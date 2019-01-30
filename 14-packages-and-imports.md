@@ -1,9 +1,9 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
 
-## Packages
+## 包
 
 Every Kotlin file should belong to a _package_. This is somewhat similar to modules in Python, but files need to explicitly declare which package they belong to, and a package implicitly comes into existence whenever any file declares itself to belong to that package (as opposed to explicitly defining a module with `__init__.py` and having all the files in that directory implicitly belong to the module). The package declaration must go on the top of the file:
 
@@ -20,7 +20,7 @@ While the dots suggest that packages are nested inside each other, that's not ac
 Package names customarily contain only lowercase letters (no underscores) and the separating dots.
 
 
-## Imports
+## 导入
 
 In order to use something from a package, it is sufficient to use the package name to fully qualify the name of the symbol at the place where you use the symbol:
 
@@ -52,7 +52,7 @@ If there is a naming conflict, you should usually import just one of the symbols
 import content.exercises.Exercise as Ex
 ```
 
-In Kotlin, importing is a compile-time concept - importing something does not actually cause any code to run (unlike Python, where all top-level statements in a file are executed at import time). Therefore, circular imports are allowed, but they might suggest a design problem in your code. However, during execution, a class will be loaded the first time it (or any of its properties or functions) is referenced, and class loading causes [companion objects](objects-and-companion-objects.html#companion-objects) to be initialized - this can lead to runtime exceptions if you have circular dependencies.
+In Kotlin, importing is a compile-time concept - importing something does not actually cause any code to run (unlike Python, where all top-level statements in a file are executed at import time). Therefore, circular imports are allowed, but they might suggest a design problem in your code. However, during execution, a class will be loaded the first time it (or any of its properties or functions) is referenced, and class loading causes [伴生对象](objects-and-companion-objects.html#伴生对象) to be initialized - this can lead to runtime exceptions if you have circular dependencies.
 
 Every file implicitly imports its own package and a number of built-in Kotlin and Java packages.
 
@@ -61,4 +61,4 @@ Every file implicitly imports its own package and a number of built-in Kotlin an
 
 ---
 
-[← Previous: Functional programming](functional-programming.html) | [Next: Visibility modifiers →](visibility-modifiers.html)
+[← 上一节：函数式编程](functional-programming.html) | [下一节：可见性修饰符 →](visibility-modifiers.html)

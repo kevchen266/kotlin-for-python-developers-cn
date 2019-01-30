@@ -1,4 +1,4 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
@@ -70,7 +70,7 @@ while (x < 10) {
 The loop variable(s), if any, must be declared outside of the `while` loop, and are therefore available for inspection afterwards, at which point they will contain the value(s) that made the loop condition false.
 
 
-## `continue` and `break`
+## `continue` 与 `break`
 
 A plain `continue` or `break` works the same way as in Python: `continue` skips to the next iteration of the innermost containing loop, and `break` stops the loop. However, you can also _label_ your loops and reference the label in the `continue` or `break` statement in order to indicate which loop you want to affect. A label is an identifier followed by `@,` e.g. `outer@` (possibly followed by a space). For example, to generate primes:
 
@@ -90,4 +90,4 @@ Note that there must be no space between `continue`/`break` and `@`.
 
 ---
 
-[← Previous: Collections](collections.html) | [Next: Functions →](functions.html)
+[← 上一节：集合](collections.html) | [下一节：函数 →](functions.html)

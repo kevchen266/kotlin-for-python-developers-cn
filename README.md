@@ -1,112 +1,112 @@
-# Kotlin for Python developers
+# 面向 Python 开发者的 Kotlin 教程
 
 _By [Aasmund Eldhuset](https://eldhuset.net/), Software Engineer at [Khan Academy](https://www.khanacademy.org/). Published on November 29, 2018._  
 _This document is not a part of Khan Academy's official product offering, but rather an [internal resource](http://engineering.khanacademy.org/posts/kotlin-for-python-developers.htm) that we're providing "as&nbsp;is" for the benefit of the programming community. If you find any errors, please submit an [issue](https://github.com/Khan/kotlin-for-python-developers/issues) or a [pull request](https://github.com/Khan/kotlin-for-python-developers/pulls)._
 
 ---
 
-Kotlin is a compiled, statically typed language, which might provide some initial hurdles for people who are used to the interpreted, dynamically typed Python. This document aims to explain a substantial portion of Kotlin's syntax and concepts in terms of how they compare to corresponding concepts in Python.
+Kotlin 是一种编译型的静态类型语言，这可能会给习惯于解释型、动态类型的 Python 用户带来一些初始障碍。本文档旨在解释 Kotlin 的大部分语法、概念以及与 Python 中相应概念的比较。
 
-Kotlin can be compiled for several different platforms. In this document, we assume that the target platform is the Java virtual machine, which grants some extra capabilities - in particular, your code will be compiled to Java bytecode and will therefore be interoperable with the large ecosystem of Java libraries.
+Kotlin 可以为多个不同平台编译。在本文档中，我们假定目标平台是 Java 虚拟机，它提供了一些附加功能——尤其是会将代码编译为 Java 字节码，进而能够与 Java 库的庞大生态系统互操作。
 
-Even if you don't know Python, this document should hopefully be a useful introduction to Kotlin, in particular if you are used to other dynamically typed languages. However, if you're coming from a Java background, you're probably better off diving directly into the excellent [official docs](https://kotlinlang.org/docs/reference/) (from which this doc has drawn a lot of inspiration). To some extent, you can try to write Java code and look stuff up whenever what you're trying to do doesn't work - and some IDEs can even automatically convert Java code to Kotlin.
+即使你不了解 Python，这篇文档应该也是对 Kotlin 的有用介绍，尤其是如果你已习惯于其他动态类型语言。但是如果你有 Java 背景，最好直接去看优秀的[官方网文档](https://www.kotlincn.net/docs/reference/)（本文档也从中汲取了很多灵感）。一定程度上讲，你可以按照 Java 代码的方式编写，并在所尝试的内容不起作用时查找资料——一些 IDE 甚至可以自动将 Java 代码转换为 Kotlin 代码。
 
 
-## Contents
+## 目录
 
 * [Hello World](#hello-world)
-* [Compiling and running](#compiling-and-running)
-* [Declaring variables](#declaring-variables)
-    * [Read-only variables](#read-only-variables)
-    * [Constants](#constants)
-    * [Specifying the type explicitly](#specifying-the-type-explicitly)
-    * [Scopes and naming](#scopes-and-naming)
-* [Primitive data types and their limitations](#primitive-data-types-and-their-limitations)
-    * [Integer types](#integer-types)
-    * [Floating-point and other types](#floating-point-and-other-types)
-* [Strings](#strings)
-* [Conditionals](#conditionals)
+* [编译与运行](#编译与运行)
+* [声明变量](#声明变量)
+    * [只读变量](#只读变量)
+    * [常量](#常量)
+    * [显式指定类型](#显式指定类型)
+    * [作用域与命名](#作用域与命名)
+* [原生数据类型及其表示范围](#原生数据类型及其表示范围)
+    * [整型](#整型)
+    * [浮点数与其他类型](#浮点数与其他类型)
+* [字符串](#字符串)
+* [条件式](#条件式)
     * [`if`/`else`](#ifelse)
-    * [Comparisons](#comparisons)
+    * [比较](#比较)
     * [`when`](#when)
-* [Collections](#collections)
-* [Loops](#loops)
+* [集合](#集合)
+* [循环](#循环)
     * [`for`](#for)
     * [`while`](#while)
-    * [`continue` and `break`](#continue-and-break)
-* [Functions](#functions)
-    * [Declaration](#declaration)
-    * [Calling](#calling)
-    * [Returning](#returning)
-    * [Overloading](#overloading)
-    * [Varargs and optional/named parameters](#varargs-and-optionalnamed-parameters)
-* [Classes](#classes)
-    * [Declaration and instantiation](#declaration-and-instantiation)
-    * [Inherited built-in functions](#inherited-built-in-functions)
-    * [Properties](#properties)
-    * [Constructors and initializer blocks](#constructors-and-initializer-blocks)
-    * [Setters and getters](#setters-and-getters)
-    * [Member functions](#member-functions)
+    * [`continue` 与 `break`](#continue-与-break)
+* [函数](#函数)
+    * [声明](#声明)
+    * [调用](#调用)
+    * [返回](#返回)
+    * [重载](#重载)
+    * [Vararg 与可选/命名参数](#vararg-与可选命名参数)
+* [类](#类)
+    * [声明与实例化](#声明与实例化)
+    * [继承的内置函数](#继承的内置函数)
+    * [属性](#属性)
+    * [构造函数与初始化块](#构造函数与初始化块)
+    * [Setter 与 getter](#setter-与-getter)
+    * [成员函数](#成员函数)
     * [Lateinit](#lateinit)
-    * [Infix functions](#infix-functions)
-    * [Operators](#operators)
-    * [Enum classes](#enum-classes)
-    * [Data classes](#data-classes)
-* [Exceptions](#exceptions)
-    * [Throwing and catching](#throwing-and-catching)
+    * [中缀函数](#中缀函数)
+    * [操作符](#操作符)
+    * [枚举类](#枚举类)
+    * [数据类](#数据类)
+* [异常](#异常)
+    * [抛出与捕获](#抛出与捕获)
     * [Nothing](#nothing)
-* [Null safety](#null-safety)
-    * [Working with nulls](#working-with-nulls)
-    * [Safe call operator](#safe-call-operator)
-    * [Elvis operator](#elvis-operator)
-    * [Not-null assertion operator](#not-null-assertion-operator)
-* [Functional programming](#functional-programming)
-    * [Function types](#function-types)
-    * [Function literals: lambda expressions and anonymous functions](#function-literals-lambda-expressions-and-anonymous-functions)
-    * [Comprehensions](#comprehensions)
-    * [Receivers](#receivers)
-    * [Inline functions](#inline-functions)
-    * [Nice utility functions](#nice-utility-functions)
-        * [`run()`, `let()`, and `with()`](#run-let-and-with)
-        * [`apply()` and `also()`](#apply-and-also)
-        * [`takeIf()` and `takeUnless()`](#takeif-and-takeunless)
-* [Packages and imports](#packages-and-imports)
-    * [Packages](#packages)
-    * [Imports](#imports)
-* [Visibility modifiers](#visibility-modifiers)
-* [Inheritance](#inheritance)
-    * [Subclassing](#subclassing)
-    * [Overriding](#overriding)
-    * [Interfaces](#interfaces)
-    * [Abstract classes](#abstract-classes)
-    * [Polymorphism](#polymorphism)
-    * [Casting and type testing](#casting-and-type-testing)
-    * [Delegation](#delegation)
-    * [Delegated properties](#delegated-properties)
-    * [Sealed classes](#sealed-classes)
-* [Objects and companion objects](#objects-and-companion-objects)
-    * [Object declarations](#object-declarations)
-    * [Companion objects](#companion-objects)
-    * [Object expressions](#object-expressions)
-* [Generics](#generics)
-    * [Generic type parameters](#generic-type-parameters)
-    * [Constraints](#constraints)
-    * [Variance](#variance)
-        * [Introduction](#introduction)
-        * [Declaration-site covariance and contravariance](#declaration-site-covariance-and-contravariance)
-        * [Variance directions](#variance-directions)
-        * [Type projections (use-site covariance and contravariance)](#type-projections-use-site-covariance-and-contravariance)
-    * [Reified type parameters](#reified-type-parameters)
-* [Extension functions/properties](#extension-functionsproperties)
-* [Member references and reflection](#member-references-and-reflection)
-    * [Property references](#property-references)
-    * [Function references](#function-references)
-    * [Obtaining member references from a class reference](#obtaining-member-references-from-a-class-reference)
-    * [Java-style reflection](#java-style-reflection)
-* [Annotations](#annotations)
-* [File I/O](#file-io)
-* [Scoped resource usage](#scoped-resource-usage)
-* [Documentation](#documentation)
+* [空安全](#空安全)
+    * [使用空值](#使用空值)
+    * [安全调用操作符](#安全调用操作符)
+    * [Elvis 操作符](#elvis-操作符)
+    * [非空断言操作符](#非空断言操作符)
+* [函数式编程](#函数式编程)
+    * [函数类型](#函数类型)
+    * [函数字面值：lambda 表达式与匿名函数](#函数字面值lambda-表达式与匿名函数)
+    * [集合推导](#集合推导)
+    * [接收者](#接收者)
+    * [内联函数](#内联函数)
+    * [不错的工具函数](#不错的工具函数)
+        * [`run()`、`let()` 与 `with()`](#runlet-与-with)
+        * [`apply()` 与 `also()`](#apply-与-also)
+        * [`takeIf()` 与 `takeUnless()`](#takeif-与-takeunless)
+* [包与导入](#包与导入)
+    * [包](#包)
+    * [导入](#导入)
+* [可见性修饰符](#可见性修饰符)
+* [继承](#继承)
+    * [子类化](#子类化)
+    * [覆盖](#覆盖)
+    * [接口](#接口)
+    * [抽象类](#抽象类)
+    * [多态](#多态)
+    * [类型转换与类型检测](#类型转换与类型检测)
+    * [委托](#委托)
+    * [属性委托](#属性委托)
+    * [密封类](#密封类)
+* [对象与伴生对象](#对象与伴生对象)
+    * [对象声明](#对象声明)
+    * [伴生对象](#伴生对象)
+    * [对象表达式](#对象表达式)
+* [泛型](#泛型)
+    * [泛型类型参数](#泛型类型参数)
+    * [约束](#约束)
+    * [型变](#型变)
+        * [简介](#简介)
+        * [声明处协变与逆变](#声明处协变与逆变)
+        * [型变方向](#型变方向)
+        * [类型投影（使用处协变与逆变）](#类型投影使用处协变与逆变)
+    * [具体化的类型参数](#具体化的类型参数)
+* [扩展函数/属性](#扩展函数属性)
+* [成员引用与反射](#成员引用与反射)
+    * [属性引用](#属性引用)
+    * [函数引用](#函数引用)
+    * [由类引用获取成员引用](#由类引用获取成员引用)
+    * [Java 风格反射](#java-风格反射)
+* [注解](#注解)
+* [文件 I/O](#文件-io)
+* [作用域内资源用法](#作用域内资源用法)
+* [编写文档](#编写文档)
 
 
 ## Hello World
@@ -167,7 +167,7 @@ return    // Empty return statement
 ```
 
 
-## Compiling and running
+## 编译与运行
 
 The author strongly recommends that you use an IDE with Kotlin support, as the static typing allows an IDE to do reliable navigation and code completion. I recommend [IntelliJ IDEA](https://www.jetbrains.com/idea/), which is built by the same company that created Kotlin. The Community Edition is free; see [instructions for getting started](https://kotlinlang.org/docs/tutorials/getting-started.html) (it comes bundled with Kotlin, and you can run your program from the IDE).
 
@@ -184,7 +184,7 @@ java -jar program.jar
 ```
 
 
-## Declaring variables
+## 声明变量
 
 Every variable must be _declared_. Any attempt to use a variable that hasn't been declared yet is a syntax error; thus, you are protected from accidentally assigning to a misspelled variable. The declaration also decides what kind of data you are allowed to store in the variable.
 
@@ -207,7 +207,7 @@ println(message + " there")
 However, you cannot change the type of a variable: `number` can only ever refer to `Int` values, and `message` can only ever refer to `String` values, so both `number = "Test"` and `message = 3` are illegal and will produce syntax errors.
 
 
-### Read-only variables
+### 只读变量
 
 Frequently, you'll find that during the lifetime of your variable, it only ever needs to refer to one object. Then, you can declare it with `val` (for "value") instead:
 
@@ -221,16 +221,16 @@ The terminology is that `var` declares a _mutable_ variable, and that `val` decl
 Note that a read-only variable is not a constant per se: it can be initialized with the value of a variable (so its value doesn't need to be known at compile-time), and if it is declared inside a construct that is repeatedly invoked (such as a function or a loop), it can take on a different value on each invocation. Also, while the read-only variable may not be reassigned while it is in scope, it can still refer to an object which is in itself mutable (such as a list).
 
 
-### Constants
+### 常量
 
-If you have a value that is truly constant, and the value is a string or a primitive type (see below) that is known at compile-time, you can declare an actual constant instead. You can only do this at the top level of a file or inside an [object declaration](#object-declarations) (but not inside a class declaration):
+If you have a value that is truly constant, and the value is a string or a primitive type (see below) that is known at compile-time, you can declare an actual constant instead. You can only do this at the top level of a file or inside an [对象声明](#对象声明) (but not inside a class declaration):
 
 ```kotlin
 const val x = 2
 ```
 
 
-### Specifying the type explicitly
+### 显式指定类型
 
 If you really want to, you can both initialize and specify the type on the same line. This is mostly useful if you're dealing with a class hierarchy (more on that later) and you want the variable type to be a base type of the value's class:
 
@@ -248,7 +248,7 @@ x = 3
 ```
 
 
-### Scopes and naming
+### 作用域与命名
 
 A variable only exists inside the _scope_ (curly-brace-enclosed block of code; more on that later) in which it has been declared - so a variable that's declared inside a loop only exists in that loop; you can't check its final value after the loop. Variables can be redeclared inside nested scopes - so if there's a parameter `x` to a function and you create a loop and declare an `x` inside that loop, the `x` inside the loop is a different variable than the parameter `x`.
 
@@ -257,12 +257,12 @@ Variable names should use `lowerCamelCase` instead of `snake_case`.
 In general, identifiers may consist of letters, digits, and underscores, and may not begin with a digit. However, if you are writing code that e.g. autogenerates JSON based on identifiers and you want the JSON key to be a string that does not conform to these rules or that collides with a keyword, you can enclose it in backticks: `` `I can't believe this is not an error!` `` is a valid identifier.
 
 
-## Primitive data types and their limitations
+## 原生数据类型及其表示范围
 
 The _primitive data types_ are the most fundamental types in Kotlin; all other types are built up of these types and arrays thereof. Their representation is very efficient (both in terms of memory and CPU time), as they map to small byte groups that are directly manipulatable by the CPU.
 
 
-### Integer types
+### 整型
 
 Integer types in Kotlin have a _limited size_, as opposed to the arbitrarily large integers in Python. The limit depends on the type, which decides how many bits the number occupies in memory:
 
@@ -273,7 +273,7 @@ Type | Bits | Min value | Max value
 `Short` | 16 | -32768 | 32767
 `Byte` | 8 | -128 | 127
 
-Bytes are -128 through 127 due to Kotlin inheriting a bad design decision from Java. In order to get a traditional byte value between 0 and 255, keep the value as-is if it is positive, and add 256 if it is negative (so -128 is really 128, and -1 is really 255). See the section on [extension functions](#extension-functionsproperties) for a neat workaround for this.
+Bytes are -128 through 127 due to Kotlin inheriting a bad design decision from Java. In order to get a traditional byte value between 0 and 255, keep the value as-is if it is positive, and add 256 if it is negative (so -128 is really 128, and -1 is really 255). See the section on [extension functions](#扩展函数属性) for a neat workaround for this.
 
 An integer literal has the type `Int` if its value fits in an `Int`, or `Long` otherwise. `Long` literals should be suffixed by `L` for clarity, which will also let you make a `Long` with a "small" value. There are no literal suffixes for `Short` or `Byte`, so such values need an explicit type declaration or the use of an explicit conversion function.
 
@@ -315,19 +315,19 @@ When you use an arithmetic operator on two integers of different types, the resu
 In short: _think carefully through your declarations of integers, and be absolutely certain that the value will never ever need to be larger than the limits of the type!_ If you need an integer of unlimited size, use the non-primitive type `BigInteger`.
 
 
-### Floating-point and other types
+### 浮点数与其他类型
 
 Type | Bits | Notes
 -----|------|------
 `Double` | 64 | 16-17 significant digits (same as `float` in Python)
 `Float` | 32 | 6-7 significant digits
-`Char` | 16 | UTF-16 code unit (see the section on [strings](#strings) - in most cases, this is one Unicode character, but it might be just one half of a Unicode character)
+`Char` | 16 | UTF-16 code unit (see the section on [字符串](#字符串) - in most cases, this is one Unicode character, but it might be just one half of a Unicode character)
 `Boolean` | 8 | `true` or `false`
 
 Floating-point numbers act similarly to in Python, but they come in two types, depending on how many digits you need. If you need larger precision, or to work with monetary amounts (or other situations where you must have exact results), use the non-primitive type `BigDecimal`.
 
 
-## Strings
+## 字符串
 
 Unicode correctness can be onerous in Python 2, since the "default" string type `str` is really just a byte array, while `unicode` is actually a sequence of _code units_ (see below) - and whether the code units are 16 or 32 bits wide depends on how your Python distribution was built. In Kotlin, there's no such confusion: `String`, which is what you get when you make a string literal (which you can only do with double quotes), is an immutable sequence of UTF-16 code units. `ByteArray` is a fixed-size (but otherwise mutable) byte array (and `String` can specifically _not_ be used as a byte array).
 
@@ -356,7 +356,7 @@ If you want a literal `$`, you need to escape it: `\$`. Escaping generally works
 
 
 
-## Conditionals
+## 条件式
 
 
 ### `if`/`else`
@@ -393,9 +393,9 @@ val result = if (condition) trueBody else falseBody
 When using if/else as an expression, the `else` part is mandatory (but there can also be `else if` parts). If the body that ends up being evaluated contains more than one line, it's the result of the last line that becomes the result of the `if`/`else`.
 
 
-### Comparisons
+### 比较
 
-Structural equality comparisons are done with `==` and `!=`, like in Python, but it's up to each class to define what that means, by [overriding](#overriding) [`equals()`](#inherited-built-in-functions) (which will be called on the left operand with the right operand as the parameter) and `hashCode()`. Most built-in collection types implement deep equality checks for these operators and functions. Reference comparisons - checking if two variables refer to the same object (the same as `is` in Python) - are done with `===` and `!==`.
+Structural equality comparisons are done with `==` and `!=`, like in Python, but it's up to each class to define what that means, by [覆盖](#覆盖) [`equals()`](#继承的内置函数) (which will be called on the left operand with the right operand as the parameter) and `hashCode()`. Most built-in collection types implement deep equality checks for these operators and functions. Reference comparisons - checking if two variables refer to the same object (the same as `is` in Python) - are done with `===` and `!==`.
 
 Boolean expressions are formed with `&&` for logical AND, `||` for logical OR, and `!` for logical NOT. As in Python, `&&` and `||` are short-circuiting: they only evaluate the right-hand side if it's necessary to determine the outcome. Beware that the keywords `and` and `or` also exist, but they only perform _bitwise_ operations on integral values, and they do not short-circuit.
 
@@ -416,7 +416,7 @@ when (x) {
 ```
 
 
-## Collections
+## 集合
 
 Arrays in Kotlin have a constant length, so one normally uses lists, which are similar to the ones in Python. What's called a _dict_ in Python is called a _map_ in Kotlin (not to be confused with the function `map()`). `List`, `Map`, and `Set` are all _interfaces_ which are implemented by many different classes. In most situations, a standard array-backed list or hash-based map or set will do, and you can easily make those like this:
 
@@ -426,7 +426,7 @@ val map = mapOf("a" to 1, "b" to 2, "c" to 3)  // Map<String, Int>
 val set = setOf("a", "b", "c")                 // Set<String>
 ```
 
-(Note that `to` is an [infix function](#infix-functions) that creates a `Pair` containing a key and a value, from which the map is constructed.) The resulting collections are immutable - you can neither change their size nor replace their elements - however, the elements themselves may still be mutable objects. For mutable collections, do this:
+(Note that `to` is an [中缀函数](#中缀函数) that creates a `Pair` containing a key and a value, from which the map is constructed.) The resulting collections are immutable - you can neither change their size nor replace their elements - however, the elements themselves may still be mutable objects. For mutable collections, do this:
 
 ```kotlin
 val strings = mutableListOf("Anne", "Karen", "Peter")
@@ -446,10 +446,10 @@ val emptyMap = mapOf<String, Int>()
 
 The types inside the angle brackets are called _generic type parameters_, which we will cover later. In short, it's a useful technique to make a class that is tied to another class (such as a container class, which is tied to its element class) applicable to many different classes.
 
-If you really really need a mixed-type collection, you can use the element type `Any` - but you'll need typecasting to get the elements back to their proper type again, so if what you want is a multiple-value return from a function, please use the per-element-typed `Pair` or `Triple` instead. If you need four or more elements, consider making a [data class](#data-classes) for the return type instead (which you should ideally do for two or three elements as well, especially if it's a public function, since it gives you proper names for the elements) - it's very easy and usually a oneliner.
+If you really really need a mixed-type collection, you can use the element type `Any` - but you'll need typecasting to get the elements back to their proper type again, so if what you want is a multiple-value return from a function, please use the per-element-typed `Pair` or `Triple` instead. If you need four or more elements, consider making a [数据类](#数据类) for the return type instead (which you should ideally do for two or three elements as well, especially if it's a public function, since it gives you proper names for the elements) - it's very easy and usually a oneliner.
 
 
-## Loops
+## 循环
 
 
 ### `for`
@@ -519,7 +519,7 @@ while (x < 10) {
 The loop variable(s), if any, must be declared outside of the `while` loop, and are therefore available for inspection afterwards, at which point they will contain the value(s) that made the loop condition false.
 
 
-### `continue` and `break`
+### `continue` 与 `break`
 
 A plain `continue` or `break` works the same way as in Python: `continue` skips to the next iteration of the innermost containing loop, and `break` stops the loop. However, you can also _label_ your loops and reference the label in the `continue` or `break` statement in order to indicate which loop you want to affect. A label is an identifier followed by `@,` e.g. `outer@` (possibly followed by a space). For example, to generate primes:
 
@@ -535,10 +535,10 @@ outer@ for (n in 2..100) {
 Note that there must be no space between `continue`/`break` and `@`.
 
 
-## Functions
+## 函数
 
 
-### Declaration
+### 声明
 
 Functions are declared with the `fun` keyword. For the parameters, you must declare not only their names, but also their types, and you must declare the type of the value the function is intending to return. The body of the function is usually a _block_, which is enclosed in curly braces:
 
@@ -559,7 +559,7 @@ fun square(number: Int) = number * number
 Function names should use `lowerCamelCase` instead of `snake_case`.
 
 
-### Calling
+### 调用
 
 Functions are called the same way as in Python:
 
@@ -570,12 +570,12 @@ val greeting = happyBirthday("Anne", 32)
 If you don't care about the return value, you don't need to assign it to anything.
 
 
-### Returning
+### 返回
 
 As opposed to Python, omitting `return` at the end of a function does not implicitly return null; if you want to return null, you must do so with `return null`. If a function never needs to return anything, the function should have the return type `Unit` (or not declare a return type at all, in which case the return type defaults to `Unit`). In such a function, you may either have no `return` statement at all, or say just `return`. `Unit` is both a singleton object (which `None` in Python also happens to be) and the type of that object, and it represents "this function never returns any information" (rather than "this function sometimes returns information, but this time, it didn't", which is more or less the semantics of returning null).
 
 
-### Overloading
+### 重载
 
 In Python, function names must be unique within a module or a class. In Kotlin, we can _overload_ functions: there can be multiple declarations of functions that have the same name. Overloaded functions must be distinguishable from each other through their parameter lists. (The types of the parameter list, together with the return type, is known as a function's _signature_, but the return type cannot be used to disambiguate overloaded functions.) For example, we can have both of these functions in the same file:
 
@@ -594,7 +594,7 @@ square(3.14) // Calls the second function; result is 9.8596 (Double)
 While this example happened to use the same expression, that is not necessary - overloaded functions can do completely different things if need be (although your code can get confusing if you make functions that have very different behavior be overloads of each other).
 
 
-### Varargs and optional/named parameters
+### Vararg 与可选/命名参数
 
 A function can take an arbitrary number of arguments, similarly to `*args` in Python, but they must all be of the same type. Unlike Python, you may declare other positional parameters after the variadic one, but there can be at most one variadic parameter. If its type is `X`, the type of the argument will be `XArray` if `X` is a primitive type and `Array<X>` if not.
 
@@ -643,15 +643,15 @@ countAndPrintArgs(*numbers.toIntArray())
 
 Kotlin has inherited Java's fidgety array system, so primitive types have got their own array types and conversion functions, while any other type uses the generic `Array` type, to which you can convert with `.toTypedArray()`.
 
-However, you can't spread a map into a function call and expect the values in the map to be passed to the parameters named by the keys - the names of the parameters must be known at compile time. If you need runtime-defined parameter names, your function must either take a map or take `vararg kwargs: Pair<String, X>` (where `X` is the "lowest common denominator" of the parameter types, in the worst case `Any?` - be prepared to have to typecast the parameter values, and note that you'll lose type safety). You can call such a function like this: `foo("bar" to 42, "test" to "hello")`, since `to` is an [infix function](#infix-functions) that creates a `Pair`.
+However, you can't spread a map into a function call and expect the values in the map to be passed to the parameters named by the keys - the names of the parameters must be known at compile time. If you need runtime-defined parameter names, your function must either take a map or take `vararg kwargs: Pair<String, X>` (where `X` is the "lowest common denominator" of the parameter types, in the worst case `Any?` - be prepared to have to typecast the parameter values, and note that you'll lose type safety). You can call such a function like this: `foo("bar" to 42, "test" to "hello")`, since `to` is an [中缀函数](#中缀函数) that creates a `Pair`.
 
 
-## Classes
+## 类
 
-Kotlin's object model is substantially different from Python's. Most importantly, classes are _not_ dynamically modifiable at runtime! (There are some limited exceptions to this, but you generally shouldn't do it. However, it _is_ possible to dynamically _inspect_ classes and objects at runtime with a feature called _reflection_ - this can be useful, but should be judiciously used.) All properties (attributes) and functions that might ever be needed on a class must be declared either directly in the class body or as [_extension functions_](#extension-functionsproperties), so you should think carefully through your class design.
+Kotlin's object model is substantially different from Python's. Most importantly, classes are _not_ dynamically modifiable at runtime! (There are some limited exceptions to this, but you generally shouldn't do it. However, it _is_ possible to dynamically _inspect_ classes and objects at runtime with a feature called _reflection_ - this can be useful, but should be judiciously used.) All properties (attributes) and functions that might ever be needed on a class must be declared either directly in the class body or as [_extension functions_](#扩展函数属性), so you should think carefully through your class design.
 
 
-### Declaration and instantiation
+### 声明与实例化
 
 Classes are declared with the `class` keyword. A basic class without any properties or functions of its own looks like this:
 
@@ -668,16 +668,16 @@ val object = Empty()
 Class names should use `UpperCamelCase`, just like in Python.
 
 
-### Inherited built-in functions
+### 继承的内置函数
 
-Every class that doesn't explicitly declare a parent class inherits from `Any`, which is the root of the class hierarchy (similar to `object` in Python) - more on [inheritance](#inheritance) later. Via `Any`, every class automatically has the following functions:
+Every class that doesn't explicitly declare a parent class inherits from `Any`, which is the root of the class hierarchy (similar to `object` in Python) - more on [继承](#继承) later. Via `Any`, every class automatically has the following functions:
 
 * `toString()` returns a string representation of the object, similar to `__str__()` in Python (the default implementation is rather uninteresting, as it only returns the class name and something akin to the object's id)
 * `equals(x)` checks if this object is equal to some other object `x` of any class (by default, this just checks if this object is the _same_ object as `x` - just like `is` in Python - but it can be overridden by subclasses to do custom comparisons of property values)
 * `hashCode()` returns an integer that can be used by hash tables and for shortcutting complex equality comparisons (objects that are equal according to `equals()` must have the same hash code, so if two objects' hash codes are different, the objects cannot be equal)
 
 
-### Properties
+### 属性
 
 Empty classes aren't very interesting, so let's make a class with some _properties_:
 
@@ -698,14 +698,14 @@ a.age = 42
 println("${a.age} ${b.age}") // Prints "42 32"
 ```
 
-To be fair, you'd get the same output in Python, but the mechanism would be different: both instances would start out without any attributes of their own (`age` and `name` would be attributes on the class), and the first printing would access the class attribute; only the assignment would cause an `age` attribute to appear on `a`. In Kotlin, there are no class properties in this example, and each instance starts out with both properties. If you need a class-level property, see the section on [companion objects](#companion-objects).
+To be fair, you'd get the same output in Python, but the mechanism would be different: both instances would start out without any attributes of their own (`age` and `name` would be attributes on the class), and the first printing would access the class attribute; only the assignment would cause an `age` attribute to appear on `a`. In Kotlin, there are no class properties in this example, and each instance starts out with both properties. If you need a class-level property, see the section on [伴生对象](#伴生对象).
 
 Because the set of properties of an object is constrained to be exactly the set of properties that are declared at compile-time in the object's class, it's not possible to add new properties to an object or to a class at runtime, so e.g. `a.nationality = "Norwegian"` won't compile.
 
 Property names should use `lowerCamelCase` instead of `snake_case`.
 
 
-### Constructors and initializer blocks
+### 构造函数与初始化块
 
 Properties that don't have a sensible default should be taken as constructor parameters. Like with Python's `__init__()`, Kotlin constructors and initializer blocks run automatically whenever an instance of an object is created (note that there's nothing that corresponds to `__new__()`).  A Kotlin class may have one _primary constructor_, whose parameters are supplied after the class name. The primary constructor parameters are available when you initialize properties in the class body, and also in the optional _initializer block_, which can contain complex initialization logic (a property can be declared without an initial value, in which case it must be initialized in `init`). Also, you'll frequently want to use `val` instead of `var` in order to make your properties immutable after construction.
 
@@ -747,7 +747,7 @@ val c = Person(1995, "Lynne") // age = 23
 Note that if a class has got a primary constructor, it is no longer possible to create an instance of it without supplying any parameters (unless one of the secondary constructors is parameterless).
 
 
-### Setters and getters
+### Setter 与 getter
 
 A property is really a _backing field_ (kind of a hidden variable inside the object) and two accessor functions: one that gets the value of the variable and one that sets the value. You can override one or both of the accessors (an accessor that is not overridden automatically gets the default behavior of just returning or setting the backing field directly). Inside an accessor, you can reference the backing field with `field`. The setter accessor must take a parameter `value`, which is the value that is being assigned to the property. A getter body could either be a one-line expression preceded by `=` or a more complex body enclosed in curly braces, while a setter body typically includes an assignment and must therefore be enclosed in curly braces.  If you want to validate that the age is nonnegative:
 
@@ -782,7 +782,7 @@ Note that even though this is a read-only property due to declaring it with `val
 The indentation in front of the accessors is due to convention; like elsewhere in Kotlin, it has no syntactic significance. The compiler can tell which accessors belong to which properties because the only legal place for an accessor is immediately after the property declaration (and there can be at most one getter and one setter) - so you can't split the property declaration and the accessor declarations. However, the order of the accessors doesn't matter.
 
 
-### Member functions
+### 成员函数
 
 A function declared inside a class is called a _member function_ of that class. Like in Python, every invocation of a member function must be performed on an instance of the class, and the instance will be available during the execution of the function - but unlike Python, the function signature doesn't declare that: there is no explicit `self` parameter. Instead, every member function can use the keyword `this` to reference the current instance, without declaring it. Unlike Python, as long as there is no name conflict with an identically-named parameter or local variable, `this` can be omitted. If we do this inside a `Person` class with a `name` property:
 
@@ -831,9 +831,9 @@ if (::name.isInitialized) println(name)
 `lateinit` can only be used with `var`, not with `val`, and the type must be non-primitive and non-nullable.
 
 
-### Infix functions
+### 中缀函数
 
-You can designate a one-parameter member function or [extension function](#extension-functionsproperties) for use as an infix operator, which can be useful if you're designing a DSL. The left operand will become `this`, and the right operand will become the parameter. If you do this inside a `Person` class that has got a `name` property:
+You can designate a one-parameter member function or [extension function](#扩展函数属性) for use as an infix operator, which can be useful if you're designing a DSL. The left operand will become `this`, and the right operand will become the parameter. If you do this inside a `Person` class that has got a `name` property:
 
 ```kotlin
 infix fun marry(spouse: Person) {
@@ -852,7 +852,7 @@ lisa marry anne // Prints "Lisa and Anne are getting married!"
 All infix functions have the same [precedence](https://kotlinlang.org/docs/reference/grammar.html#precedence) (which is shared with all the built-in infix functions, such as the bitwise functions `and`, `or`, `inv`, etc.): lower than the arithmetic operators and the `..` range operator, but higher than the Elvis operator `?:`, comparisons, logic operators, and assignments.
 
 
-### Operators
+### 操作符
 
 Most of the operators that are recognized by Kotlin's syntax have predefined textual names and are available for implementation in your classes, just like you can do with Python's double-underscore operator names. For example, the binary `+` operator is called `plus`. Similarly to the infix example, if you do this inside a `Person` class that has got a `name` property:
 
@@ -870,12 +870,12 @@ lisa + anne // Prints "Lisa and Anne are getting married!"
 
 A particularly interesting operator is the function-call parenthesis pair, whose function name is `invoke` - if you implement this, you'll be able to call instances of your class as if they were functions. You can even overload it in order to provide different function signatures.
 
-`operator` can also be used for certain other predefined functions in order to create fancy effects, such as [delegated properties](#delegated-properties).
+`operator` can also be used for certain other predefined functions in order to create fancy effects, such as [属性委托](#属性委托).
 
 Since the available operators are hardcoded into the formal Kotlin syntax, you can not invent new operators, and overriding an operator does not affect its [precedence](https://kotlinlang.org/docs/reference/grammar.html#precedence).
 
 
-### Enum classes
+### 枚举类
 
 Whenever you want a variable that can only take on a limited number of values where the only feature of each value is that it's distinct from all the other values, you can create an _enum class_:
 
@@ -907,7 +907,7 @@ enum class ContentKind(val kind: String) {
 Null safety is enforced as usual, so a variable of type `ContentKind` can not be null, unlike in Java.
 
 
-### Data classes
+### 数据类
 
 Frequently - especially if you want a complex return type from a function or a complex key for a map - you'll want a quick and dirty class which only contains some properties, but is still comparable for equality and is usable as a map key. If you create a _data class_, you'll get automatic implementations of the following functions: `toString()` (which will produce a string containing all the property names and values), `equals()` (which will do a per-property `equals()`), `hashCode()` (which will hash the individual properties and combine the hashes), and the functions that are required to enable Kotlin to destructure an instance of the class into a declaration (`component1()`, `component2()`, etc.):
 
@@ -920,10 +920,10 @@ data class ContentDescriptor(val kind: ContentKind, val id: String) {
 ```
 
 
-## Exceptions
+## 异常
 
 
-### Throwing and catching
+### 抛出与捕获
 
 Exceptions pretty much work like they do in Python. You _throw_ (raise) one with `throw`:
 
@@ -964,15 +964,15 @@ Note that exceptions are somewhat discouraged in Kotlin except when interacting 
 
 ### Nothing
 
-`throw` is also an expression, and its return type is the special class `Nothing`, which does not have any instances. The compiler knows that an expression whose type is `Nothing` will never return normally, and will therefore generally accept its use even where a different type would normally be required, such as after the [Elvis operator](#elvis-operator). If you make a function that always throws, or that starts an infinite loop, you could declare its return type to be `Nothing` in order to make the compiler aware of this. One fun example of this is the built-in function `TODO`, which you can call in any expression (possibly supplying a string argument), and it raises a `NotImplementedError`.
+`throw` is also an expression, and its return type is the special class `Nothing`, which does not have any instances. The compiler knows that an expression whose type is `Nothing` will never return normally, and will therefore generally accept its use even where a different type would normally be required, such as after the [Elvis 操作符](#elvis-操作符). If you make a function that always throws, or that starts an infinite loop, you could declare its return type to be `Nothing` in order to make the compiler aware of this. One fun example of this is the built-in function `TODO`, which you can call in any expression (possibly supplying a string argument), and it raises a `NotImplementedError`.
 
 The nullable version `Nothing?` will be used by the compiler when something is initialized with null and there is no other type information. In `val x = null`, the type of `x` will be `Nothing?`. This type does not have the "never returns normally" semantics; instead, the compiler knows that the value will always be null.
 
 
-## Null safety
+## 空安全
 
 
-### Working with nulls
+### 使用空值
 
 A variable that doesn't refer to anything refers to `null` (or you can say that the variable "is null"). As opposed to `None` in Python, `null` is not an object - it's just a keyword that is used to make a variable refer to nothing or to check if it does (that check must be performed with `==` or `!=`). Because nulls are a frequent source of programming errors, Kotlin encourages avoiding them as much as possible - a variable cannot actually be null unless it's been declared to allow for null, which you do by suffixing the type name with `?`. For example:
 
@@ -1002,12 +1002,12 @@ if (b == null) {
 Making frequent null checks is annoying, so if you have to allow for the possibility of nulls, there are several very useful operators in Kotlin to ease working with values that might be null, as described below.
 
 
-### Safe call operator
+### 安全调用操作符
 
 `x?.y` evaluates `x`, and if it is not null, it evaluates `x.y` (without reevaluating `x`), whose result becomes the result of the expression - otherwise, you get null. This also works for functions, and it can be chained - for example, `x?.y()?.z?.w()` will return null if any of `x`, `x.y()`, or `x.y().z` produce null; otherwise, it will return the result of `x.y().z.w()`.
 
 
-### Elvis operator
+### Elvis 操作符
 
 `x ?: y` evaluates `x`, which becomes the result of the expression unless it's null, in which case you'll get `y` instead (which ought to be of a non-nullable type).  This is also known as the "Elvis operator". You can even use it to perform an early return in case of null:
 
@@ -1018,7 +1018,7 @@ val z = x ?: return y
 This will assign `x` to `z` if `x` is non-null, but if it is null, the entire function that contains this expression will stop and return `y` (this works because `return` is also an expression, and if it is evaluated, it evaluates its argument and then makes the containing function return the result).
 
 
-### Not-null assertion operator
+### 非空断言操作符
 
 Sometimes, you're in a situation where you have a value `x` that you know is not null, but the compiler doesn't realize it. This can legitimately happen when you're interacting with Java code, but if it happens because your code's logic is more complicated than the compiler's ability to reason about it, you should probably restructure your code. If you can't convince the compiler, you can resort to saying `x!!` to form an expression that produces the value of `x`, but whose type is non-nullable:
 
@@ -1039,10 +1039,10 @@ y.importantFunction()
 The above could also be a oneliner - and note that the compiler knows that because the `throw` will prevent `y` from coming into existence if `x` is null, `y` must be non-null if we reach the line below. Contrast this with `x?.importantFunction()`, which is a no-op if `x` is null.
 
 
-## Functional programming
+## 函数式编程
 
 
-### Function types
+### 函数类型
 
 Like in Python, functions in Kotlin are first-class values - they can be assigned to variables and passed around as parameters. The type a function is a _function type_, which is indicated with a parenthesized parameter type list and an arrow to the return type. Consider this function:
 
@@ -1072,9 +1072,9 @@ class Divider : (Int, Int) -> Double {
 ```
 
 
-### Function literals: lambda expressions and anonymous functions
+### 函数字面值：lambda 表达式与匿名函数
 
-Like in Python, you can write _lambda expressions_: unnamed function declarations with a very compact syntax, which evaluate to callable function objects. In Kotlin, lambdas can contain multiple statements, which make them useful for [more complex tasks](#receivers) than the single-expression lambdas of Python. The last statement must be an expression, whose result will become the return value of the lambda (unless `Unit` is the return type of the variable/parameter that the lambda expression is assigned to, in which case the lambda has no return value). A lambda expression is enclosed in curly braces, and begins by listing its parameter names and possibly their types (unless the types can be inferred from context):
+Like in Python, you can write _lambda expressions_: unnamed function declarations with a very compact syntax, which evaluate to callable function objects. In Kotlin, lambdas can contain multiple statements, which make them useful for [more complex tasks](#接收者) than the single-expression lambdas of Python. The last statement must be an expression, whose result will become the return value of the lambda (unless `Unit` is the return type of the variable/parameter that the lambda expression is assigned to, in which case the lambda has no return value). A lambda expression is enclosed in curly braces, and begins by listing its parameter names and possibly their types (unless the types can be inferred from context):
 
 ```kotlin
 val safeDivide = { numerator: Int, denominator: Int ->
@@ -1112,7 +1112,7 @@ A parameterless lambda does not need the arrow. A one-parameter lambda can choos
 val square: (Double) -> Double = { it * it }
 ```
 
-If the type of the last parameter to a function is a function type and you want to supply a lambda expression, you can place the lambda expression _outside_ of the parameter parentheses. If the lambda expression is the only parameter, you can omit the parentheses entirely. This is very useful for [constructing DSLs](#receivers).
+If the type of the last parameter to a function is a function type and you want to supply a lambda expression, you can place the lambda expression _outside_ of the parameter parentheses. If the lambda expression is the only parameter, you can omit the parentheses entirely. This is very useful for [constructing DSLs](#接收者).
 
 ```kotlin
 fun callWithPi(function: (Double) -> Double) {
@@ -1137,7 +1137,7 @@ callWithPi(fun(x: Double) = x * x)
 Lambda expressions and anonymous functions are collectively called _function literals_.
 
 
-### Comprehensions
+### 集合推导
 
 Kotlin can get quite close to the compactness of Python's `list`/`dict`/`set` comprehensions. Assuming that `people` is a collection of `Person` objects with a `name` property:
 
@@ -1164,9 +1164,9 @@ These transformations can also be applied to `Sequence<T>`, which is similar to 
 There's a vast collection of functional programming-style operations available in the [`kotlin.collections` package](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html).
 
 
-### Receivers
+### 接收者
 
-The signature of a member function or an [extension function](#extension-functionsproperties) begins with a _receiver_: the type upon which the function can be invoked. For example, the signature of `toString()` is `Any.() -> String` - it can be called on any non-null object (the receiver), it takes no parameters, and it returns a `String`. It is possible to write a lambda function with such a signature - this is called a _function literal with receiver_, and is extremely useful for building DSLs.
+The signature of a member function or an [extension function](#扩展函数属性) begins with a _receiver_: the type upon which the function can be invoked. For example, the signature of `toString()` is `Any.() -> String` - it can be called on any non-null object (the receiver), it takes no parameters, and it returns a `String`. It is possible to write a lambda function with such a signature - this is called a _function literal with receiver_, and is extremely useful for building DSLs.
 
 A function literal with receiver is perhaps easiest to think of as an extension function in the form of a lambda expression. The declaration looks like an ordinary lambda expression; what makes it take a receiver is the context - it must be passed to a function that takes a function with receiver as a parameter, or assigned to a variable/property whose type is a function type with receiver. The only way to use a function with receiver is to invoke it on an instance of the receiver class, as if it were a member function or extension function. For example:
 
@@ -1254,7 +1254,7 @@ t = tree("root", init_root)
 The official docs also have a very cool example with a [ DSL for constructing HTML documents](https://kotlinlang.org/docs/reference/type-safe-builders.html).
 
 
-### Inline functions
+### 内联函数
 
 There's a little bit of runtime overhead associated with lambda functions: they are really objects, so they must be instantiated, and (like other functions) calling them takes a little bit of time too. If we use the `inline` keyword on a function, we tell the compiler to _inline_ both the function and its lambda parameters (if any) - that is, the compiler will copy the code of the function (and its lambda parameters) into _every_ callsite, thus eliminating the overhead of both the lambda instantiation and the calling of the function and the lambdas. This will happen unconditionally, unlike in C and C++, where `inline` is more of a hint to the compiler. This will cause the size of the compiled code to grow, but it may be worth it for certain small but frequently-called functions.
 
@@ -1285,10 +1285,10 @@ println(t)
 In an inline function definition, you can use `noinline` in front of any function-typed parameter to prevent the lambda that will be passed to it from also being inlined.
 
 
-### Nice utility functions
+### 不错的工具函数
 
 
-#### `run()`, `let()`, and `with()`
+#### `run()`、`let()` 与 `with()`
 
 `?.` is nice if you want to call a function on something that might be null. But what if you want to call a function that takes a non-null parameter, but the value you want to pass for that parameter might be null? Try `run()`, which is an extension function on `Any?` that takes a lambda with receiver as a parameter and invokes it on the value that it's called on, and use `?.` to call `run()` only if the object is non-null:
 
@@ -1329,7 +1329,7 @@ val result = with(someExpression) {
 In the last line, there's an implicit `this.` in front of both `memberFunction()` and `memberProperty` (if these exist on the type of `someExpression`). The return value is that of the last expression.
 
 
-#### `apply()` and `also()`
+#### `apply()` 与 `also()`
 
 If you don't care about the return value from the function, but you want to make one or more calls involving something that might be null and then keep on using that value, try `apply()`, which returns the value it's called on. This is particularly useful if you want to work with many members of the object in question:
 
@@ -1354,7 +1354,7 @@ maybeNull?.also {
 ```
 
 
-#### `takeIf()` and `takeUnless()`
+#### `takeIf()` 与 `takeUnless()`
 
 If you want to use a value only if it satisfies a certain condition, try `takeIf()`, which returns the value it's called on if it satisfies the given predicate, and null otherwise. There's also `takeUnless()`, which inverts the logic. You can follow this with a `?.` to perform an operation on the value only if it satisfies the predicate. Below, we compute the square of some expression, but only if the expression value is at least 42:
 
@@ -1363,10 +1363,10 @@ val result = someExpression.takeIf { it >= 42 } ?.let { it * it }
 ```
 
 
-## Packages and imports
+## 包与导入
 
 
-### Packages
+### 包
 
 Every Kotlin file should belong to a _package_. This is somewhat similar to modules in Python, but files need to explicitly declare which package they belong to, and a package implicitly comes into existence whenever any file declares itself to belong to that package (as opposed to explicitly defining a module with `__init__.py` and having all the files in that directory implicitly belong to the module). The package declaration must go on the top of the file:
 
@@ -1378,12 +1378,12 @@ If a file doesn't declare a package, it belongs to the nameless _default package
 
 Package names customarily correspond to the directory structure - note that the source file name should _not_ be a part of the package name (so if you follow this, file-level symbol names must be unique within an entire directory, not just within a file). However, this correspondence is not required, so if you're going to do interop with Java code and all your package names must start with the same prefix, e.g. `org.khanacademy`, you might be relieved to learn that you don't need to put all your code inside `org/khanacademy` (which is what Java would have forced you to do) - instead, you could start out with a directory called e.g. `content`, and the files inside it could declare that they belong to the package `org.khanacademy.content`. However, if you have a mixed project with both Kotlin and Java code, the convention is to use the Java-style package directories for Kotlin code too.
 
-While the dots suggest that packages are nested inside each other, that's not actually the case from a language standpoint. While it's a good idea to organize your code such that the "subpackages" of `content`, such as  `content.exercises` and `content.articles`, both contain content-related code, these three packages are unrelated from a language standpoint. However, if you use _modules_ (as defined by your build system), it is typically the case that all "subpackages" go in the same module, in which case symbols with [`internal` visibility](#visibility-modifiers) are visible throughout the subpackages.
+While the dots suggest that packages are nested inside each other, that's not actually the case from a language standpoint. While it's a good idea to organize your code such that the "subpackages" of `content`, such as  `content.exercises` and `content.articles`, both contain content-related code, these three packages are unrelated from a language standpoint. However, if you use _modules_ (as defined by your build system), it is typically the case that all "subpackages" go in the same module, in which case symbols with [`internal` visibility](#可见性修饰符) are visible throughout the subpackages.
 
 Package names customarily contain only lowercase letters (no underscores) and the separating dots.
 
 
-### Imports
+### 导入
 
 In order to use something from a package, it is sufficient to use the package name to fully qualify the name of the symbol at the place where you use the symbol:
 
@@ -1415,12 +1415,12 @@ If there is a naming conflict, you should usually import just one of the symbols
 import content.exercises.Exercise as Ex
 ```
 
-In Kotlin, importing is a compile-time concept - importing something does not actually cause any code to run (unlike Python, where all top-level statements in a file are executed at import time). Therefore, circular imports are allowed, but they might suggest a design problem in your code. However, during execution, a class will be loaded the first time it (or any of its properties or functions) is referenced, and class loading causes [companion objects](#companion-objects) to be initialized - this can lead to runtime exceptions if you have circular dependencies.
+In Kotlin, importing is a compile-time concept - importing something does not actually cause any code to run (unlike Python, where all top-level statements in a file are executed at import time). Therefore, circular imports are allowed, but they might suggest a design problem in your code. However, during execution, a class will be loaded the first time it (or any of its properties or functions) is referenced, and class loading causes [伴生对象](#伴生对象) to be initialized - this can lead to runtime exceptions if you have circular dependencies.
 
 Every file implicitly imports its own package and a number of built-in Kotlin and Java packages.
 
 
-## Visibility modifiers
+## 可见性修饰符
 
 Kotlin allows you to enforce symbol visibility (which Python only does via underscore conventions) via _visibility modifiers_, which can be placed on symbol declarations. If you don't supply a visibility modifier, you get the default visibility level, which is _public_.
 
@@ -1444,7 +1444,7 @@ For a symbol that is declared inside a class:
 
 * `public` (or omitted): this symbol is visible to any code that can see the containing class
 * `internal`: this symbol is only visible to code that exists inside a file that belongs to the same module as the file where this symbol is declared, and that can also see the containing class
-* `protected`: this symbol is only visible inside the containing class and all of its subclasses, no matter where they are declared (so if your class is public and [open](#subclassing), anyone can subclass it and thus get to see and use the protected members). If you have used Java: this does _not_ also grant access from the rest of the package.
+* `protected`: this symbol is only visible inside the containing class and all of its subclasses, no matter where they are declared (so if your class is public and [open](#子类化), anyone can subclass it and thus get to see and use the protected members). If you have used Java: this does _not_ also grant access from the rest of the package.
 * `private`: this symbol is only visible inside the containing class
 
 A constructor can also have a visibility modifier. If you want to place one on the primary constructor (which you might want to do if you have a number of secondary constructors which all invoke a complicated primary constructor that you don't want to expose), you need to include the `constructor` keyword: `class Person private constructor(val name: String)`.
@@ -1453,13 +1453,13 @@ Visibility modifiers can't be placed on local variables, since their visibility 
 
 The type of a property, and the types that are used for the parameters and the return type of a function, must be "at least as visible" as the property/function itself. For example, a public function can't take a private type as a parameter.
 
-The visibility level only affects the _lexical visibility_ of the _symbol_ - i.e., where the compiler allows you to type out the symbol. It does not affect where _instances_ are used: for example, a public top-level function may well return an instance of a private class, as long as the return type doesn't mention the private class name but is instead a public base class of the private class (possibly `Any`) or a public interface that the private class implements. When you [subclass](#subclassing) a class, its private members are also inherited by the subclass, but are not directly accessible there - however, if you call an inherited public function that happens to access a private member, that's fine.
+The visibility level only affects the _lexical visibility_ of the _symbol_ - i.e., where the compiler allows you to type out the symbol. It does not affect where _instances_ are used: for example, a public top-level function may well return an instance of a private class, as long as the return type doesn't mention the private class name but is instead a public base class of the private class (possibly `Any`) or a public interface that the private class implements. When you [subclass](#子类化) a class, its private members are also inherited by the subclass, but are not directly accessible there - however, if you call an inherited public function that happens to access a private member, that's fine.
 
 
-## Inheritance
+## 继承
 
 
-### Subclassing
+### 子类化
 
 Kotlin supports single-parent class inheritance - so each class (except the root class `Any`) has got exactly one parent class, called a _superclass_. Kotlin wants you to think through your class design to make sure that it's actually safe to _subclass_ it, so classes are _closed_ by default and can't be inherited from unless you explicitly declare the class to be _open_ or _abstract_. You can then subclass from that class by declaring a new class which mentions its parent class after a colon:
 
@@ -1493,7 +1493,7 @@ Note that we do not use `val` in front of `maxSpeed` in `Car` - doing so would h
 When an instance of a subclass is constructed, the superclass "part" is constructed first (via the superclass constructor). This means that during execution of the constructor of an open class, it could be that the object being constructed is an instance of a subclass, in which case the subclass-specific properties have not been initialized yet. For that reason, calling an open function from a constructor is risky: it might be overridden in the subclass, and if it is accessing subclass-specific properties, those won't be initialized yet.
 
 
-### Overriding
+### 覆盖
 
 If a member function or property is declared as `open`, subclasses may _override_ it by providing a new implementation. Let's say that `MotorVehicle` declares this function:
 
@@ -1519,7 +1519,7 @@ override fun drive() =
 ```
 
 
-### Interfaces
+### 接口
 
 The single-parent rule often becomes too limiting, as you'll often find commonalities between classes in different branches of a class hierarchy. These commonalities can be expressed in _interfaces_.
 
@@ -1549,10 +1549,10 @@ Subclasses of a class that implements an interface (in this case, `Car`) are als
 
 A symbol that is declared inside an interface normally should be public. The only other legal visibility modifier is `private`, which can only be used if the function body is supplied - that function may then be called by each class that implements the interface, but not by anyone else.
 
-As for why you would want to create an interface, other than as a reminder to have your classes implement certain members, see the section on [polymorphism](#polymorphism).
+As for why you would want to create an interface, other than as a reminder to have your classes implement certain members, see the section on [多态](#多态).
 
 
-### Abstract classes
+### 抽象类
 
 Some superclasses are very useful as a grouping mechanism for related classes and for providing shared functions, but are so general that they're not useful on their own. `MotorVehicle` seems to fit this description. Such a class should be declared _abstract_, which will prevent the class from being instantiated directly:
 
@@ -1574,7 +1574,7 @@ abstract override fun bar(): Int
 Being abstract is the only way to "escape" from having to implement the members of your interfaces, by offloading the work onto your subclasses - if a subclass wants to be concrete, it must implement all the "missing" members.
 
 
-### Polymorphism
+### 多态
 
 Polymorphism is the ability to treat objects with similar traits in a common way. In Python, this is achieved via _ducktyping_: if `x` refers to some object, you can call `x.quack()` as long as the object happens to have the function `quack()` - nothing else needs to be known (or rather, assumed) about the object. That's very flexible, but also risky: if `x` is a parameter, every caller of your function must be aware that the object they pass to it must have `quack()`, and if someone gets it wrong, the program blows up at runtime.
 
@@ -1598,13 +1598,13 @@ ride(car)
 
 We're allowed to pass a `Car` to `boast()` because `Car` is a subclass of `MotorVehicle`. We're allowed to pass a `Car` to `ride()` because `Car` implements `Driveable` (thanks to being a subclass `MotorVehicle`). Inside `boast()`, we're only allowed to access the members of the declared parameter type `MotorVehicle`, even if we're in a situation where we know that it's really a `Car` (because there could be other callers that pass a non-`Car`). Inside `ride()`, we're only allowed to access the members of the declared parameter type `Driveable`. This ensures that every member lookup is safe - the compiler only allows you to pass objects that are guaranteed to have the necessary members. The downside is that you will sometimes be forced to declare "unnecessary" interfaces or wrapper classes in order to make a function accept instances of different classes.
 
-With collections and functions, polymorphism becomes more complicated - see the section on [generics](#generics).
+With collections and functions, polymorphism becomes more complicated - see the section on [泛型](#泛型).
 
 
 [//]: TODO (Overload resolution rules)
 
 
-### Casting and type testing
+### 类型转换与类型检测
 
 When you take an interface or an open class as a parameter, you generally don't know the real type of the parameter at runtime, since it could be an instance of a subclass or of any class that implements the interface. It is possible to check what the exact type is, but like in Python, you should generally avoid it and instead design your class hierarchy such that you can do what you need by proper overriding of functions or properties.
 
@@ -1641,7 +1641,7 @@ val p = x as Person?
 ```
 
 
-### Delegation
+### 委托
 
 If you find that an interface that you want a class to implement is already implemented by one of the properties of the class, you can _delegate_ the implementation of that interface to that property with `by`:
 
@@ -1658,7 +1658,7 @@ open class MotorVehicle(val engine: Engine): PowerSource by engine
 This will automatically implement all the interface members of `PowerSource` in `MotorVehicle` by invoking the same member on `engine`. This only works for properties that are declared in the constructor.
 
 
-### Delegated properties
+### 属性委托
 
 Let's say that you're writing a simple ORM. Your database library represents a row as instances of a class `Entity`, with functions like `getString("name")` and `getLong("age")` for getting typed values from the given columns. We could create a typed wrapper class like this:
 
@@ -1744,15 +1744,15 @@ val name: String? by lazy {
 ```
 
 
-### Sealed classes
+### 密封类
 
 If you want to restrict the set of subclasses of a base class, you can declare the base class to be `sealed` (which also makes it abstract), in which case you can only declare subclasses in the same file. The compiler then knows the complete set of possible subclasses, which will let you do exhaustive `when` expression for all the possible subtypes without the need for an `else` clause (and if you add another subclass in the future and forget to update the `when`, the compiler will let you know).
 
 
-## Objects and companion objects
+## 对象与伴生对象
 
 
-### Object declarations
+### 对象声明
 
 If you need a _singleton_ - a class that only has got one instance - you can declare the class in the usual way, but use the `object` keyword instead of `class`:
 
@@ -1776,7 +1776,7 @@ println(CarFactory.cars.size)
 ```
 
 
-### Companion objects
+### 伴生对象
 
 If you need a function or a property to be tied to a class rather than to instances of it (similar to `@staticmethod` in Python), you can declare it inside a _companion object_:
 
@@ -1801,14 +1801,14 @@ val car = Car.makeCar(150)
 println(Car.Factory.cars.size)
 ```
 
-In spite of this syntactical convenience, the companion object is a proper object on its own, and can have its own supertypes - and you can assign it to a variable and pass it around. If you're integrating with Java code and need a true `static` member, you can [annotate](#annotations) a member inside a companion object with `@JvmStatic`.
+In spite of this syntactical convenience, the companion object is a proper object on its own, and can have its own supertypes - and you can assign it to a variable and pass it around. If you're integrating with Java code and need a true `static` member, you can [annotate](#注解) a member inside a companion object with `@JvmStatic`.
 
 A companion object is initialized when the class is loaded (typically the first time it's referenced by other code that is being executed), in a thread-safe manner. You can omit the name, in which case the name defaults to `Companion`. A class can only have one companion object, and companion objects can not be nested.
 
 Companion objects and their members can only be accessed via the containing class name, not via instances of the containing class. Kotlin does not support class-level functions that also can be overridden in subclasses (like `@classmethod` in Python). If you try to redeclare a companion object in a subclass, you'll just shadow the one from the base class. If you need an overridable "class-level" function, make it an ordinary open function in which you do not access any instance members - you can override it in subclasses, and when you call it via an object instance, the override in the object's class will be called. It is possible, but inconvenient, to call functions via a class reference in Kotlin, so we won't cover that here.
 
 
-### Object expressions
+### 对象表达式
 
 Java only got support for function types and lambda expressions a few years ago. Previously, Java worked around this by using an interface to define a function signature and allowing an inline, anonymous definition of a class that implements the interface. This is also available in Kotlin, partly for compatibility with Java libraries and partly because it can be handy for specifying event handlers (in particular if there is more than one event type that must be listened for by the same listener object). Consider an interface or a (possibly abstract) class, as well a function that takes an instance of it:
 
@@ -1837,10 +1837,10 @@ In spite of the `object` keyword being used, a new instance of the anonymous cla
 The body of an object expression may access, and possibly modify, the local variables of the containing scope.
 
 
-## Generics
+## 泛型
 
 
-### Generic type parameters
+### 泛型类型参数
 
 One might think that static typing would make it very impractical to make collection classes or any other class that needs to contain members whose types vary with each usage. Generics to the rescue: they allow you to specify a "placeholder" type in a class or function that must be filled in whenever the class or function is used. For example, a node in a linked list needs to contain data of some type that is not known when we write the class, so we introduce a _generic type parameter_ `T` (they are conventionally given single-letter names):
 
@@ -1867,7 +1867,7 @@ fun <T> makeLinkedList(vararg elements: T): TreeNode<T>? {
 ```
 
 
-### Constraints
+### 约束
 
 You can restrict the types that can be used for a generic type parameter, by specifying that it must be an instance of a specific type or of a subclass thereof. If you've got a class or interface called `Vehicle`, you can do:
 
@@ -1884,10 +1884,10 @@ class TreeNode<T> where T : Vehicle, T : HasWheels
 ```
 
 
-### Variance
+### 型变
 
 
-#### Introduction
+#### 简介
 
 Pop quiz: if `Apple` is a subtype of `Fruit`, and `Bowl` is a generic container class, is `Bowl<Apple>` a subtype of `Bowl<Fruit>`? The answer is - perhaps surprisingly - _no_. The reason is that if it were a subtype, we would be able to break the type system like this:
 
@@ -1902,7 +1902,7 @@ val apple = bowl.get() // Boom!
 If the second-to-last line compiled, it would allow us to put a pear into what is ostensibly a bowl of only apples, and your code would explode when it tried to extract the "apple" from the bowl. However, it's frequently useful to be able to let the type hierarchy of a generic type parameter "flow" to the generic class. As we saw above, though, some care must be taken - the solution is to restrict the direction in which you can move data in and out of the generic object.
 
 
-#### Declaration-site covariance and contravariance
+#### 声明处协变与逆变
 
 If you have an instance of `Generic<Subtype>`, and you want to refer to it as a `Generic<Supertype>`, you can safely _get_ instances of the generic type parameter from it - these will truly be instances of `Subtype` (because they come from an instance of `Generic<Subtype>`), but they will appear to you as instances of `Supertype` (because you've told the compiler that you have a `Generic<Supertype>`). This is safe; it is called _covariance_, and Kotlin lets you do _declaration-site covariance_ by putting `out` in front of the generic type parameter. If you do, you may only use that type parameter as a return type, not as a parameter type. Here is the simplest useful covariant interface:
 
@@ -1942,7 +1942,7 @@ val c: Consumer<Apple> = Bowl<Fruit>()
 ```
 
 
-#### Variance directions
+#### 型变方向
 
 If the parameters or return types of the members of a variant type are themselves variant, it gets a bit complicated. Function types in parameters and return types make it even more challenging. If you're wondering whether it's safe to use a variant type parameter `T` in a particular position, ask yourself:
 
@@ -2009,7 +2009,7 @@ A contravariant type parameter may be used in the converse situations. It is lef
 * `fun f(): () -> Consumer<T>`
 
 
-#### Type projections (use-site covariance and contravariance)
+#### 类型投影（使用处协变与逆变）
 
 If you're using a generic class whose type parameters haven't been declared in a variant way (either because its authors didn't think of it, or because the type parameters can't have either variance kind because they are used both as parameter types and return types), you can still use it in a variant way thanks to _type projection_. The term "projection" refers to the fact that when you do this, you might restrict yourself to using only some of its members - so you're in a sense only seeing a partial, or "projected" version of the class. Let's look again at our `Bowl` class, but without the variant interfaces this time:
 
@@ -2064,11 +2064,11 @@ When using a generic type where you have star-projected one or more of its type 
 * Not use any members that take a star-projected type as a parameter
 
 
-### Reified type parameters
+### 具体化的类型参数
 
 Sadly, Kotlin has inherited Java's limitation on generics: they are strictly a compile-time concept - the generic type information is _erased_ at runtime. Therefore, you can not say `T()` to construct a new instance of a generic type; you can not at runtime check if an object is an instance of a generic type parameter; and if you try to cast between generic types, the compiler can't guarantee the correctness of it.
 
-Luckily, Kotlin has got _reified type parameters_, which alleviates some of these problems. By writing `reified` in front of a generic type parameter, it does become available at runtime, and you'll get to write `T::class` to get the [class metadata](#obtaining-member-references-from-a-class-reference). You can only do this in inline functions (because an inline function will be compiled into its callsite, where the type information _is_ available at runtime), but it still goes a long way. For example, you can make an inline wrapper function for a big function that has got a less elegant signature.
+Luckily, Kotlin has got _reified type parameters_, which alleviates some of these problems. By writing `reified` in front of a generic type parameter, it does become available at runtime, and you'll get to write `T::class` to get the [class metadata](#由类引用获取成员引用). You can only do this in inline functions (because an inline function will be compiled into its callsite, where the type information _is_ available at runtime), but it still goes a long way. For example, you can make an inline wrapper function for a big function that has got a less elegant signature.
 
 In the example below, we assume that there is a `DbModel` base class, and that every subclass has got a parameterless primary constructor. In the inline function, `T` is reified, so we can get the class metadata. We pass this to the function that does the real work of talking to the database.
 
@@ -2089,7 +2089,7 @@ fun <T : DbModel> loadFromDb(cls: KClass<T>, id: String): T {
 Now, you can say `loadFromDb<Exercise>("x01234567")` to load an object from the `Exercise` database table.
 
 
-## Extension functions/properties
+## 扩展函数/属性
 
 Since you can't modify built-in or third-party classes, you can't directly add functions or properties to them. If you can achieve what you want by only using the public members of a class, you can of course just write a function that takes an instance of the class as a parameter - but sometimes, you'd really like to be able to say `x.foo(y)` instead of `foo(x, y)`,  especially if you want to make a chain of such calls or property lookups: `x.foo(y).bar().baz` instead of `getBaz(bar(foo(x, y)))`. 
 
@@ -2127,10 +2127,10 @@ val x = foo(Car())
 There are a lot of built-in extension functions/properties in Kotlin - for example, `map()`, `filter()`, and the rest of the framework for processing collections in a functional manner is built using extension functions.
 
 
-## Member references and reflection
+## 成员引用与反射
 
 
-### Property references
+### 属性引用
 
 Consider this class: 
 
@@ -2171,7 +2171,7 @@ incrementProperty(person, Person::age)
 You can also get a reference to a top-level property by just prefixing the property name with `::` (e.g. `::foo`), and its type will be `KProperty0<V>` or `KMutableProperty0<V>`.
 
 
-### Function references
+### 函数引用
 
 Functions act similarly to properties, but can be referenced as two different kinds of types.
 
@@ -2213,13 +2213,13 @@ If you only want to call the function and don't care about the metadata, use a f
 You can get a reference to an top-level function by prefixing the function name with `::` (e.g. `::foo`).
 
 
-### Obtaining member references from a class reference
+### 由类引用获取成员引用
 
 While it is possible in Kotlin to dynamically create new classes at runtime or to add members to a class, it's tricky and slow, and generally discouraged. However, it is easy to dynamically inspect an object to see e.g. what properties and functions it contains and which annotations exist on them. This is called _reflection_, and it's not very performant, so avoid it unless you really need it.
 
 Kotlin has got its own reflection library (`kotlin-reflect.jar` must be included in your build). When targeting the JVM, you can also use the Java reflection facilities. Note that the Kotlin reflection isn't quite feature-complete yet - in particular, you can't use it to inspect built-in classes like `String`.
 
-Warning: using reflection is usually the wrong way to solve problems in Kotlin! In particular, if you have several classes that all have some common properties/functions and you want to write a function that can take an instance of any of those classes and use those properties, the correct approach is to define an interface with the common properties/functions and make all the relevant classes implement it; the function can then take that interface as a parameter. If you don't control those classes, you can use the [Adapter pattern](https://en.wikipedia.org/wiki/Adapter_pattern) and write wrapper classes that implement the interface - this is very easy thanks to Kotlin's [delegation feature](#delegation). You can also get a lot of leverage out of using generics in clever ways.
+Warning: using reflection is usually the wrong way to solve problems in Kotlin! In particular, if you have several classes that all have some common properties/functions and you want to write a function that can take an instance of any of those classes and use those properties, the correct approach is to define an interface with the common properties/functions and make all the relevant classes implement it; the function can then take that interface as a parameter. If you don't control those classes, you can use the [Adapter pattern](https://en.wikipedia.org/wiki/Adapter_pattern) and write wrapper classes that implement the interface - this is very easy thanks to Kotlin's [delegation feature](#委托). You can also get a lot of leverage out of using generics in clever ways.
 
 Appending `::class` to a class name will give you a `KClass<C>` metadata object for that class. The generic type parameter `C` is the class itself, so you can use `KClass<*>` if you're writing a function that can work with metadata for any class, or you can make a generic function with a type parameter `T` and parameter type `KClass<T>`. From this, you can obtain references to the members of the class. The most interesting properties on `KClass` are probably `primaryConstructor`, `constructors`, `memberProperties`, `declaredMemberProperties`, `memberFunctions`, and `declaredMemberFunctions`. The difference between e.g. `memberProperties` and `declaredMemberProperties` is that the former includes inherited properties, while the latter only includes the properties that have been declared in the class' own body.
 
@@ -2240,7 +2240,7 @@ val newPerson = ctor("Karen", 45)
 ```
 
 
-### Java-style reflection
+### Java 风格反射
 
 If you're targeting the JVM platform, you can also use Java's reflection system directly. In this example, we grab a function reference from an object's class by specifying the function's name as a string (if the function takes parameters, you also need to specify their types), and then we call it. Note that we didn't mention `String` anywhere - this technique works without knowing what the object's class is, but it will raise an exception if the object's class doesn't have the requested function. However, Java-style function references do not have type information, so you won't get verification of the parameter types, and you must cast the return value:
 
@@ -2255,7 +2255,7 @@ If you don't have an instance of the class, you can get the class metadata with 
 If you need to look up the class dynamically as well, you can use `Class.forName()` and supply the fully-qualified name of the class.
 
 
-## Annotations
+## 注解
 
 While Kotlin annotations look like Python decorators, they are far less flexible: they can generally only be used for metadata. They are pure data-containing classes, and do not contain any executable code. Some built-in annotations have an effect on the compilation process (such as `@JvmStatic`), but custom annotations are only useful for providing metadata that can be inspected at runtime by the reflection system. We won't delve deeply into annotations here, but here is an example. The annotations on the annotation declaration itself specify what constructs the annotation may be applied to and whether it is available for runtime inspection.
 
@@ -2276,7 +2276,7 @@ println(getTestSize(Tests::class))
 ```
 
 
-## File I/O
+## 文件 I/O
 
 Kotlin has inherited Java's fidgety (but very flexible) way of doing I/O, but with some simplifying extra features. We won't get into all of it here, so for starters, this is how to iterate through all the lines of a file (you'll need `import java.io.File`):
 
@@ -2315,7 +2315,7 @@ If you want to write strings gradually, you need to create an `OutputStreamWrite
 If you need a fancier way of reading or writing file data, you have access to  the full Java suite of I/O classes - in particular, `Scanner`, which can parse numbers and other data types from files or other streams, and `BufferedReader` (which is good for efficient reading of large amounts of data), which you can obtain by calling `bufferedReader()` on a file or stream. See any Java tutorial for how to use these.
 
 
-## Scoped resource usage
+## 作用域内资源用法
 
 Kotlin does not have Python's _resource managers_ or Java's _try-with-resources_, but thanks to extension functions, there's `use`:
 
@@ -2330,10 +2330,10 @@ File("/home/aasmund/test.txt").inputStream().use {
 
 Thus, you can create something resource manager-like by creating a class that implements `Closeable`, does its setup work in `init`, and does its cleanup work in `close()`.
 
-In case you're wondering about how `use`, which is a function, can just be followed by a block like that, see the section on [DSL support](#receivers).
+In case you're wondering about how `use`, which is a function, can just be followed by a block like that, see the section on [DSL support](#接收者).
 
 
-## Documentation
+## 编写文档
 
 Kotlin's documentation syntax is called _KDoc_. A KDoc block is placed above the construct it describes, and begins with `/**` and ends with `*/` (possibly on one line; if not, each intermediate lines should start with an aligned asterisk). The first block of text is the summary; then, you can use _block tags_ to provide information about specific parts of the construct. Some block tags are `@param` for function parameters and generic type parameters, and `@return` for the return value. You can link to identifiers inside brackets. All the text outside of links and block tag names is in Markdown format.
 

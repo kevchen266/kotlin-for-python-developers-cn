@@ -1,4 +1,4 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
@@ -6,7 +6,7 @@ _This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is o
 Kotlin's object model is substantially different from Python's. Most importantly, classes are _not_ dynamically modifiable at runtime! (There are some limited exceptions to this, but you generally shouldn't do it. However, it _is_ possible to dynamically _inspect_ classes and objects at runtime with a feature called _reflection_ - this can be useful, but should be judiciously used.) All properties (attributes) and functions that might ever be needed on a class must be declared either directly in the class body or as [_extension functions_](extension-functionsproperties.html), so you should think carefully through your class design.
 
 
-## Declaration and instantiation
+## 声明与实例化
 
 Classes are declared with the `class` keyword. A basic class without any properties or functions of its own looks like this:
 
@@ -23,16 +23,16 @@ val object = Empty()
 Class names should use `UpperCamelCase`, just like in Python.
 
 
-## Inherited built-in functions
+## 继承的内置函数
 
-Every class that doesn't explicitly declare a parent class inherits from `Any`, which is the root of the class hierarchy (similar to `object` in Python) - more on [inheritance](inheritance.html) later. Via `Any`, every class automatically has the following functions:
+Every class that doesn't explicitly declare a parent class inherits from `Any`, which is the root of the class hierarchy (similar to `object` in Python) - more on [继承](inheritance.html) later. Via `Any`, every class automatically has the following functions:
 
 * `toString()` returns a string representation of the object, similar to `__str__()` in Python (the default implementation is rather uninteresting, as it only returns the class name and something akin to the object's id)
 * `equals(x)` checks if this object is equal to some other object `x` of any class (by default, this just checks if this object is the _same_ object as `x` - just like `is` in Python - but it can be overridden by subclasses to do custom comparisons of property values)
 * `hashCode()` returns an integer that can be used by hash tables and for shortcutting complex equality comparisons (objects that are equal according to `equals()` must have the same hash code, so if two objects' hash codes are different, the objects cannot be equal)
 
 
-## Properties
+## 属性
 
 Empty classes aren't very interesting, so let's make a class with some _properties_:
 
@@ -53,14 +53,14 @@ a.age = 42
 println("${a.age} ${b.age}") // Prints "42 32"
 ```
 
-To be fair, you'd get the same output in Python, but the mechanism would be different: both instances would start out without any attributes of their own (`age` and `name` would be attributes on the class), and the first printing would access the class attribute; only the assignment would cause an `age` attribute to appear on `a`. In Kotlin, there are no class properties in this example, and each instance starts out with both properties. If you need a class-level property, see the section on [companion objects](objects-and-companion-objects.html#companion-objects).
+To be fair, you'd get the same output in Python, but the mechanism would be different: both instances would start out without any attributes of their own (`age` and `name` would be attributes on the class), and the first printing would access the class attribute; only the assignment would cause an `age` attribute to appear on `a`. In Kotlin, there are no class properties in this example, and each instance starts out with both properties. If you need a class-level property, see the section on [伴生对象](objects-and-companion-objects.html#伴生对象).
 
 Because the set of properties of an object is constrained to be exactly the set of properties that are declared at compile-time in the object's class, it's not possible to add new properties to an object or to a class at runtime, so e.g. `a.nationality = "Norwegian"` won't compile.
 
 Property names should use `lowerCamelCase` instead of `snake_case`.
 
 
-## Constructors and initializer blocks
+## 构造函数与初始化块
 
 Properties that don't have a sensible default should be taken as constructor parameters. Like with Python's `__init__()`, Kotlin constructors and initializer blocks run automatically whenever an instance of an object is created (note that there's nothing that corresponds to `__new__()`).  A Kotlin class may have one _primary constructor_, whose parameters are supplied after the class name. The primary constructor parameters are available when you initialize properties in the class body, and also in the optional _initializer block_, which can contain complex initialization logic (a property can be declared without an initial value, in which case it must be initialized in `init`). Also, you'll frequently want to use `val` instead of `var` in order to make your properties immutable after construction.
 
@@ -102,7 +102,7 @@ val c = Person(1995, "Lynne") // age = 23
 Note that if a class has got a primary constructor, it is no longer possible to create an instance of it without supplying any parameters (unless one of the secondary constructors is parameterless).
 
 
-## Setters and getters
+## Setter 与 getter
 
 A property is really a _backing field_ (kind of a hidden variable inside the object) and two accessor functions: one that gets the value of the variable and one that sets the value. You can override one or both of the accessors (an accessor that is not overridden automatically gets the default behavior of just returning or setting the backing field directly). Inside an accessor, you can reference the backing field with `field`. The setter accessor must take a parameter `value`, which is the value that is being assigned to the property. A getter body could either be a one-line expression preceded by `=` or a more complex body enclosed in curly braces, while a setter body typically includes an assignment and must therefore be enclosed in curly braces.  If you want to validate that the age is nonnegative:
 
@@ -137,7 +137,7 @@ Note that even though this is a read-only property due to declaring it with `val
 The indentation in front of the accessors is due to convention; like elsewhere in Kotlin, it has no syntactic significance. The compiler can tell which accessors belong to which properties because the only legal place for an accessor is immediately after the property declaration (and there can be at most one getter and one setter) - so you can't split the property declaration and the accessor declarations. However, the order of the accessors doesn't matter.
 
 
-## Member functions
+## 成员函数
 
 A function declared inside a class is called a _member function_ of that class. Like in Python, every invocation of a member function must be performed on an instance of the class, and the instance will be available during the execution of the function - but unlike Python, the function signature doesn't declare that: there is no explicit `self` parameter. Instead, every member function can use the keyword `this` to reference the current instance, without declaring it. Unlike Python, as long as there is no name conflict with an identically-named parameter or local variable, `this` can be omitted. If we do this inside a `Person` class with a `name` property:
 
@@ -186,7 +186,7 @@ if (::name.isInitialized) println(name)
 `lateinit` can only be used with `var`, not with `val`, and the type must be non-primitive and non-nullable.
 
 
-## Infix functions
+## 中缀函数
 
 You can designate a one-parameter member function or [extension function](extension-functionsproperties.html) for use as an infix operator, which can be useful if you're designing a DSL. The left operand will become `this`, and the right operand will become the parameter. If you do this inside a `Person` class that has got a `name` property:
 
@@ -207,7 +207,7 @@ lisa marry anne // Prints "Lisa and Anne are getting married!"
 All infix functions have the same [precedence](https://kotlinlang.org/docs/reference/grammar.html#precedence) (which is shared with all the built-in infix functions, such as the bitwise functions `and`, `or`, `inv`, etc.): lower than the arithmetic operators and the `..` range operator, but higher than the Elvis operator `?:`, comparisons, logic operators, and assignments.
 
 
-## Operators
+## 操作符
 
 Most of the operators that are recognized by Kotlin's syntax have predefined textual names and are available for implementation in your classes, just like you can do with Python's double-underscore operator names. For example, the binary `+` operator is called `plus`. Similarly to the infix example, if you do this inside a `Person` class that has got a `name` property:
 
@@ -225,12 +225,12 @@ lisa + anne // Prints "Lisa and Anne are getting married!"
 
 A particularly interesting operator is the function-call parenthesis pair, whose function name is `invoke` - if you implement this, you'll be able to call instances of your class as if they were functions. You can even overload it in order to provide different function signatures.
 
-`operator` can also be used for certain other predefined functions in order to create fancy effects, such as [delegated properties](inheritance.html#delegated-properties).
+`operator` can also be used for certain other predefined functions in order to create fancy effects, such as [属性委托](inheritance.html#属性委托).
 
 Since the available operators are hardcoded into the formal Kotlin syntax, you can not invent new operators, and overriding an operator does not affect its [precedence](https://kotlinlang.org/docs/reference/grammar.html#precedence).
 
 
-## Enum classes
+## 枚举类
 
 Whenever you want a variable that can only take on a limited number of values where the only feature of each value is that it's distinct from all the other values, you can create an _enum class_:
 
@@ -262,7 +262,7 @@ enum class ContentKind(val kind: String) {
 Null safety is enforced as usual, so a variable of type `ContentKind` can not be null, unlike in Java.
 
 
-## Data classes
+## 数据类
 
 Frequently - especially if you want a complex return type from a function or a complex key for a map - you'll want a quick and dirty class which only contains some properties, but is still comparable for equality and is usable as a map key. If you create a _data class_, you'll get automatic implementations of the following functions: `toString()` (which will produce a string containing all the property names and values), `equals()` (which will do a per-property `equals()`), `hashCode()` (which will hash the individual properties and combine the hashes), and the functions that are required to enable Kotlin to destructure an instance of the class into a declaration (`component1()`, `component2()`, etc.):
 
@@ -279,4 +279,4 @@ data class ContentDescriptor(val kind: ContentKind, val id: String) {
 
 ---
 
-[← Previous: Functions](functions.html) | [Next: Exceptions →](exceptions.html)
+[← 上一节：函数](functions.html) | [下一节：异常 →](exceptions.html)

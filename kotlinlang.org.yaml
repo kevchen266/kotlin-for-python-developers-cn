@@ -1,6 +1,6 @@
 - md: 00-introduction.md
   url: introduction.html
-  title: "Introduction"
+  title: "简介"
 
 - md: 01-hello-world.md
   url: hello-world.html
@@ -8,93 +8,93 @@
 
 - md: 02-compiling-and-running.md
   url: compiling-and-running.html
-  title: "Compiling and running"
+  title: "编译与运行"
 
 - md: 03-declaring-variables.md
   url: declaring-variables.html
-  title: "Declaring variables"
+  title: "声明变量"
 
 - md: 04-primitive-data-types-and-their-limitations.md
   url: primitive-data-types-and-their-limitations.html
-  title: "Primitive data types and their limitations"
+  title: "原生数据类型及其表示范围"
 
 - md: 05-strings.md
   url: strings.html
-  title: "Strings"
+  title: "字符串"
 
 - md: 06-conditionals.md
   url: conditionals.html
-  title: "Conditionals"
+  title: "条件式"
 
 - md: 07-collections.md
   url: collections.html
-  title: "Collections"
+  title: "集合"
 
 - md: 08-loops.md
   url: loops.html
-  title: "Loops"
+  title: "循环"
 
 - md: 09-functions.md
   url: functions.html
-  title: "Functions"
+  title: "函数"
 
 - md: 10-classes.md
   url: classes.html
-  title: "Classes"
+  title: "类"
 
 - md: 11-exceptions.md
   url: exceptions.html
-  title: "Exceptions"
+  title: "异常"
 
 - md: 12-null-safety.md
   url: null-safety.html
-  title: "Null safety"
+  title: "空安全"
 
 - md: 13-functional-programming.md
   url: functional-programming.html
-  title: "Functional programming"
+  title: "函数式编程"
 
 - md: 14-packages-and-imports.md
   url: packages-and-imports.html
-  title: "Packages and imports"
+  title: "包与导入"
 
 - md: 15-visibility-modifiers.md
   url: visibility-modifiers.html
-  title: "Visibility modifiers"
+  title: "可见性修饰符"
 
 - md: 16-inheritance.md
   url: inheritance.html
-  title: "Inheritance"
+  title: "继承"
 
 - md: 17-objects-and-companion-objects.md
   url: objects-and-companion-objects.html
-  title: "Objects and companion objects"
+  title: "对象与伴生对象"
 
 - md: 18-generics.md
   url: generics.html
-  title: "Generics"
+  title: "泛型"
 
 - md: 19-extension-functionsproperties.md
   url: extension-functionsproperties.html
-  title: "Extension functions/properties"
+  title: "扩展函数/属性"
 
 - md: 20-member-references-and-reflection.md
   url: member-references-and-reflection.html
-  title: "Member references and reflection"
+  title: "成员引用与反射"
 
 - md: 21-annotations.md
   url: annotations.html
-  title: "Annotations"
+  title: "注解"
 
 - md: 22-file-io.md
   url: file-io.html
-  title: "File I/O"
+  title: "文件 I/O"
 
 - md: 23-scoped-resource-usage.md
   url: scoped-resource-usage.html
-  title: "Scoped resource usage"
+  title: "作用域内资源用法"
 
 - md: 24-documentation.md
   url: documentation.html
-  title: "Documentation"
+  title: "编写文档"
 

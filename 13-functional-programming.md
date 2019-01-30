@@ -1,9 +1,9 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
 
-## Function types
+## 函数类型
 
 Like in Python, functions in Kotlin are first-class values - they can be assigned to variables and passed around as parameters. The type a function is a _function type_, which is indicated with a parenthesized parameter type list and an arrow to the return type. Consider this function:
 
@@ -33,9 +33,9 @@ class Divider : (Int, Int) -> Double {
 ```
 
 
-## Function literals: lambda expressions and anonymous functions
+## 函数字面值：lambda 表达式与匿名函数
 
-Like in Python, you can write _lambda expressions_: unnamed function declarations with a very compact syntax, which evaluate to callable function objects. In Kotlin, lambdas can contain multiple statements, which make them useful for [more complex tasks](functional-programming.html#receivers) than the single-expression lambdas of Python. The last statement must be an expression, whose result will become the return value of the lambda (unless `Unit` is the return type of the variable/parameter that the lambda expression is assigned to, in which case the lambda has no return value). A lambda expression is enclosed in curly braces, and begins by listing its parameter names and possibly their types (unless the types can be inferred from context):
+Like in Python, you can write _lambda expressions_: unnamed function declarations with a very compact syntax, which evaluate to callable function objects. In Kotlin, lambdas can contain multiple statements, which make them useful for [more complex tasks](functional-programming.html#接收者) than the single-expression lambdas of Python. The last statement must be an expression, whose result will become the return value of the lambda (unless `Unit` is the return type of the variable/parameter that the lambda expression is assigned to, in which case the lambda has no return value). A lambda expression is enclosed in curly braces, and begins by listing its parameter names and possibly their types (unless the types can be inferred from context):
 
 ```kotlin
 val safeDivide = { numerator: Int, denominator: Int ->
@@ -73,7 +73,7 @@ A parameterless lambda does not need the arrow. A one-parameter lambda can choos
 val square: (Double) -> Double = { it * it }
 ```
 
-If the type of the last parameter to a function is a function type and you want to supply a lambda expression, you can place the lambda expression _outside_ of the parameter parentheses. If the lambda expression is the only parameter, you can omit the parentheses entirely. This is very useful for [constructing DSLs](functional-programming.html#receivers).
+If the type of the last parameter to a function is a function type and you want to supply a lambda expression, you can place the lambda expression _outside_ of the parameter parentheses. If the lambda expression is the only parameter, you can omit the parentheses entirely. This is very useful for [constructing DSLs](functional-programming.html#接收者).
 
 ```kotlin
 fun callWithPi(function: (Double) -> Double) {
@@ -98,7 +98,7 @@ callWithPi(fun(x: Double) = x * x)
 Lambda expressions and anonymous functions are collectively called _function literals_.
 
 
-## Comprehensions
+## 集合推导
 
 Kotlin can get quite close to the compactness of Python's `list`/`dict`/`set` comprehensions. Assuming that `people` is a collection of `Person` objects with a `name` property:
 
@@ -110,9 +110,9 @@ val shortGreetings = people
 
 corresponds to
 
-```kotlin
+```python
 short_greetings = [
-    "Hello, %s!" % p.name
+    f"Hello, {p.name}"  # In Python 2, this would be: "Hello, %s!" % p.name
     for p in people
     if len(p.name) < 10
 ]
@@ -125,7 +125,7 @@ These transformations can also be applied to `Sequence<T>`, which is similar to 
 There's a vast collection of functional programming-style operations available in the [`kotlin.collections` package](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html).
 
 
-## Receivers
+## 接收者
 
 The signature of a member function or an [extension function](extension-functionsproperties.html) begins with a _receiver_: the type upon which the function can be invoked. For example, the signature of `toString()` is `Any.() -> String` - it can be called on any non-null object (the receiver), it takes no parameters, and it returns a `String`. It is possible to write a lambda function with such a signature - this is called a _function literal with receiver_, and is extremely useful for building DSLs.
 
@@ -182,7 +182,7 @@ The block after `tree("root")` is the first function literal with receiver, whic
 
 If we had wanted to express the same thing in Python, it would have looked like this, and we would be hamstrung by the fact that lambda functions can only contain one expression, so we need explicit function definitions for everything but the oneliners:
 
-```kotlin
+```python
 class TreeNode:
     def __init__(self, name):
         self.name = name
@@ -215,7 +215,7 @@ t = tree("root", init_root)
 The official docs also have a very cool example with a [ DSL for constructing HTML documents](https://kotlinlang.org/docs/reference/type-safe-builders.html).
 
 
-## Inline functions
+## 内联函数
 
 There's a little bit of runtime overhead associated with lambda functions: they are really objects, so they must be instantiated, and (like other functions) calling them takes a little bit of time too. If we use the `inline` keyword on a function, we tell the compiler to _inline_ both the function and its lambda parameters (if any) - that is, the compiler will copy the code of the function (and its lambda parameters) into _every_ callsite, thus eliminating the overhead of both the lambda instantiation and the calling of the function and the lambdas. This will happen unconditionally, unlike in C and C++, where `inline` is more of a hint to the compiler. This will cause the size of the compiled code to grow, but it may be worth it for certain small but frequently-called functions.
 
@@ -246,10 +246,10 @@ println(t)
 In an inline function definition, you can use `noinline` in front of any function-typed parameter to prevent the lambda that will be passed to it from also being inlined.
 
 
-## Nice utility functions
+## 不错的工具函数
 
 
-### `run()`, `let()`, and `with()`
+### `run()`、`let()` 与 `with()`
 
 `?.` is nice if you want to call a function on something that might be null. But what if you want to call a function that takes a non-null parameter, but the value you want to pass for that parameter might be null? Try `run()`, which is an extension function on `Any?` that takes a lambda with receiver as a parameter and invokes it on the value that it's called on, and use `?.` to call `run()` only if the object is non-null:
 
@@ -290,7 +290,7 @@ val result = with(someExpression) {
 In the last line, there's an implicit `this.` in front of both `memberFunction()` and `memberProperty` (if these exist on the type of `someExpression`). The return value is that of the last expression.
 
 
-### `apply()` and `also()`
+### `apply()` 与 `also()`
 
 If you don't care about the return value from the function, but you want to make one or more calls involving something that might be null and then keep on using that value, try `apply()`, which returns the value it's called on. This is particularly useful if you want to work with many members of the object in question:
 
@@ -315,7 +315,7 @@ maybeNull?.also {
 ```
 
 
-### `takeIf()` and `takeUnless()`
+### `takeIf()` 与 `takeUnless()`
 
 If you want to use a value only if it satisfies a certain condition, try `takeIf()`, which returns the value it's called on if it satisfies the given predicate, and null otherwise. There's also `takeUnless()`, which inverts the logic. You can follow this with a `?.` to perform an operation on the value only if it satisfies the predicate. Below, we compute the square of some expression, but only if the expression value is at least 42:
 
@@ -328,4 +328,4 @@ val result = someExpression.takeIf { it >= 42 } ?.let { it * it }
 
 ---
 
-[← Previous: Null safety](null-safety.html) | [Next: Packages and imports →](packages-and-imports.html)
+[← 上一节：空安全](null-safety.html) | [下一节：包与导入 →](packages-and-imports.html)

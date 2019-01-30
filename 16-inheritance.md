@@ -1,9 +1,9 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
 
-## Subclassing
+## 子类化
 
 Kotlin supports single-parent class inheritance - so each class (except the root class `Any`) has got exactly one parent class, called a _superclass_. Kotlin wants you to think through your class design to make sure that it's actually safe to _subclass_ it, so classes are _closed_ by default and can't be inherited from unless you explicitly declare the class to be _open_ or _abstract_. You can then subclass from that class by declaring a new class which mentions its parent class after a colon:
 
@@ -37,7 +37,7 @@ Note that we do not use `val` in front of `maxSpeed` in `Car` - doing so would h
 When an instance of a subclass is constructed, the superclass "part" is constructed first (via the superclass constructor). This means that during execution of the constructor of an open class, it could be that the object being constructed is an instance of a subclass, in which case the subclass-specific properties have not been initialized yet. For that reason, calling an open function from a constructor is risky: it might be overridden in the subclass, and if it is accessing subclass-specific properties, those won't be initialized yet.
 
 
-## Overriding
+## 覆盖
 
 If a member function or property is declared as `open`, subclasses may _override_ it by providing a new implementation. Let's say that `MotorVehicle` declares this function:
 
@@ -63,7 +63,7 @@ override fun drive() =
 ```
 
 
-## Interfaces
+## 接口
 
 The single-parent rule often becomes too limiting, as you'll often find commonalities between classes in different branches of a class hierarchy. These commonalities can be expressed in _interfaces_.
 
@@ -93,10 +93,10 @@ Subclasses of a class that implements an interface (in this case, `Car`) are als
 
 A symbol that is declared inside an interface normally should be public. The only other legal visibility modifier is `private`, which can only be used if the function body is supplied - that function may then be called by each class that implements the interface, but not by anyone else.
 
-As for why you would want to create an interface, other than as a reminder to have your classes implement certain members, see the section on [polymorphism](inheritance.html#polymorphism).
+As for why you would want to create an interface, other than as a reminder to have your classes implement certain members, see the section on [多态](inheritance.html#多态).
 
 
-## Abstract classes
+## 抽象类
 
 Some superclasses are very useful as a grouping mechanism for related classes and for providing shared functions, but are so general that they're not useful on their own. `MotorVehicle` seems to fit this description. Such a class should be declared _abstract_, which will prevent the class from being instantiated directly:
 
@@ -118,7 +118,7 @@ abstract override fun bar(): Int
 Being abstract is the only way to "escape" from having to implement the members of your interfaces, by offloading the work onto your subclasses - if a subclass wants to be concrete, it must implement all the "missing" members.
 
 
-## Polymorphism
+## 多态
 
 Polymorphism is the ability to treat objects with similar traits in a common way. In Python, this is achieved via _ducktyping_: if `x` refers to some object, you can call `x.quack()` as long as the object happens to have the function `quack()` - nothing else needs to be known (or rather, assumed) about the object. That's very flexible, but also risky: if `x` is a parameter, every caller of your function must be aware that the object they pass to it must have `quack()`, and if someone gets it wrong, the program blows up at runtime.
 
@@ -142,13 +142,13 @@ ride(car)
 
 We're allowed to pass a `Car` to `boast()` because `Car` is a subclass of `MotorVehicle`. We're allowed to pass a `Car` to `ride()` because `Car` implements `Driveable` (thanks to being a subclass `MotorVehicle`). Inside `boast()`, we're only allowed to access the members of the declared parameter type `MotorVehicle`, even if we're in a situation where we know that it's really a `Car` (because there could be other callers that pass a non-`Car`). Inside `ride()`, we're only allowed to access the members of the declared parameter type `Driveable`. This ensures that every member lookup is safe - the compiler only allows you to pass objects that are guaranteed to have the necessary members. The downside is that you will sometimes be forced to declare "unnecessary" interfaces or wrapper classes in order to make a function accept instances of different classes.
 
-With collections and functions, polymorphism becomes more complicated - see the section on [generics](generics.html).
+With collections and functions, polymorphism becomes more complicated - see the section on [泛型](generics.html).
 
 
 [//]: TODO (Overload resolution rules)
 
 
-## Casting and type testing
+## 类型转换与类型检测
 
 When you take an interface or an open class as a parameter, you generally don't know the real type of the parameter at runtime, since it could be an instance of a subclass or of any class that implements the interface. It is possible to check what the exact type is, but like in Python, you should generally avoid it and instead design your class hierarchy such that you can do what you need by proper overriding of functions or properties.
 
@@ -185,7 +185,7 @@ val p = x as Person?
 ```
 
 
-## Delegation
+## 委托
 
 If you find that an interface that you want a class to implement is already implemented by one of the properties of the class, you can _delegate_ the implementation of that interface to that property with `by`:
 
@@ -202,7 +202,7 @@ open class MotorVehicle(val engine: Engine): PowerSource by engine
 This will automatically implement all the interface members of `PowerSource` in `MotorVehicle` by invoking the same member on `engine`. This only works for properties that are declared in the constructor.
 
 
-## Delegated properties
+## 属性委托
 
 Let's say that you're writing a simple ORM. Your database library represents a row as instances of a class `Entity`, with functions like `getString("name")` and `getLong("age")` for getting typed values from the given columns. We could create a typed wrapper class like this:
 
@@ -288,7 +288,7 @@ val name: String? by lazy {
 ```
 
 
-## Sealed classes
+## 密封类
 
 If you want to restrict the set of subclasses of a base class, you can declare the base class to be `sealed` (which also makes it abstract), in which case you can only declare subclasses in the same file. The compiler then knows the complete set of possible subclasses, which will let you do exhaustive `when` expression for all the possible subtypes without the need for an `else` clause (and if you add another subclass in the future and forget to update the `when`, the compiler will let you know).
 
@@ -297,4 +297,4 @@ If you want to restrict the set of subclasses of a base class, you can declare t
 
 ---
 
-[← Previous: Visibility modifiers](visibility-modifiers.html) | [Next: Objects and companion objects →](objects-and-companion-objects.html)
+[← 上一节：可见性修饰符](visibility-modifiers.html) | [下一节：对象与伴生对象 →](objects-and-companion-objects.html)

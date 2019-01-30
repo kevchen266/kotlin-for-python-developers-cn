@@ -1,4 +1,4 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
@@ -34,4 +34,4 @@ If you want a literal `$`, you need to escape it: `\$`. Escaping generally works
 
 ---
 
-[← Previous: Primitive data types and their limitations](primitive-data-types-and-their-limitations.html) | [Next: Conditionals →](conditionals.html)
+[← 上一节：原生数据类型及其表示范围](primitive-data-types-and-their-limitations.html) | [下一节：条件式 →](conditionals.html)

@@ -1,4 +1,4 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
@@ -8,7 +8,7 @@ _This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is o
 `if`/`else` works the same way as in Python, but it's `else if` instead of `elif`, the conditions are enclosed in parentheses, and the bodies are enclosed in curly braces:
 
 ```kotlin
-int age = 42
+val age = 42
 if (age < 10) {
     println("You're too young to watch this movie")
 } else if (age < 13) {
@@ -37,9 +37,9 @@ val result = if (condition) trueBody else falseBody
 When using if/else as an expression, the `else` part is mandatory (but there can also be `else if` parts). If the body that ends up being evaluated contains more than one line, it's the result of the last line that becomes the result of the `if`/`else`.
 
 
-## Comparisons
+## 比较
 
-Structural equality comparisons are done with `==` and `!=`, like in Python, but it's up to each class to define what that means, by [overriding](inheritance.html#overriding) [`equals()`](classes.html#inherited-built-in-functions) (which will be called on the left operand with the right operand as the parameter) and `hashCode()`. Most built-in collection types implement deep equality checks for these operators and functions. Reference comparisons - checking if two variables refer to the same object (the same as `is` in Python) - are done with `===` and `!==`.
+Structural equality comparisons are done with `==` and `!=`, like in Python, but it's up to each class to define what that means, by [覆盖](inheritance.html#覆盖) [`equals()`](classes.html#继承的内置函数) (which will be called on the left operand with the right operand as the parameter) and `hashCode()`. Most built-in collection types implement deep equality checks for these operators and functions. Reference comparisons - checking if two variables refer to the same object (the same as `is` in Python) - are done with `===` and `!==`.
 
 Boolean expressions are formed with `&&` for logical AND, `||` for logical OR, and `!` for logical NOT. As in Python, `&&` and `||` are short-circuiting: they only evaluate the right-hand side if it's necessary to determine the outcome. Beware that the keywords `and` and `or` also exist, but they only perform _bitwise_ operations on integral values, and they do not short-circuit.
 
@@ -64,4 +64,4 @@ when (x) {
 
 ---
 
-[← Previous: Strings](strings.html) | [Next: Collections →](collections.html)
+[← 上一节：字符串](strings.html) | [下一节：集合 →](collections.html)

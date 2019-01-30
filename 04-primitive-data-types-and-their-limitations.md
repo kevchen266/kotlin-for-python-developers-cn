@@ -1,4 +1,4 @@
-_This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is owned by [Khan Academy](https://www.khanacademy.org/) and is licensed for use under [CC BY-NC-SA 3.0 US](https://creativecommons.org/licenses/by-nc-sa/3.0/us/). Please note that this is not a part of Khan Academy's official product offering._
+*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
 
 ---
 
@@ -6,7 +6,7 @@ _This material was written by [Aasmund Eldhuset](https://eldhuset.net/); it is o
 The _primitive data types_ are the most fundamental types in Kotlin; all other types are built up of these types and arrays thereof. Their representation is very efficient (both in terms of memory and CPU time), as they map to small byte groups that are directly manipulatable by the CPU.
 
 
-## Integer types
+## 整型
 
 Integer types in Kotlin have a _limited size_, as opposed to the arbitrarily large integers in Python. The limit depends on the type, which decides how many bits the number occupies in memory:
 
@@ -59,13 +59,13 @@ When you use an arithmetic operator on two integers of different types, the resu
 In short: _think carefully through your declarations of integers, and be absolutely certain that the value will never ever need to be larger than the limits of the type!_ If you need an integer of unlimited size, use the non-primitive type `BigInteger`.
 
 
-## Floating-point and other types
+## 浮点数与其他类型
 
 Type | Bits | Notes
 -----|------|------
 `Double` | 64 | 16-17 significant digits (same as `float` in Python)
 `Float` | 32 | 6-7 significant digits
-`Char` | 16 | UTF-16 code unit (see the section on [strings](strings.html) - in most cases, this is one Unicode character, but it might be just one half of a Unicode character)
+`Char` | 16 | UTF-16 code unit (see the section on [字符串](strings.html) - in most cases, this is one Unicode character, but it might be just one half of a Unicode character)
 `Boolean` | 8 | `true` or `false`
 
 Floating-point numbers act similarly to in Python, but they come in two types, depending on how many digits you need. If you need larger precision, or to work with monetary amounts (or other situations where you must have exact results), use the non-primitive type `BigDecimal`.
@@ -75,4 +75,4 @@ Floating-point numbers act similarly to in Python, but they come in two types, d
 
 ---
 
-[← Previous: Declaring variables](declaring-variables.html) | [Next: Strings →](strings.html)
+[← 上一节：声明变量](declaring-variables.html) | [下一节：字符串 →](strings.html)
