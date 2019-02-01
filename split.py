@@ -11,7 +11,7 @@ sections = []
 link_regex = re.compile(r"\]\(#([^)]+)\)")
 subsection_slugs = {}
 copyright_notice = (
-    u"*本资料的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；"
+    u"*本资料英文原文的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；"
     u"其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，"
     u"授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）]"
     u"(https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。"
