@@ -3,15 +3,17 @@
 ---
 
 
-The author strongly recommends that you use an IDE with Kotlin support, as the static typing allows an IDE to do reliable navigation and code completion. I recommend [IntelliJ IDEA](https://www.jetbrains.com/idea/), which is built by the same company that created Kotlin. The Community Edition is free; see [instructions for getting started](https://kotlinlang.org/docs/tutorials/getting-started.html) (it comes bundled with Kotlin, and you can run your program from the IDE).
+作者强烈建议使用支持 Kotlin 的 IDE，因为静态类型让 IDE 能够进行可靠的导航与代码补全。我推荐 [IntelliJ IDEA](https://www.jetbrains.com/idea/)，它与 Kotlin 都是同一家公司出品的。其社区版免费；参见[引入指引](https://www.kotlincn.net/docs/tutorials/getting-started.html)（其中预置了 Kotlin，可以在 IDE 中运行程序）。
 
-If you insist on using a plain editor and the command line, see [these instructions instead](https://kotlinlang.org/docs/tutorials/command-line.html). In short, you need to _compile_ your Kotlin code before running it. Assuming that your Kotlin file is called `program.kt`:
+如果你坚持使用普通编辑器与命令行，请参见[这些指引](https://www.kotlincn.net/docs/tutorials/command-line.html)。 简而言之，在运行之前需要*编译* Kotlin 代码。假设你的 Kotlin 文件名为 `program.kt`：
 
 ```bash
 kotlinc program.kt -include-runtime -d program.jar
 ```
 
-By default, Kotlin compiles down to Java (so you have the entire Java Standard Library available to you, and interacting with Java libraries is a breeze), so you now have a Java Archive (`program.jar`) which includes the Java libraries that are necessary to support the Kotlin features (thanks to `-include-runtime`), and you can run it using an out-of-the-box Java runtime:
+默认情况下，Kotlin 编译为 Java[^2]（因此可以使用整个 Java 标准库并且与 Java 库交互也易如反掌），于是现在有了一个 Java 归档文件（`program.jar`），其中包含了支持 Kotlin 特性所必需的 Java 库（多亏了 `-include-runtime`），之后就可以使用开箱即用的 Java 来运行了：
+
+[^2]: 译者注：实际上是 Java 字节码
 
 ```bash
 java -jar program.jar

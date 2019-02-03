@@ -212,7 +212,7 @@ def init_math(math):
 t = tree("root", init_root)
 ```
 
-The official docs also have a very cool example with a [ DSL for constructing HTML documents](https://kotlinlang.org/docs/reference/type-safe-builders.html).
+The official docs also have a very cool example with a [ DSL for constructing HTML documents](https://www.kotlincn.net/docs/reference/type-safe-builders.html).
 
 
 ## 内联函数

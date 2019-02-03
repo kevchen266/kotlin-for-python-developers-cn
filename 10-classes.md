@@ -204,7 +204,7 @@ val anne = Person("Anne")
 lisa marry anne // Prints "Lisa and Anne are getting married!"
 ```
 
-All infix functions have the same [precedence](https://kotlinlang.org/docs/reference/grammar.html#precedence) (which is shared with all the built-in infix functions, such as the bitwise functions `and`, `or`, `inv`, etc.): lower than the arithmetic operators and the `..` range operator, but higher than the Elvis operator `?:`, comparisons, logic operators, and assignments.
+All infix functions have the same [precedence](https://www.kotlincn.net/docs/reference/grammar.html#precedence) (which is shared with all the built-in infix functions, such as the bitwise functions `and`, `or`, `inv`, etc.): lower than the arithmetic operators and the `..` range operator, but higher than the Elvis operator `?:`, comparisons, logic operators, and assignments.
 
 
 ## 操作符
@@ -227,7 +227,7 @@ A particularly interesting operator is the function-call parenthesis pair, whose
 
 `operator` can also be used for certain other predefined functions in order to create fancy effects, such as [属性委托](inheritance.html#属性委托).
 
-Since the available operators are hardcoded into the formal Kotlin syntax, you can not invent new operators, and overriding an operator does not affect its [precedence](https://kotlinlang.org/docs/reference/grammar.html#precedence).
+Since the available operators are hardcoded into the formal Kotlin syntax, you can not invent new operators, and overriding an operator does not affect its [precedence](https://www.kotlincn.net/docs/reference/grammar.html#precedence).
 
 
 ## 枚举类
