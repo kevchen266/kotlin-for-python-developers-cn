@@ -3,16 +3,16 @@
 ---
 
 
-Every variable must be _declared_. Any attempt to use a variable that hasn't been declared yet is a syntax error; thus, you are protected from accidentally assigning to a misspelled variable. The declaration also decides what kind of data you are allowed to store in the variable.
+每个变量都必需*声明*。任何尝试使用尚未声明的变量都会是语法错误；因此可以防止意外赋值给拼错的变量。声明还决定了允许在变量中存储哪种数据。
 
-Local variables are typically declared and initialized at the same time, in which case the type of the variable is _inferred_ to be the type of the expression you initialize it with:
+局部变量通常在声明时同时初始化，对于这种情况，变量的类型*推断*为初始化所使用的表达式的类型：
 
 ```kotlin
 var number = 42
 var message = "Hello"
 ```
 
-We now have a local variable `number` whose value is 42 and whose type is `Int` (because that's the type of the literal `42`), and another local variable `message` whose value is `"Hello"` and whose type is `String`. Subsequent usages of the variable must use only the name, not `var`:
+我们现在有一个局部变量 `number`，其值为 42、其类型为 `Int`（因为这是字面值 `42` 的类型），还有一个局部变量 `message`，其值为 `Hello`、其类型为 `String`。变量的后续用法必须只使用其变量名而不带 `var`：
 
 ```kotlin
 number = 10
@@ -21,7 +21,7 @@ println(number)
 println(message + " there")
 ```
 
-However, you cannot change the type of a variable: `number` can only ever refer to `Int` values, and `message` can only ever refer to `String` values, so both `number = "Test"` and `message = 3` are illegal and will produce syntax errors.
+然而不能改变变量的类型：`number` 只能引用 `Int` 值，而 `message` 只能引用 `String` 值，因此 `number = "Test"` 与 `message = 3` 都是非法的、都会产生语法错误。
 
 
 ## 只读变量
