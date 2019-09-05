@@ -16,8 +16,8 @@ copyright_notice = (
     u"授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）]"
     u"(https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。"
     u"请注意，这并不是可汗学院官方产品的一部分。"
-    u"中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*\n\n---\n\n\n")
-
+    u"中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*")
+copyright_notice_separator = "\n\n---\n\n"
 
 def substitute_link(match):
     link = match.group(1)
@@ -119,5 +119,10 @@ with open("kotlinlang.org.yaml", "w") as yaml:
             navigation.append(u"[下一节：{0} \u2192]({1}.html)".format(*ascii_info(sections[i + 1][0:2])))
         section.append(u"\n\n---\n\n{0}\n".format(" | ".join(navigation)))
         with open(filename, "w") as md:
-            md.write(copyright_notice.encode('utf-8'))
+            if i == 0:
+                md.write(copyright_notice.encode('utf-8'))
+                md.write(copyright_notice_separator)
             md.write(u"".join(section).encode("utf-8"))
+            if i != 0:
+                md.write(copyright_notice_separator)
+                md.write(copyright_notice.encode('utf-8'))
