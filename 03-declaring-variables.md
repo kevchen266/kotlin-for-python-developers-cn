@@ -7,7 +7,7 @@ var number = 42
 var message = "Hello"
 ```
 
-我们现在有一个局部变量 `number`，其值为 42、其类型为 `Int`（因为这是字面值 `42` 的类型），还有一个局部变量 `message`，其值为 `Hello`、其类型为 `String`。变量的后续用法必须只使用其变量名而不带 `var`：
+现在有一个局部变量 `number`，其值为 42、其类型为 `Int`（因为这是字面值 `42` 的类型），还有一个局部变量 `message`，其值为 `Hello`、其类型为 `String`。变量的后续用法必须只使用其变量名而不带 `var`：
 
 ```kotlin
 number = 10
@@ -21,21 +21,21 @@ println(message + " there")
 
 ## 只读变量
 
-Frequently, you'll find that during the lifetime of your variable, it only ever needs to refer to one object. Then, you can declare it with `val` (for "value") instead:
+在变量的生存期内，通常仅需要引用一个对象。然后，可以使用 `val`（用于“值”）声明它：
 
 ```kotlin
 val message = "Hello"
 val number = 42
 ```
 
-The terminology is that `var` declares a _mutable_ variable, and that `val` declares a _read-only_ or _assign-once_ variable - so both kinds are called _variables_.
+关键字 `var` 声明了一个 _可变_ 变量，而 `val` 声明了一个 _只读_ 或者说 _只赋值一次_ 的变量——因此这两种都称为 _变量_。
 
-Note that a read-only variable is not a constant per se: it can be initialized with the value of a variable (so its value doesn't need to be known at compile-time), and if it is declared inside a construct that is repeatedly invoked (such as a function or a loop), it can take on a different value on each invocation. Also, while the read-only variable may not be reassigned while it is in scope, it can still refer to an object which is in itself mutable (such as a list).
+请注意，只读变量本身不是常量：可以使用变量的值进行初始化（因此，在编译时不需要知道其值），如果在构造函数中声明了该变量，并反复调用（例如函数或循环），则每次调用时可以采用不同的值。同样，尽管只读变量在作用域内可能无法重新分配，但它仍可以引用自身是可变的对象（例如列表）。
 
 
 ## 常量
 
-If you have a value that is truly constant, and the value is a string or a primitive type (see below) that is known at compile-time, you can declare an actual constant instead. You can only do this at the top level of a file or inside an [对象声明](objects-and-companion-objects.html#对象声明) (but not inside a class declaration):
+如果有一个真正常量的值，并且该值是在编译时已知的字符串或原始类型（请参见下文），则可以声明一个实际常量。只能在文件的顶层或[对象声明](objects-and-companion-objects.html#对象声明)内（但不能在类声明内）执行此操作：
 
 ```kotlin
 const val x = 2
@@ -44,15 +44,15 @@ const val x = 2
 
 ## 显式指定类型
 
-If you really want to, you can both initialize and specify the type on the same line. This is mostly useful if you're dealing with a class hierarchy (more on that later) and you want the variable type to be a base type of the value's class:
+如果确实需要，可以在同一行上初始化并指定类型。如果要处理类层次结构（稍后会详细介绍），并且希望变量类型是值的类的基类型，那么这是非常有用的：
 
 ```kotlin
 val characters: CharSequence = "abc"
 ```
 
-In this doc, we'll sometimes specify the type unnecessarily, in order to highlight what type is produced by an expression. (Also, a good IDE will be able to show you the resulting type.)
+在本文档中，有时会不必要地指定类型，以突出显示表达式产生的类型。（此外，良好的 IDE 可以显示结果类型。）
 
-For completeness: it is also possible (but discouraged) to split the declaration and the initial assignment, and even to initialize in multiple places based on some condition. You can only read the variable at a point where the compiler can prove that every possible execution path will have initialized it. If you're creating a read-only variable in this way, you must also ensure that every possible execution path assigns to it _exactly_ once.
+为了完整起见：也可以（但不鼓励）拆分声明和初始赋值，甚至可以根据某些条件在多个位置进行初始化。只能在编译器可以证明每个可能的执行路径都已将其初始化的点读取变量。如果以这种方式创建只读变量，则还必须确保每个可能的执行路径都 _仅_ 分配一次。
 
 ```kotlin
 val x: String
@@ -62,11 +62,11 @@ x = 3
 
 ## 作用域与命名
 
-A variable only exists inside the _scope_ (curly-brace-enclosed block of code; more on that later) in which it has been declared - so a variable that's declared inside a loop only exists in that loop; you can't check its final value after the loop. Variables can be redeclared inside nested scopes - so if there's a parameter `x` to a function and you create a loop and declare an `x` inside that loop, the `x` inside the loop is a different variable than the parameter `x`.
+变量仅存在于已在其中声明了它的 _作用域_（花括号括起来的代码块；稍后会详细介绍）内——因此，在循环内声明的变量仅存在于该循环内。无法在循环后检查其最终值。可以在嵌套作用域内重新声明变量——因此，如果函数有一个参数 `x`，在该函数内创建一个循环并在该循环内声明一个 `x`，则该循环内的 `x` 与函数内的 `x` 不同。
 
-Variable names should use `lowerCamelCase` instead of `snake_case`.
+变量名称应使用 `lowerCamelCase`（小驼峰命名）而不是 `snake_case`（蛇形命名）。
 
-In general, identifiers may consist of letters, digits, and underscores, and may not begin with a digit. However, if you are writing code that e.g. autogenerates JSON based on identifiers and you want the JSON key to be a string that does not conform to these rules or that collides with a keyword, you can enclose it in backticks: `` `I can't believe this is not an error!` `` is a valid identifier.
+通常，标识符可以由字母、数字与下划线组成，并且不能以数字开头。但是，如果正在编写例如：根据标识符自动生成 JSON，并且希望 JSON 键是不符合这些规则或与关键字冲突的字符串，可以将其括在反引号中：`` `我不敢相信这不是错误！` `` 是有效的标识符。
 
 
 
