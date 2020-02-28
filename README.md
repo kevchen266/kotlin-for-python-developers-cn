@@ -264,23 +264,23 @@ x = 3
 
 ## 原生数据类型及其表示范围
 
-The _primitive data types_ are the most fundamental types in Kotlin; all other types are built up of these types and arrays thereof. Their representation is very efficient (both in terms of memory and CPU time), as they map to small byte groups that are directly manipulatable by the CPU.
+_原生数据类型_ 是 Kotlin 中最基本的类型。所有其他类型均由这些类型及其数组组成。它们的表现非常高效（在内存与 CPU 时间方面），因为它们映射到可由 CPU 直接操作的小字节组。
 
 
 ### 整型
 
-Integer types in Kotlin have a _limited size_, as opposed to the arbitrarily large integers in Python. The limit depends on the type, which decides how many bits the number occupies in memory:
+与 Python 中任意大的整数相反，Kotlin 中的整数类型具有 _大小限制_。该限制取决于类型，而类型决定了该数字在内存中占用多少位：
 
-Type | Bits | Min value | Max value
+类型 | 位 | 最小值 | 最大值
 -----|------|-----------|----------
 `Long` | 64 | -9223372036854775808 | 9223372036854775807
 `Int` | 32 | -2147483648 | 2147483647
 `Short` | 16 | -32768 | 32767
 `Byte` | 8 | -128 | 127
 
-Bytes are -128 through 127 due to Kotlin inheriting a bad design decision from Java. In order to get a traditional byte value between 0 and 255, keep the value as-is if it is positive, and add 256 if it is negative (so -128 is really 128, and -1 is really 255). See the section on [extension functions](#扩展函数属性) for a neat workaround for this.
+由于 Kotlin 决定继承了 Java 的错误设计，因此字节数为 -128 至 127。为了获得介于 0 与 255 之间的传统字节值，如果该值是正数，则将其保持原样；如果它是负数，则将其添加为 256（因此，-128 实际上是 128，而 -1 是真正的 255）。请参阅[扩展函数](#扩展函数属性)部分，以获取解决方案。
 
-An integer literal has the type `Int` if its value fits in an `Int`, or `Long` otherwise. `Long` literals should be suffixed by `L` for clarity, which will also let you make a `Long` with a "small" value. There are no literal suffixes for `Short` or `Byte`, so such values need an explicit type declaration or the use of an explicit conversion function.
+如果整数字面的值适合 `Int`，则其类型为 `Int`，否则为 `Long`。为清晰起见，`Long` 字面量应加 `L` 后缀，这也使得可以将“小”值设为 `Long`。`Short` 或 `Byte` 没有字面后缀，因此此类值需要显式类型声明或使用显式转换函数。
 
 ```kotlin
 val anInt = 3
@@ -294,17 +294,17 @@ val aByte: Byte = 65
 val anotherByte = -32.toByte()
 ```
 
-Beware that dividing an integer by an integer produces an integer (like in Python 2, but unlike Python 3). If you want a floating-point result, at least one of the operands needs to be a floating-point number (and recall that like in most languages, floating-point operations are generally imprecise):
+请注意，将整数除以整数会产生整数（类似于 Python 2，但与 Python 3不同）。如果要浮点结果，则至少一个操作数需要为浮点数（并且请记住，就像在大多数语言中一样，浮点运算通常是不精确的）：
 
 ```kotlin
-println(7 / 3)            // Prints 2
-println(7 / 3.0)          // Prints 2.3333333333333335
+println(7 / 3)            // 输出 2
+println(7 / 3.0)          // 输出 2.3333333333333335
 val x = 3
-println(7 / x)            // Prints 2
-println(7 / x.toDouble()) // Prints 2.3333333333333335
+println(7 / x)            // 输出 2
+println(7 / x.toDouble()) // 输出 2.3333333333333335
 ```
 
-Whenever you use an arithmetic operator on two integers of the same type (or when you use a unary operator like negation), _there is no automatic "upgrading" if the result doesn't fit in the type of the operands!_ Try this:
+每当对相同类型的两个整数使用算术运算符时（或使用例如 `-` 之类的一元运算符时），_如果结果不适合操作数的类型，则不会自动进行“升级”！_ 试试这个：
 
 ```kotlin
 val mostPositive = 2147483647
@@ -313,23 +313,23 @@ println(mostPositive + 1)
 println(-mostNegative)
 ```
 
-Both of these print `-2147483648`, because only the lower 32 bits of the "real" result are stored.
+这两个命令都输出 `-2147483648`，因为仅存储了“真实”结果的低于 32 位的部分。
 
-When you use an arithmetic operator on two integers of different types, the result is "upgraded" to the widest type. Note that the result might still overflow.
+当对两个不同类型的整数使用算术运算符时，结果将“升级”为最大类型。请注意，结果仍有可能溢出。
 
-In short: _think carefully through your declarations of integers, and be absolutely certain that the value will never ever need to be larger than the limits of the type!_ If you need an integer of unlimited size, use the non-primitive type `BigInteger`.
+简而言之：_请仔细考虑整数的声明，并绝对肯定该值永远不会大于该类型的限制！_ 如果需要无限制大小的整数，请使用非原始类型 `BigInteger`。
 
 
 ### 浮点数与其他类型
 
-Type | Bits | Notes
+类型 | 位 | 注释
 -----|------|------
-`Double` | 64 | 16-17 significant digits (same as `float` in Python)
-`Float` | 32 | 6-7 significant digits
-`Char` | 16 | UTF-16 code unit (see the section on [字符串](#字符串) - in most cases, this is one Unicode character, but it might be just one half of a Unicode character)
-`Boolean` | 8 | `true` or `false`
+`Double` | 64 | 16~17 位有效数字（与 Python 中的 `float` 相同）
+`Float` | 32 | 6~7 位有效数字
+`Char` | 16 | UTF-16 代码单元（请参阅[字符串](#字符串)——在大多数情况下，这是一个 Unicode 字符，但也可能只是 Unicode 字符的一半）
+`Boolean` | 8 | `true` 或 `false`
 
-Floating-point numbers act similarly to in Python, but they come in two types, depending on how many digits you need. If you need larger precision, or to work with monetary amounts (or other situations where you must have exact results), use the non-primitive type `BigDecimal`.
+浮点数的作用与 Python 中的相似，但根据所需的位数，分为两种类型。如果需要更高的精度，或者需要处理货币金额（或必须具有精确结果的其他情况），请使用非原始类型 `BigDecimal`。
 
 
 ## 字符串
