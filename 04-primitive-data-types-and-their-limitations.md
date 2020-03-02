@@ -5,7 +5,7 @@ _原生数据类型_ 是 Kotlin 中最基本的类型。所有其他类型均由
 
 与 Python 中任意大的整数相反，Kotlin 中的整数类型具有 _大小限制_。该限制取决于类型，而类型决定了该数字在内存中占用多少比特：
 
-类型 | 比特 | 最小值 | 最大值
+类型 | 比特数 | 最小值 | 最大值
 -----|------|-----------|----------
 `Long` | 64 | -9223372036854775808 | 9223372036854775807
 `Int` | 32 | -2147483648 | 2147483647
@@ -56,7 +56,7 @@ println(-mostNegative)
 
 ## 浮点数与其他类型
 
-类型 | 比特 | 注释
+类型 | 比特数 | 注释
 -----|------|------
 `Double` | 64 | 16~17 位有效数字（与 Python 中的 `float` 相同）
 `Float` | 32 | 6~7 位有效数字
@@ -75,4 +75,4 @@ println(-mostNegative)
 
 ---
 
-*本资料英文原文的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
+*本资料英文原文的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)、[Yue-plus](https://github.com/Yue-plus) 译，遵循相同授权方式。*
