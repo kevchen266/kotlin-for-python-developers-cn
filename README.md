@@ -366,7 +366,7 @@ val message = "$name is ${yearNow - yearOfBirth} years old"
 
 ### `if`/`else`
 
-`if`/`else` works the same way as in Python, but it's `else if` instead of `elif`, the conditions are enclosed in parentheses, and the bodies are enclosed in curly braces:
+`if`/`else` 的工作方式与 Python 相同，但是使用 `else if` 而不是 `elif`，条件用小括号括起来，而主体用花括号括起来：
 
 ```kotlin
 val age = 42
@@ -379,37 +379,37 @@ if (age < 10) {
 }
 ```
 
-The curly braces around a body can be omitted if the body is a oneliner. This is discouraged unless the body goes on the same line as the condition, because it makes it easy to make this mistake, especially when one is used to Python:
+如果主体只有一条语句，则可以省略主体周围的花括号。除非主体与条件在同一行，否则不建议这样做，因为这样做很容易犯错误，尤其是习惯使用 Python 的人：
 
 ```kotlin
 if (age < 10)
     println("You're too young to watch this movie")
-    println("You should go home") // Mistake - this is not a part of the if body!
+    println("You should go home") // 错误——这不是 if 主体的一部分！
 ```
 
-Without the curly braces, only the first line is a part of the body. Indentation in Kotlin matters only for human readers, so the second print is outside the if and will always be executed.
+没有花括号，只有第一行是主体的一部分。Kotlin 的缩进仅对易读性有意义，因此第二条输出在 if 之外，并且总是会被执行。
 
-An if/else statement is also an expression, meaning that a ternary conditional (which looks like `result = true_body if condition else false_body` in Python) looks like this in Kotlin:
+if/else 语句也是一个表达式，这意味着在Kotlin中，三元运算符（在 Python 中像是 `result = true_body if condition else false_body`）看起来就像这样：
 
 ```kotlin
 val result = if (condition) trueBody else falseBody
 ```
 
-When using if/else as an expression, the `else` part is mandatory (but there can also be `else if` parts). If the body that ends up being evaluated contains more than one line, it's the result of the last line that becomes the result of the `if`/`else`.
+使用 if/else 作为表达式时，`else` 部分是必需的（但也可以有 `else if` 部分）。如果最后要求值的主体包含多行，则返回最后一行的结果作为 `if`/`else` 的结果。
 
 
 ### 比较
 
-Structural equality comparisons are done with `==` and `!=`, like in Python, but it's up to each class to define what that means, by [覆盖](#覆盖) [`equals()`](#继承的内置函数) (which will be called on the left operand with the right operand as the parameter) and `hashCode()`. Most built-in collection types implement deep equality checks for these operators and functions. Reference comparisons - checking if two variables refer to the same object (the same as `is` in Python) - are done with `===` and `!==`.
+结构相等性比较是使用 `==` 或 `!=` 进行的，但取决于每个类来定义含义是什么，就像在 Python 中一样，可以通过[覆盖](#覆盖)、[`equals()`](#继承的内置函数)（将在左侧操作数上调用，以右侧操作数为参数）与 `hashCode()`。大多数内置集合类型对这些运算符和函数执行深度相等检查。检查两个变量是否引用同一对象（与 Python 中的 `is` 相同）——用 `===` 或 `!==` 进行。
 
-Boolean expressions are formed with `&&` for logical AND, `||` for logical OR, and `!` for logical NOT. As in Python, `&&` and `||` are short-circuiting: they only evaluate the right-hand side if it's necessary to determine the outcome. Beware that the keywords `and` and `or` also exist, but they only perform _bitwise_ operations on integral values, and they do not short-circuit.
+布尔表达式由 `&&` 表示逻辑“与”，`||` 表示逻辑“或”，而 `!` 表示逻辑“非”。与 Python 中一样，`&&` 与 `||` 是短路的：它们仅在需要确定结果时才检查右侧。请注意，关键字 `and` 与 `or` 也存在，但是它们仅对整数值执行 _逐位_ 操作，并且不会短路。
 
-There are no automatic conversions to boolean and thus no concept of truthy and falsy: checks for zero, empty, or null must be done explicitly with `==` or `!=`. Most collection types have an `isEmpty()` and an `isNotEmpty()` function.
+没有自动转换为布尔值的方法，因此也没有“真假”的概念：必须使用 `==` 或 `!=` 明确进行是否为零、empty 或 null 的检查。 大多数集合类型具有 `isEmpty()` 和 `isNotEmpty()` 函数。
 
 
 ### `when`
 
-We're not going to cover the [`when` expression](https://www.kotlincn.net/docs/reference/control-flow.html#when-表达式) in depth here since it doesn't have a close equivalent in Python, but check it out - it's pretty nifty, as it lets you compare one expression against many kinds of expressions in a very compact way (but it's not a full functional-programming-style pattern matcher). For example:
+并不会在这里深入介绍 [`when` 表达式](https://www.kotlincn.net/docs/reference/control-flow.html#when-表达式)，因为在 Python 中没有非常接近的等效表达式，但请来看看——<span title="漂亮警告！( ‵▽′)ψ">它好漂亮的</span>，因为它可以用非常紧凑的方式将一个表达式与多种表达式进行比较（但这不是完整的功能编程风格的模式匹配器）。例如：
 
 ```kotlin
 val x = 42
