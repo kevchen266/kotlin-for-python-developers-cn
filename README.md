@@ -334,9 +334,9 @@ println(-mostNegative)
 
 ## 字符串
 
-Unicode correctness can be onerous in Python 2, since the "default" string type `str` is really just a byte array, while `unicode` is actually a sequence of _code units_ (see below) - and whether the code units are 16 or 32 bits wide depends on how your Python distribution was built. In Kotlin, there's no such confusion: `String`, which is what you get when you make a string literal (which you can only do with double quotes), is an immutable sequence of UTF-16 code units. `ByteArray` is a fixed-size (but otherwise mutable) byte array (and `String` can specifically _not_ be used as a byte array).
+保证 Unicode 正确性在 Python 2 中可能很繁琐，因为“默认”字符串类型 `str` 实际上只是一个字节数组，而 `unicode` 实际上是一系列 _代码单元_（参见下文）——代码单元是 16 位还是 32 位宽取决于 Python 发行版本的构建方式。在 Kotlin 中，没有这种混乱：`String` 是声明字符串字面值（只能用双引号引起来）时得到的，它是 UTF-16 代码单元的不可变序列。`ByteArray` 是固定大小（但可变的）字节数组（并且 `String` 明确 *不能* 用作字节数组）。
 
-A UTF-16 _code unit_ is a 16-bit unsigned integral value that represents either one Unicode _code point_ (character code) or must be combined with another code unit to form a code unit. If this makes no sense, I strongly recommend [Joel Spolsky's excellent essay on Unicode and its encodings](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/). For most Western scripts, including English, all code points fit inside one code unit, so it's tempting to think of a code unit as a character - but that will lead astray once your code encounters non-Western scripts. A single UTF-16 code unit can be represented with single quotes, and has the type `Char`:
+UTF-16 _代码单元_ 是一个 16 位无符号整数值，代表一个 Unicode _代码点_（字符代码），或者必须与另一个代码单元结合形成一个代码单元。如果觉得这没有意义，那么强烈推荐阅读[由 Joel Spolsky 撰写的关于 Unicode 及其编码的出色文章](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)。对于大多数西方脚本（包括英语），所有代码点都位于一个代码单元内，因此很容易将代码单元视为字符——但是一旦代码遇到非西方脚本，就会误入歧途。单个 UTF-16 代码单元可以用单引号表示，并具有 `Char` 类型：
 
 ```kotlin
 val c = 'x' // Char
@@ -344,11 +344,11 @@ val message = "Hello" // String
 val m = message[0] // Char
 ```
 
-Thus, single quotes can not be used to form string literals.
+因此，单引号不能用于声明字符串字面值。
 
-Given a string `s`, you can get a `ByteArray` with the UTF-8 encoding of the string by calling `s.toByteArray()`, or you can specify another encoding, e.g. `s.toByteArray(Charsets.US_ASCII)` - just like `encode()` in Python. Given a byte array `b` that contains a UTF-8-encoded string, you can get a `String` by calling `String(b)`; if you've got a different encoding, use e.g. `String(b, Charsets.US_ASCII)`, just like `decode()` in Python. You can also call e.g. `b.toString(Charsets.US_ASCII)`, but do _not_ call `b.toString()` without parameters (this will just print an internal reference to the byte array).
+给定字符串 `s`，可以通过调用 `s.toByteArray()` 获得带有字符串 UTF-8 编码的 `ByteArray`，或者可以指定其他编码，例如 `s.toByteArray(Charsets.US_ASCII)` ——就像 Python 中的 `encode()` 一样。给定一个字节数组 `b`，其中包含一个 UTF-8 编码的字符串，则可以通过调用 `String(b)` 获得 `String`。如果使用其他编码，请使用例如 `String(b, Charsets.US_ASCII)`，就像 Python 中的 `decode()` 一样。也可以调用例如 `b.toString(Charsets.US_ASCII)`，但 _不要_ 在没有参数的情况下调用 `b.toString()`（这只会输出对字节数组的内部引用）。
 
-You can do string interpolation with `$`, and use curly braces for expressions:
+可以使用 `$` 进行字符串插值，并对表达式使用花括号：
 
 ```kotlin
 val name = "Anne"
@@ -357,7 +357,7 @@ val yearNow = 2018
 val message = "$name is ${yearNow - yearOfBirth} years old"
 ```
 
-If you want a literal `$`, you need to escape it: `\$`. Escaping generally works the same way as in Python, with a similar set of standard escape sequences.
+如果要使用文本 `$`，则需要​​对其进行转义：`\$`。转义通常以与 Python 中相同的方式工作，并具有一组类似的标准转义序列。
 
 
 
