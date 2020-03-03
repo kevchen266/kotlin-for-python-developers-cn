@@ -1,6 +1,6 @@
-要保证 Unicode 正确性在 Python 2 中可能很繁琐，因为“默认”字符串类型 `str` 实际上只是一个字节数组，而 `unicode` 实际上是一系列 _代码单元_（参见下文）——代码单元是 16 位还是 32 位宽取决于 Python 发行版本的构建方式。在 Kotlin 中，没有这种混乱：`String` 是将字符串文字（只能用双引号引起来）时得到的，它是 UTF-16 代码单元的不可变序列。  `ByteArray` 是固定大小（但可变的）字节数组（并且 `String` _不能_ 专门用作字节数组）。
+保证 Unicode 正确性在 Python 2 中可能很繁琐，因为“默认”字符串类型 `str` 实际上只是一个字节数组，而 `unicode` 实际上是一系列 _代码单元_（参见下文）——代码单元是 16 位还是 32 位宽取决于 Python 发行版本的构建方式。在 Kotlin 中，没有这种混乱：`String` 是将字符串字面值声明（只能用双引号引起来）时得到的，它是 UTF-16 代码单元的不可变序列。`ByteArray` 是固定大小（但可变的）字节数组（并且 `String` 明确 *不能* 用作字节数组）。
 
-UTF-16 _代码单元_ 是一个 16 位无符号整数值，代表一个 Unicode _代码点_（字符代码），或者必须与另一个代码单元结合形成一个代码单元。如果觉得这没有意义，则强烈推荐阅读[由 Joel Spolsky 撰写的关于 Unicode 及其编码的出色文章](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)。对于大多数西方脚本（包括英语），所有代码点都位于一个代码单元内，因此很容易将代码单元视为字符——但是一旦代码遇到非西方脚本，就会误入歧途。单个 UTF-16 代码单元可以用单引号表示，并具有 `Char` 类型：
+UTF-16 _代码单元_ 是一个 16 位无符号整数值，代表一个 Unicode _代码点_（字符代码），或者必须与另一个代码单元结合形成一个代码单元。如果觉得这没有意义，那么强烈推荐阅读[由 Joel Spolsky 撰写的关于 Unicode 及其编码的出色文章](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)。对于大多数西方脚本（包括英语），所有代码点都位于一个代码单元内，因此很容易将代码单元视为字符——但是一旦代码遇到非西方脚本，就会误入歧途。单个 UTF-16 代码单元可以用单引号表示，并具有 `Char` 类型：
 
 ```kotlin
 val c = 'x' // Char
