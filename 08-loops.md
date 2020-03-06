@@ -1,6 +1,6 @@
 ## `for`
 
-Kotlin 的循环类似于 Python 的循环。`for` 用于遍历任何 _可遍历对象_（任何具有提供 `Iterator` 对象的 `iterator()` 函数）或者本身就是迭代器的对象：
+Kotlin 的循环类似于 Python 的循环。`for` 用于遍历任何 _可遍历对象_（任何具有提供 `Iterator` 对象的 `iterator()` 函数的对象）或者本身就是迭代器的对象：
 
 ```kotlin
 val names = listOf("Anne", "Peter", "Jeff")
@@ -41,7 +41,7 @@ for (x in 10 downTo 0 step 2) println(x) // 输出 10, 8, 6, 4, 2, 0
 val numbers = (0..9).toList()
 ```
 
-如果在遍历时需要了解当前元素的索引，可以使用 `withIndex()`，它对应于 `enumerate()`。它产生一系列具有两个属性（索引与值）以及两个特殊命名的访问器函数的对象序列，分别称为 `component1()` 与 `component2()`。Kotlin 允许将这样的对象分解为声明：
+如果在遍历时需要了解当前元素的索引，可以使用 `withIndex()`，它对应于 `enumerate()`。它产生一系列具有两个属性（索引与值）以及两个特殊命名的访问器函数的对象序列，分别称为 `component1()` 与 `component2()`。Kotlin 允许将这样的对象解构为声明：
 
 ```kotlin
 for ((index, value) in names.withIndex()) {
@@ -49,7 +49,7 @@ for ((index, value) in names.withIndex()) {
 }
 ```
 
-可以通过几种不同的方式遍历 Map，具体取决于是想要键或值还是两个都要：
+可以通过几种不同的方式遍历 Map，具体取决于是想要键、要值还是两个都要：
 
 ```kotlin
 // 遍历条目为包含键与值作为属性的对象
@@ -91,7 +91,7 @@ while (x < 10) {
 
 ## `continue` 与 `break`
 
-普通的 `continue` 或 `break` 与 Python 中的工作方式相同：`continue` 跳到最里面的包含循环的下一个迭代，而 `break` 停止循环。但是，也可以用 _标签_ 循环并在 `continue` 或 `break` 语句中引用该标记，以指示要影响哪个循环。标签是标识符，后跟 `@`，例如：`outer@`（可能后跟一个空格）。例子，生成质数：
+普通的 `continue` 或 `break` 与 Python 中的工作方式相同：`continue` 跳到最里面的包含循环的下一个迭代，而 `break` 停止循环。但是，也可以用 _标签_ 循环并在 `continue` 或 `break` 语句中引用该标签，以指示要影响哪个循环。标签是标识符，后跟 `@`，例如：`outer@`（可能后跟一个空格）。例如，生成质数：
 
 ```kotlin
 outer@ for (n in 2..100) {
