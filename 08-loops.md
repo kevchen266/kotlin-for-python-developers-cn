@@ -1,6 +1,6 @@
 ## `for`
 
-Kotlin's loops are similar to Python's. `for` iterates over anything that is _iterable_ (anything that has an `iterator()` function that provides an `Iterator` object), or anything that is itself an iterator:
+Kotlin 的循环类似于 Python 的循环。`for` 用于遍历任何 _可遍历对象_（任何具有提供 `Iterator` 对象的 `iterator()` 函数的对象）或者本身就是迭代器的对象：
 
 ```kotlin
 val names = listOf("Anne", "Peter", "Jeff")
@@ -9,39 +9,39 @@ for (name in names) {
 }
 ```
 
-Note that a `for` loop always implicitly declares a new read-only variable (in this example, `name`) - if the outer scope already contains a variable with the same name, it will be shadowed by the unrelated loop variable. For the same reason, the final value of the loop variable is not accessible after the loop.
+请注意，`for` 循环始终隐式声明一个新的只读变量（在本示例中为 `name`）——如果外部作用域已经包含一个具有相同名称的变量，则该变量将被不相关的循环变量遮盖。出于同样的原因，循环变量的最终值在循环后不可访问。
 
-You can also create a range with the `..` operator - but beware that unlike Python's `range()`, it _includes_ its endpoint:
-
-```kotlin
-for (x in 0..10) println(x) // Prints 0 through 10 (inclusive)
-```
-
-If you want to exclude the last value, use `until`:
+还可以使用 `..` 运算符创建区间——但要注意，与 Python 的 `range()` 不同，它 _包含_ 其端点：
 
 ```kotlin
-for (x in 0 until 10) println(x) // Prints 0 through 9
+for (x in 0..10) println(x) // 输出 0 到 10（含10）
 ```
 
-You can control the increment with `step`:
+如果要排除最后一个值，请使用 `until`：
 
 ```kotlin
-for (x in 0 until 10 step 2) println(x) // Prints 0, 2, 4, 6, 8
+for (x in 0 until 10) println(x) // 输出 0 到 9
 ```
 
-The step value must be positive. If you need to count downwards, use the inclusive `downTo`:
+可以使用 `step` 控制增量：
 
 ```kotlin
-for (x in 10 downTo 0 step 2) println(x) // Prints 10, 8, 6, 4, 2, 0
+for (x in 0 until 10 step 2) println(x) // 输出 0, 2, 4, 6, 8
 ```
 
-Any of the expressions to the right of `in` in the loops above can also be used outside of loops in order to generate _ranges_ (one type of iterables - this is similar to `xrange()` in Python 2 and `range()` in Python 3), which can be iterated over later or turned into lists:
+step 值必须为正。如果需要递减计数，请使用内置的 `downTo`：
+
+```kotlin
+for (x in 10 downTo 0 step 2) println(x) // 输出 10, 8, 6, 4, 2, 0
+```
+
+以上例子中所有 `in` 右边的表达式都可以在循环外部使用，以生成 _区间_（一种可遍历的类型——这类似于 Python 2 中的 `xrange()` 或 Python 3 中的 `range()`），可以稍后进行遍历或转换为列表：
 
 ```kotlin
 val numbers = (0..9).toList()
 ```
 
-If you need to know the index of the current element when you're iterating over something, you can use `withIndex()`, which corresponds to `enumerate()`. It produces a sequence of objects that have got two properties (the index and the value) and two specially-named accessor functions called `component1()` and `component2()`; Kotlin lets you destructure such an object into a declaration:
+如果在遍历时需要了解当前元素的索引，可以使用 `withIndex()`，它对应于 `enumerate()`。它产生一系列具有两个属性（索引与值）以及两个特殊命名的访问器函数的对象序列，分别称为 `component1()` 与 `component2()`。Kotlin 允许将这样的对象解构为声明：
 
 ```kotlin
 for ((index, value) in names.withIndex()) {
@@ -49,25 +49,25 @@ for ((index, value) in names.withIndex()) {
 }
 ```
 
-You can iterate over a map in several different ways, depending on whether you want the keys, the values, or both:
+可以通过几种不同的方式遍历 Map，具体取决于是想要键、要值还是两个都要：
 
 ```kotlin
-// Iterate over the entries as objects that contain the key and the value as properties
+// 遍历条目为包含键与值作为属性的对象
 for (entry in map) {
     println("${entry.key}: ${entry.value}")
 }
 
-// Iterate over the entries as separate key and value objects
+// 遍历条目，将键值分开为单独的对象
 for ((key, value) in map) {
     println("$key: $value")
 }
 
-// Iterate over the keys
+// 遍历键
 for (key in map.keys) {
     println(key)
 }
 
-// Iterate over the values
+// 遍历值
 for (value in map.values) {
     println(value)
 }
@@ -76,22 +76,22 @@ for (value in map.values) {
 
 ## `while`
 
-The `while` loop is similar to Python (but keep in mind that the condition must be an actual boolean expression, as there's no concept of truthy or falsy values).
+`while` 循环与 Python 类似（但请记住，条件必须是实际的布尔表达式，因为没有真值（truthy）与假值（falsy）的概念）。
 
 ```kotlin
 var x = 0
 while (x < 10) {
     println(x)
-    x++ // Same as x += 1
+    x++ // 等同于 x += 1
 }
 ```
 
-The loop variable(s), if any, must be declared outside of the `while` loop, and are therefore available for inspection afterwards, at which point they will contain the value(s) that made the loop condition false.
+循环变量（如果有）必须在 `while` 循环外声明，因此可以在以后检查，此时它们将包含使循环条件为假的值。
 
 
 ## `continue` 与 `break`
 
-A plain `continue` or `break` works the same way as in Python: `continue` skips to the next iteration of the innermost containing loop, and `break` stops the loop. However, you can also _label_ your loops and reference the label in the `continue` or `break` statement in order to indicate which loop you want to affect. A label is an identifier followed by `@,` e.g. `outer@` (possibly followed by a space). For example, to generate primes:
+普通的 `continue` 或 `break` 与 Python 中的工作方式相同：`continue` 跳到最里面的包含循环的下一个迭代，而 `break` 停止循环。但是，也可以用 _标签_ 循环并在 `continue` 或 `break` 语句中引用该标签，以指示要影响哪个循环。标签是标识符，后跟 `@`，例如：`outer@`（可能后跟一个空格）。例如，生成质数：
 
 ```kotlin
 outer@ for (n in 2..100) {
@@ -102,7 +102,7 @@ outer@ for (n in 2..100) {
 }
 ```
 
-Note that there must be no space between `continue`/`break` and `@`.
+请注意，`continue`/`break` 与 `@` 之间必须没有空格。
 
 
 
