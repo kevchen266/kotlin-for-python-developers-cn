@@ -103,7 +103,7 @@ countAndPrintArgs(*numbers.toIntArray())
 
 Kotlin 继承了 Java 烦躁的数组系统，因此原始类型具有自己的数组类型与转换函数，而其他任何类型都使用通用 `Array` 类型，可以使用 `.toTypedArray()` 转换为该类型。
 
-但是，不能将 Map 展开到函数调用中，然后期望将 Map 中的值传递给以键命名的参数——必须在编译时知道参数的名称。如果需要运行时定义的参数名称，则函数必须采用 Map 或采用 `vararg kwargs: Pair<String, X>`（其中 `X` 是参数类型的“最低公分母”，在最坏的情况下 `Any?`——准备必须强制转换参数值，并注意将失去类型安全性）。可以调用这样的函数：`foo("bar" to 42, "test" to "hello")`，因为 `to` 是创建 `Pair` 的中缀函数。
+但是，不能将 Map 展开到函数调用中，然后期望将 Map 中的值传递给以键命名的参数——必须在编译时知道参数的名称。如果需要运行时定义的参数名称，则函数必须采用 Map 或采用 `vararg kwargs: Pair<String, X>`（其中 `X` 是参数类型的“最低公分母”，在最坏的情况下 `Any?`——准备必须强制转换参数值，并注意将失去类型安全性）。可以调用这样的函数：`foo("bar" to 42, "test" to "hello")`，因为 `to` 是创建 `Pair` 的[中缀函数](classes.html#中缀函数)。
 
 
 
