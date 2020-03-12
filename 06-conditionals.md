@@ -34,11 +34,11 @@ val result = if (condition) trueBody else falseBody
 
 ## 比较
 
-结构相等性比较是使用 `==` 或 `!=` 进行的，但取决于每个类来定义含义是什么，就像在 Python 中一样，可以通过[覆盖](inheritance.html#覆盖) [`equals()`](classes.html#继承的内置函数)（将在左侧操作数上调用，以右侧操作数为参数）与 `hashCode()`。大多数内置集合类型对这些运算符和函数执行深度相等检查。检查两个变量是否引用同一对象（与 Python 中的 `is` 相同）——用 `===` 或 `!==` 进行。
+结构相等性比较是使用 `==` 或 `!=` 进行的，但取决于每个类来定义含义是什么，就像在 Python 中一样，可以通过[覆盖](inheritance.html#覆盖) [`equals()`](classes.html#继承的内置函数)（将在左侧操作数上调用，以右侧操作数为参数）与 `hashCode()`。大多数内置集合类型对这些运算符和函数执行深度相等检测。检测两个变量是否引用同一对象（与 Python 中的 `is` 相同）——用 `===` 或 `!==` 进行。
 
-布尔表达式由 `&&` 表示逻辑“与”，`||` 表示逻辑“或”，而 `!` 表示逻辑“非”。与 Python 中一样，`&&` 与 `||` 是短路的：它们仅在需要求值时才检查右侧。请注意，关键字 `and` 与 `or` 也存在，但是它们仅对整数值执行 _逐位_ 操作，并且不会短路。
+布尔表达式由 `&&` 表示逻辑“与”，`||` 表示逻辑“或”，而 `!` 表示逻辑“非”。与 Python 中一样，`&&` 与 `||` 是短路的：它们仅在需要求值时才检测右侧。请注意，关键字 `and` 与 `or` 也存在，但是它们仅对整数值执行 _逐位_ 操作，并且不会短路。
 
-没有自动转换为布尔值的方法，因此也没有真值（truthy）与假值（falsy）的概念：必须使用 `==` 或 `!=` 明确进行是否为零、empty 或 null 的检查。 大多数集合类型具有 `isEmpty()` 和 `isNotEmpty()` 函数。
+没有自动转换为布尔值的方法，因此也没有真值（truthy）与假值（falsy）的概念：必须使用 `==` 或 `!=` 显式进行是否为零、为空容器或为 null 的检测。 大多数集合类型都有 `isEmpty()` 与 `isNotEmpty()` 函数。
 
 
 ## `when`
@@ -64,4 +64,4 @@ when (x) {
 
 ---
 
-*本资料英文原文的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*
+*本资料英文原文的作者是 [Aasmund Eldhuset](https://eldhuset.net/)；其所有权属于[可汗学院（Khan Academy）](https://www.khanacademy.org/)，授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。请注意，这并不是可汗学院官方产品的一部分。中文版由[灰蓝天际](https://hltj.me/)、[Yue-plus](https://github.com/Yue-plus) 翻译，遵循相同授权方式。*

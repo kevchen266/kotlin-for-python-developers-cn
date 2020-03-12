@@ -16,7 +16,7 @@ copyright_notice = (
     u"授权许可为 [CC BY-NC-SA 3.0 US（署名-非商业-相同方式共享）]"
     u"(https://creativecommons.org/licenses/by-nc-sa/3.0/us/)。"
     u"请注意，这并不是可汗学院官方产品的一部分。"
-    u"中文版由[灰蓝天际](https://hltj.me/)译，遵循相同授权方式。*")
+    u"中文版由[灰蓝天际](https://hltj.me/)、[Yue-plus](https://github.com/Yue-plus) 翻译，遵循相同授权方式。*")
 copyright_notice_separator = "\n\n---\n\n"
 
 def substitute_link(match):
