@@ -177,6 +177,7 @@ Kotlin 将允许声明该属性而无需初始化它，并且可以在构造后�
 ```kotlin
 if (::name.isInitialized) println(name)
 ```
+
 `lateinit` 只能与 `var` 一起使用，而不能与 `val` 一起使用，并且类型必须是非基本且不可为 null 的。
 
 
