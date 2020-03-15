@@ -1,35 +1,35 @@
-Kotlin's object model is substantially different from Python's. Most importantly, classes are _not_ dynamically modifiable at runtime! (There are some limited exceptions to this, but you generally shouldn't do it. However, it _is_ possible to dynamically _inspect_ classes and objects at runtime with a feature called _reflection_ - this can be useful, but should be judiciously used.) All properties (attributes) and functions that might ever be needed on a class must be declared either directly in the class body or as [_extension functions_](extension-functionsproperties.html), so you should think carefully through your class design.
+Kotlin 的对象模型与 Python 的对象模型有很大的不同。最重要的是，类 _不能_ 在运行时动态修改！（对此有一些有限的例外，但是通常不应该这样做。但是，_可以_ 使用称为 _反射_ 的特性在运行时动态 _检查_ 类与对象——这可能很有用，但应谨慎使用。）必须直接在类主体中声明或作为[_扩展函数_](extension-functionsproperties.html)声明类中可能需要的属性（属性）和函数，因此您应仔细考虑类设计。
 
 
 ## 声明与实例化
 
-Classes are declared with the `class` keyword. A basic class without any properties or functions of its own looks like this:
+用 `class` 关键字声明类。没有任何属性或函数的基本类如下所示：
 
 ```kotlin
 class Empty
 ```
 
-You can then create an instance of this class in a way that looks similar to Python, as if the class were a function (but this is just syntactic sugar - unlike Python, classes in Kotlin aren't really functions):
+然后，可以按照类似于 Python 的方式创建该类的实例，就好像该类是一个函数（但这只是语法糖——与 Python 不同，Kotlin 中的类并不是真正的函数）：
 
 ```kotlin
 val object = Empty()
 ```
 
-Class names should use `UpperCamelCase`, just like in Python.
+就像在 Python 中一样，类名应使用 `UpperCamelCase`（大驼峰命名）。
 
 
 ## 继承的内置函数
 
-Every class that doesn't explicitly declare a parent class inherits from `Any`, which is the root of the class hierarchy (similar to `object` in Python) - more on [继承](inheritance.html) later. Via `Any`, every class automatically has the following functions:
+每个未明确声明父类的类都从 `Any` 继承，Any 是类层次结构的根（类似于 Python 中的 `object`）——有关[继承](inheritance.html)的更多信息。通过 `Any`，每个类自动具有以下函数：
 
-* `toString()` returns a string representation of the object, similar to `__str__()` in Python (the default implementation is rather uninteresting, as it only returns the class name and something akin to the object's id)
-* `equals(x)` checks if this object is equal to some other object `x` of any class (by default, this just checks if this object is the _same_ object as `x` - just like `is` in Python - but it can be overridden by subclasses to do custom comparisons of property values)
-* `hashCode()` returns an integer that can be used by hash tables and for shortcutting complex equality comparisons (objects that are equal according to `equals()` must have the same hash code, so if two objects' hash codes are different, the objects cannot be equal)
+* `toString()` 返回对象的字符串表示形式，类似于 Python 中的 `__str__()`（默认实现相当有趣，因为它仅返回类名与类似于对象 ID 的名称）
+* `equals(x)` 检查此对象是否与任何类的某个其他对象 `x` 相同（默认情况下，它仅检查该对象是否与 `x` 是 _相同的_ 对象——类似 Python 中的 `is`——但可以被子类覆盖以进行属性值的自定义比较）
+* `hashCode()` 返回一个整数，哈希表可以使用该整数并用于简化复杂的相等比较（根据 `equals()` 相等的对象必须具有相同的哈希码，因此，如果两个对象的哈希码不同，则这些对象不能相等）
 
 
 ## 属性
 
-Empty classes aren't very interesting, so let's make a class with some _properties_:
+空类不是很有趣，所以来创建一个具有一些 _属性_ 的类：
 
 ```kotlin
 class Person {
@@ -38,26 +38,26 @@ class Person {
 }
 ```
 
-Note that the type of a property must be explicitly specified. As opposed to Python, declaring a property directly inside the class does not create a class-level property, but an instance-level one: every instance of `Person` will have _its own_ `name` and `age`. Their values will start out in every instance as `"Anne"` and `32`, respectively, but the value in each instance can be modified independently of the others:
+请注意，必须明确指定属性的类型。与 Python 相反，在类内部直接声明属性不会创建类级别的属性，而是创建实例级别的属性：`Person` 的每个实例都有 _它自己_ 的 `name` 和 `age`。它们的值将在每个实例中分别以 `"Anne"` 与 `32` 生成，但是每个实例中的值可以独立于其他实例进行修改：
 
 ```kotlin
 val a = Person()
 val b = Person()
-println("${a.age} ${b.age}") // Prints "32 32"
+println("${a.age} ${b.age}") // 输出 "32 32"
 a.age = 42
-println("${a.age} ${b.age}") // Prints "42 32"
+println("${a.age} ${b.age}") // 输出 "42 32"
 ```
 
-To be fair, you'd get the same output in Python, but the mechanism would be different: both instances would start out without any attributes of their own (`age` and `name` would be attributes on the class), and the first printing would access the class attribute; only the assignment would cause an `age` attribute to appear on `a`. In Kotlin, there are no class properties in this example, and each instance starts out with both properties. If you need a class-level property, see the section on [伴生对象](objects-and-companion-objects.html#伴生对象).
+公平地说，在 Python 中会得到相同的输出，但是机制会有所不同：两个实例生成时自身都没有任何属性（`age` 与 `name` 将是类的属性），并且 第一次输出将访问类属性；只有赋值会导致 `age` 属性出现在 `a` 上。在 Kotlin 中，此示例中没有类属性，并且每个实例都从这两个属性生成。如果需要类级别的属性，请参见[伴生对象](objects-and-companion-objects.html#伴生对象)一节。
 
-Because the set of properties of an object is constrained to be exactly the set of properties that are declared at compile-time in the object's class, it's not possible to add new properties to an object or to a class at runtime, so e.g. `a.nationality = "Norwegian"` won't compile.
+由于对象的属性集必须严格限制为在对象类的编译时声明的属性集，因此无法在运行时将新属性添加到对象或类中。所以，例如 `a.nationality = "Norwegian"` 将无法通过编译。
 
-Property names should use `lowerCamelCase` instead of `snake_case`.
+属性名称应使用 `lowerCamelCase`（大驼峰命名）而不是 `snake_case`（下划线命名）。
 
 
 ## 构造函数与初始化块
 
-Properties that don't have a sensible default should be taken as constructor parameters. Like with Python's `__init__()`, Kotlin constructors and initializer blocks run automatically whenever an instance of an object is created (note that there's nothing that corresponds to `__new__()`).  A Kotlin class may have one _primary constructor_, whose parameters are supplied after the class name. The primary constructor parameters are available when you initialize properties in the class body, and also in the optional _initializer block_, which can contain complex initialization logic (a property can be declared without an initial value, in which case it must be initialized in `init`). Also, you'll frequently want to use `val` instead of `var` in order to make your properties immutable after construction.
+没有合理默认值的属性应作为构造函数参数。像 Python 的 `__init__()` 一样，只要创建对象的实例，Kotlin 构造函数和初始化程序块就会自动运行（请注意，没有与 `__new__()` 相对应的函数）。Kotlin 类可以具有一个 _主构造函数_，其参数在类名称之后提供。在类主体中初始化属性时，主构造函数参数是可用的，在可选 _初始化块_ 中也是可用的，可选初始化块可以包含复杂的初始化逻辑（可以在没有初始值的情况下声明属性，在这种情况下，必须在 `init` 中对其进行初始化）。另外，经常需要使用 `val` 而不是 `var`，以使构造后属性不变。
 
 ```kotlin
 class Person(firstName: String, lastName: String, yearOfBirth: Int) {
@@ -70,13 +70,13 @@ class Person(firstName: String, lastName: String, yearOfBirth: Int) {
 }
 ```
 
-If all you want to do with a constructor parameter value is to assign it to a property with the same name, you can declare the property in the primary constructor parameter list (the oneliner below is sufficient for both declaring the properties, declaring the constructor parameters, and initializing the properties with the parameters):
+如果想要对构造函数参数值进行的所有操作就是声明指定名称的属性，则可以在主构造函数参数列表中声明该属性（下面的单行代码足以声明属性，声明构造函数参数以及使用参数初始化属性）：
 
 ```kotlin
 class Person(val name: String, var age: Int)
 ```
 
-If you need multiple ways to initialize a class, you can create _secondary constructors_, each of which looks like a function whose name is `constructor`. Every secondary constructor must invoke another (primary or secondary) constructor by using the `this` keyword as if it were a function (so that every instance construction eventually calls the primary constructor).
+如果需要多种方法来初始化类，则可以创建 _次构造函数_，每个构造函数看起来都像一个名称为 `constructor` 的函数。每个次构造函数都必须使用 `this` 关键字来调用另一个（主或次）构造函数，就好像它是一个函数一样（以便每个实例构造最终都调用该主构造函数）。
 
 ```kotlin
 class Person(val name: String, var age: Int) {
@@ -86,7 +86,7 @@ class Person(val name: String, var age: Int) {
 }
 ```
 
-(A secondary constructor can also have a body in curly braces if needs to do more than what the primary constructor does.) The constructors are distinguished from each other through the types of their parameters, like in ordinary function overloading. That's the reason we had to flip the parameter order in the last secondary constructor - otherwise, it would have been indistinguishable from the primary constructor (parameter names are not a part of a function's signature and don't have any effect on overload resolution). In the most recent example, we can now create a `Person` in three different ways:
+（如果需要做的事情比主构造函数还要多，则次构造函数也可以使用花括号括起来。）这些构造函数通过其参数类型彼此区分开，就像在普通函数重载中一样。这就是必须在最后一个次构造函数中翻转参数顺序的原因——否则，它与主构造函数将无法区分（参数名称不是函数签名的一部分，并且对重载解析没有任何影响）。在以下示例中，可以通过三种不同的方式创建一个 `Person`：
 
 ```kotlin
 val a = Person("Jaime", 35)
@@ -94,12 +94,12 @@ val b = Person("Jack") // age = 0
 val c = Person(1995, "Lynne") // age = 23
 ```
 
-Note that if a class has got a primary constructor, it is no longer possible to create an instance of it without supplying any parameters (unless one of the secondary constructors is parameterless).
+请注意，如果一个类具有主构造函数，则无法在不提供任何参数的情况下创建其实例（除非其中一个次构造函数是无参数的）。
 
 
-## Setter 与 getter
+## Setter 与 Getter
 
-A property is really a _backing field_ (kind of a hidden variable inside the object) and two accessor functions: one that gets the value of the variable and one that sets the value. You can override one or both of the accessors (an accessor that is not overridden automatically gets the default behavior of just returning or setting the backing field directly). Inside an accessor, you can reference the backing field with `field`. The setter accessor must take a parameter `value`, which is the value that is being assigned to the property. A getter body could either be a one-line expression preceded by `=` or a more complex body enclosed in curly braces, while a setter body typically includes an assignment and must therefore be enclosed in curly braces.  If you want to validate that the age is nonnegative:
+属性实际上是一个 _后备字段_（对象内部为隐藏变量的种类）与两个访问器函数：一个用于获取变量的值，另一个用于设置值。可以重写一个或两个访问器（未被重写的访问器会自动获得默认行为，即直接返回或设置后备字段）。在访问器内部，可以使用 `field` 引用后备字段。Setter 访问器必须采用参数 `value`，这是赋值给属性的值。一个 Getter 主体可以是一个以 `=` 开头的单行表达式，也可以是一个花括号括起来的更复杂的主体，而 Setter 主体通常包括一个赋值，因此必须括在花括号中。如果要验证年龄是否为负数：
 
 ```kotlin
 class Person(age: Int) {
@@ -116,25 +116,25 @@ class Person(age: Int) {
 }
 ```
 
-Annoyingly, the setter logic is not invoked by the initialization, which instead sets the backing field directly - that's why we have to use an initializer block in this example in order to verify that newly-created persons also don't get a negative age. Note the use of `this.age` in the initializer block in order to distinguish between the identically-named property and constructor parameter.
+烦人的是，初始化未调用 Setter 逻辑，而是直接设置了后备字段——这就是为什么在此示例中必须使用初始化块来验证新创建的 Person 不会得到负 age 的原因。请注意在初始化程序块中使用 `this.age` 以便区分同名属性和构造函数参数。
 
-If for some reason you want to store a different value in the backing field than the value that is being assigned to the property, you're free to do that, but then you will probably want a getter to give the calling code back what they expect: if you say `field = value * 2` in the setter and `this.age = age * 2` in the initializer block, you should also have `get() = field / 2`.
+如果由于某种原因想要在后备字段中存储与赋值给该属性值不同的值，则可以自由地这样做，但是可能会希望使用 Getter 将调用代码返回给它们期望的结果：如果在 Setter 中声明 `field = value * 2`，而在初始化块中声明 `this.age = age * 2`，则还应该有 `get() = field / 2`。
 
-You can also create properties that don't actually have a backing field, but just reference another property:
+还可以创建实际上没有后备字段的属性，而只需引用另一个属性：
 
 ```kotlin
 val isNewborn
     get() = age == 0
 ```
 
-Note that even though this is a read-only property due to declaring it with `val` (in which case you may not provide a setter), its value can still change since it reads from a mutable property - you just can't assign to the property. Also, note that the property type is inferred from the return value of the getter.
+请注意，尽管由于使用 `val` 声明了它是一个只读属性（在这种情况下，可能没有提供 Setter），但它的值仍然可以更改，因为它是从可变属性中读取的——只是无法给该属性赋值。另外，请注意，属性类型是根据 Getter 的返回值推断出来的。
 
-The indentation in front of the accessors is due to convention; like elsewhere in Kotlin, it has no syntactic significance. The compiler can tell which accessors belong to which properties because the only legal place for an accessor is immediately after the property declaration (and there can be at most one getter and one setter) - so you can't split the property declaration and the accessor declarations. However, the order of the accessors doesn't matter.
+访问器前面的缩进是由于约定；像 Kotlin 的其他地方一样，它没有语法意义。编译器可以知道哪些访问器属于哪些属性，因为访问器的唯一合法位置是在属性声明之后（并且最多可以有一个 Getter 与一个 Setter）——因此无法拆分属性声明与访问器声明。总之，访问器的顺序并不重要。
 
 
 ## 成员函数
 
-A function declared inside a class is called a _member function_ of that class. Like in Python, every invocation of a member function must be performed on an instance of the class, and the instance will be available during the execution of the function - but unlike Python, the function signature doesn't declare that: there is no explicit `self` parameter. Instead, every member function can use the keyword `this` to reference the current instance, without declaring it. Unlike Python, as long as there is no name conflict with an identically-named parameter or local variable, `this` can be omitted. If we do this inside a `Person` class with a `name` property:
+在类内部声明的函数称为该类的 _成员函数_。像在 Python 中一样，成员函数的每次调用都必须在类的实例上执行，并且该实例将在函数执行期间可用——但与 Python 不同的是，函数签名并未声明：没有明确的 `self` 参数。相反，每个成员函数都可以使用关键字 `this` 引用当前实例，而无需声明它。与 Python 不同，只要与名称相同的参数或局部变量没有名称冲突，`this` 就可以省略。如果在具有 `name` 属性的 `Person` 类中执行此操作：
 
 ```kotlin
 fun present() {
@@ -142,48 +142,47 @@ fun present() {
 }
 ```
 
-We can then do this:
+然后可以这样做：
 
 ```kotlin
 val p = Person("Claire")
-p.present() // Prints "Hello, I'm Claire!"
+p.present() // 输出 "Hello, I'm Claire!"
 ```
 
-You could have said `${this.name}`, but that's redundant and generally discouraged. Oneliner functions can be declared with an `=`:
+可能已经写过 `${this.name}`，但这是多余的，通常不建议使用。可以使用 `=` 声明单行函数：
 
 ```kotlin
 fun greet(other: Person) = println("Hello, ${other.name}, I'm $name!")
 ```
 
-Apart from the automatic passing of the instance into `this`, member functions generally act like ordinary functions.
+除了将实例自动传递到 `this` 之外，成员函数通常的作用类似于普通函数。
 
-Because the set of member functions of an object is constrained to be exactly the set of member functions that are declared at compile-time in the object's class and base classes, it's not possible to add new member functions to an object or to a class at runtime, so e.g. `p.leave = fun() { println("Bye!") }` or anything of the sort won't compile.
+由于对象的成员函数集被限制为恰好是在编译时在对象的类与基类中声明的成员函数集，在运行时无法向对象或类添加新的成员函数。所以，例如 `p.leave = fun() { println("Bye!") }` 或其他任何形式都无法通过编译。
 
-Member function names should use `lowerCamelCase` instead of `snake_case`.
+成员函数名应该使用 `lowerCamelCase`（小驼峰命名）而不是 `snake_case`（下划线命名）。
 
 
 ## Lateinit
 
-Kotlin requires that every member property is initialized during instance construction. Sometimes, a class is intended to be used in such a way that the constructor doesn't have enough information to initialize all properties (such as when making a builder class or when using property-based dependency injection). In order to not have to make those properties nullable, you can use a _late-initialized property_:
+Kotlin 要求在实例构建过程中初始化每个成员属性。有时，类的使用方式使构造函数没有足够的信息来初始化所有属性（例如，在生成构建器类或使用基于属性的依赖注入时）。为了不必使这些属性可为空，可以使用 _后期初始化的属性_：
 
 ```kotlin
 lateinit var name: String
 ```
 
-Kotlin will allow you to declare this property without initializing it, and you can set the property value at some point after construction (either directly or via a function). It is the responsibility of the class itself as well as its users to take care not to read the property before it has been set, and Kotlin allows you to write code that reads `name` as if it were an ordinary, non-nullable property. However, the compiler is unable to enforce correct usage, so if the property is read before it has been set, an `UninitializedPropertyAccessException` will be thrown at runtime.
+Kotlin 将允许声明该属性而无需初始化它，并且可以在构造后的某个时候（直接或通过函数）设置属性值。类本身及其用户都有责任注意在设置属性之前不要读取该属性，并且 Kotlin 允许编写读取 `name` 的代码，就像它是一个普通的，不可为空的属性一样。但是，编译器无法强制正确使用，因此，如果在设置属性之前先读取该属性，将在运行时抛出 `UninitializedPropertyAccessException`。
 
-Inside the class that declares a lateinit property, you can check if it has been initialized:
+在声明了 Lateinit 属性的类中，可以检查它是否已初始化：
 
 ```kotlin
 if (::name.isInitialized) println(name)
 ```
-
-`lateinit` can only be used with `var`, not with `val`, and the type must be non-primitive and non-nullable.
+`lateinit` 只能与 `var` 一起使用，而不能与 `val` 一起使用，并且类型必须是非基本且不可为 null 的。
 
 
 ## 中缀函数
 
-You can designate a one-parameter member function or [extension function](extension-functionsproperties.html) for use as an infix operator, which can be useful if you're designing a DSL. The left operand will become `this`, and the right operand will become the parameter. If you do this inside a `Person` class that has got a `name` property:
+可以指定单个参数成员函数或[扩展函数](extension-functionsproperties.html)以用作中缀运算符，这在设计 DSL 时很有用。左操作数将变为 `this`，而右操作数将变为参数。如果在具有 `name` 属性的 `Person` 类中执行此操作：
 
 ```kotlin
 infix fun marry(spouse: Person) {
@@ -191,20 +190,20 @@ infix fun marry(spouse: Person) {
 }
 ```
 
-We can now do this (but it's still possible to call the function the normal way):
+现在，可以执行此操作（但是仍然可以按正常方式调用该函数）：
 
 ```kotlin
 val lisa = Person("Lisa")
 val anne = Person("Anne")
-lisa marry anne // Prints "Lisa and Anne are getting married!"
+lisa marry anne // 输出 "Lisa and Anne are getting married!"
 ```
 
-All infix functions have the same [precedence](https://www.kotlincn.net/docs/reference/grammar.html#precedence) (which is shared with all the built-in infix functions, such as the bitwise functions `and`, `or`, `inv`, etc.): lower than the arithmetic operators and the `..` range operator, but higher than the Elvis operator `?:`, comparisons, logic operators, and assignments.
+所有中缀函数具有相同的[优先级](https://www.kotlincn.net/docs/reference/grammar.html#precedence)（与所有内置中缀函数共享，例如位运算 `and`、`or`、`inv` 等）：低于算术运算符与 `..` 区间运算符，但高于 Elvis 运算符 `?:`、比较、逻辑运算符和赋值。
 
 
 ## 操作符
 
-Most of the operators that are recognized by Kotlin's syntax have predefined textual names and are available for implementation in your classes, just like you can do with Python's double-underscore operator names. For example, the binary `+` operator is called `plus`. Similarly to the infix example, if you do this inside a `Person` class that has got a `name` property:
+Kotlin 语法可识别的大多数运算符都有预定义的文本名称，可在类中实现，就像使用 Python 的双下划线运算符名称一样。例如，二进制 `+` 运算符称为 `plus`。与中缀实例类似，如果在具有 `name` 属性的 `Person` 类中执行此操作：
 
 ```kotlin
 operator fun plus(spouse: Person) {
@@ -212,22 +211,22 @@ operator fun plus(spouse: Person) {
 }
 ```
 
-With `lisa` and `anne` from the infix example, you can now do:
+使用中缀实例中的 `lisa` 与 `anne`，现在可以执行以下操作：
 
 ```kotlin
-lisa + anne // Prints "Lisa and Anne are getting married!"
+lisa + anne // 输出 "Lisa and Anne are getting married!"
 ```
 
-A particularly interesting operator is the function-call parenthesis pair, whose function name is `invoke` - if you implement this, you'll be able to call instances of your class as if they were functions. You can even overload it in order to provide different function signatures.
+一个特别有趣的运算符是函数调用括号对，其函数名称为 `invoke`——如果实现此功能，则可以像使用函数一样调用类的实例。甚至可以重载它以提供不同的函数签名。
 
-`operator` can also be used for certain other predefined functions in order to create fancy effects, such as [属性委托](inheritance.html#属性委托).
+`operator` 也可以用于某些其他预定义功能，以创建精美的效果，例如[属性委托](inheritance.html#属性委托)。
 
-Since the available operators are hardcoded into the formal Kotlin syntax, you can not invent new operators, and overriding an operator does not affect its [precedence](https://www.kotlincn.net/docs/reference/grammar.html#precedence).
+由于可用的运算符被硬编码为正式的 Kotlin 语法，因此无法发明新的运算符，并且重写运算符不会影响其[优先级](https://www.kotlincn.net/docs/reference/grammar.html#precedence)。
 
 
 ## 枚举类
 
-Whenever you want a variable that can only take on a limited number of values where the only feature of each value is that it's distinct from all the other values, you can create an _enum class_:
+每当想要一个只能包含有限数量的值的变量，而每个值的唯一特征是与所有其他值都不同时，则可以创建一个 _枚举类_：
 
 ```kotlin
 enum class ContentKind {
@@ -238,7 +237,7 @@ enum class ContentKind {
 }
 ```
 
-There are exactly four instances of this class, named `ContentKind.TOPIC`, and so on. Instances of this class can be compared to each other with `==` and `!=`, and you can get all the allowable values with `ContentKind.values()`. You can also tack on more information to each instance if you need:
+该类有四个实例，分别称为 `ContentKind.TOPIC`，依此类推。可以使用 `==` 与 `!=` 将该类的实例相互比较，并且可以通过 `ContentKind.values()` 获得所有允许的值。如果需要，还可以为每个实例提供更多信息：
 
 ```kotlin
 enum class ContentKind(val kind: String) {
@@ -254,12 +253,12 @@ enum class ContentKind(val kind: String) {
 }
 ```
 
-Null safety is enforced as usual, so a variable of type `ContentKind` can not be null, unlike in Java.
+通常会强制执行空安全，因此与 Java 不同，`ContentKind` 类型的变量不能为 null。
 
 
 ## 数据类
 
-Frequently - especially if you want a complex return type from a function or a complex key for a map - you'll want a quick and dirty class which only contains some properties, but is still comparable for equality and is usable as a map key. If you create a _data class_, you'll get automatic implementations of the following functions: `toString()` (which will produce a string containing all the property names and values), `equals()` (which will do a per-property `equals()`), `hashCode()` (which will hash the individual properties and combine the hashes), and the functions that are required to enable Kotlin to destructure an instance of the class into a declaration (`component1()`, `component2()`, etc.):
+通常——尤其是想要从函数的复杂返回类型或 Map 的复杂键——将需要一个快速且肮脏的类，该类仅包含一些属性，但对于相等性仍可比较，并且可用作 Map 键。如果创建 _数据类_，则将自动实现以下函数：`toString()`（将产生包含所有属性名称和值的字符串）、`equals()`（将按属性进行 `equals()`）、`hashCode()`（将散列各个属性并组合散列）以及使 Kotlin 将类的实例解构为声明所需的函数（`component1()`、`component2()` 等）：
 
 ```kotlin
 data class ContentDescriptor(val kind: ContentKind, val id: String) {
