@@ -16,7 +16,7 @@ fun square(number: Int) = number * number
 
 （请注意，没有 `**` 运算符；应通过 `Math.pow()` 进行非平方幂运算。）
 
-函数名称应使用 `lowerCamelCase`（小驼峰命名）而不是 `snake_case`（下划线命名）。
+函数名称应使用 `lowerCamelCase`（小写驼峰命名）而不是 `snake_case`（下划线命名）。
 
 
 ## 调用
