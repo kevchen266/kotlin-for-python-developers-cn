@@ -954,7 +954,7 @@ data class ContentDescriptor(val kind: ContentKind, val id: String) {
 
 ### 抛出与捕获
 
-异常几乎像在 Python 中一样工作。使用 `throw` 将 _抛出_（提升）一个异常：
+异常几乎像在 Python 中一样工作。使用 `throw` 将 _抛出_ 一个异常：
 
 ```kotlin
 throw IllegalArgumentException("Value must be positive")
@@ -972,7 +972,7 @@ fun divideOrZero(numerator: Int, denominator: Int): Int {
 }
 ```
 
-依次尝试 `catch` 代码块，直到找到与抛出的异常匹配的异常类型（不必完全匹配；抛出的异常的类可以是已声明异常的子类），并且最多包含一个 `catch` 代码块将被执行。如果没有找到匹配项，那么异常会从 `try`/`catch` 中冒出。
+依次尝试 `catch` 代码块，直到找到与抛出的异常匹配的异常类型（无需精准匹配；抛出的异常的类可以是已声明异常的子类），并且最多包含一个 `catch` 代码块将被执行。如果没有找到匹配项，那么异常会从 `try`/`catch` 中冒出。
 
 无论结果如何，都将在最后执行 `finally` 代码块（如果有的话）：在 try 代码块成功执行之后，或者在 catch 代码块执行之后（即使 catch 块引发了另一个异常），或者找不到匹配的捕获。
 
