@@ -1,12 +1,12 @@
 ## 抛出与捕获
 
-Exceptions pretty much work like they do in Python. You _throw_ (raise) one with `throw`:
+异常几乎像在 Python 中一样工作。使用 `throw` 将 _抛出_（提升）一个异常：
 
 ```kotlin
 throw IllegalArgumentException("Value must be positive")
 ```
 
-You _catch_ it with `try`/`catch` (which corresponds to `try`/`except` in Python):
+然后使用 `try`/`catch` 来 _捕获_ 异常（对应 Python 的 `try`/`except`）：
 
 ```kotlin
 fun divideOrZero(numerator: Int, denominator: Int): Int {
@@ -18,11 +18,11 @@ fun divideOrZero(numerator: Int, denominator: Int): Int {
 }
 ```
 
-The `catch` blocks are tried in order until an exception type is found that matches the thrown exception (it doesn't need to be an exact match; the thrown exception's class can be a subclass of the declared one), and at most one `catch` block will be executed. If no match is found, the exception bubbles out of the `try`/`catch`.
+依次尝试 `catch` 代码块，直到找到与抛出的异常匹配的异常类型（不必完全匹配；抛出的异常的类可以是已声明异常的子类），并且最多包含一个 `catch` 代码块将被执行。如果没有找到匹配项，那么异常会从 `try`/`catch` 中冒出。
 
-The `finally` block (if any) is executed at the end, no matter what the outcome is: either after the try block completes successfully, or after a catch block is executed (even if another exception is thrown by the catch block), or if no matching catch is found.
+无论结果如何，都将在最后执行 `finally` 代码块（如果有的话）：在 try 代码块成功执行之后，或者在 catch 代码块执行之后（即使 catch 块引发了另一个异常），或者找不到匹配的捕获。
 
-Unlike Python, `try`/`catch` is an expression: the last expression of the `try` block (if it succeeds) or the chosen `catch` block becomes the result value (`finally` doesn't affect the result), so we can refactor the function body above to:
+与 Python 不同，`try`/`catch` 是一个表达式：`try` 代码块（如果成功）或所选的 `catch` 代码块的最后一个表达式将成为结果值（`finally` 不会影响结果），因此可以将上面的函数体重构为：
 
 ```kotlin
 return try {
@@ -32,16 +32,16 @@ return try {
 }
 ```
 
-The base exception class is `Throwable` (but it is more common to extend its subclass `Exception`), and there are a ton of built-in exception classes. If you don't find one that match your needs, you can create your own by inheriting from an existing exception class.
+基本异常类是 `Throwable`（但是扩展其子类 `Exception` 更为常见），并且有大量内置的异常类。如果找不到满足需求的异常类，则可以通过从现有异常类继承来创建自己的异常类。
 
-Note that exceptions are somewhat discouraged in Kotlin except when interacting with Java code. Instead of throwing exceptions in your own code, consider using special return types like [Option](https://arrow-kt.io/docs/datatypes/option/) or [Either](https://arrow-kt.io/docs/datatypes/either/) from the [Arrow library](https://arrow-kt.io/).
+请注意，除了与 Java 代码进行交互时，在 Kotlin 中不建议使用异常。与其在自己的代码中引发异常，不如考虑使用特殊的返回类型，例如 [Arrow 库](https://arrow-kt.io/)中的 [Option](https://arrow-kt.io/docs/datatypes/option/) 或 [Either](https://arrow-kt.io/docs/datatypes/either/)。
 
 
 ## Nothing
 
-`throw` is also an expression, and its return type is the special class `Nothing`, which does not have any instances. The compiler knows that an expression whose type is `Nothing` will never return normally, and will therefore generally accept its use even where a different type would normally be required, such as after the [Elvis 操作符](null-safety.html#elvis-操作符). If you make a function that always throws, or that starts an infinite loop, you could declare its return type to be `Nothing` in order to make the compiler aware of this. One fun example of this is the built-in function `TODO`, which you can call in any expression (possibly supplying a string argument), and it raises a `NotImplementedError`.
+`throw` 也是一个表达式，其返回类型是特殊类 `Nothing`，它没有任何实例。编译器知道类型为 `Nothing` 的表达式永远不会正常返回，因此即使通常需要使用其他类型（例如在 [Elvis 操作符](null-safety.html#elvis-操作符)之后）的情况下，也通常会接受其使用。如果创建一个始终抛出异常的函数，或者开始一个无限循环，则可以将其返回类型声明为 `Nothing`，以使编译器意识到这一点。一个有趣的例子是内置函数 `TODO`，可以在任何表达式中调用它（可能提供一个字符串参数），它会引发 `NotImplementedError`。
 
-The nullable version `Nothing?` will be used by the compiler when something is initialized with null and there is no other type information. In `val x = null`, the type of `x` will be `Nothing?`. This type does not have the "never returns normally" semantics; instead, the compiler knows that the value will always be null.
+可为空版本 `Nothing?` 在当使用 null 初始化某些内容且没有其他类型信息时，编译器将使用它。在 `val x = null` 中，`x` 的类型将为 `Nothing?`。此类型没有“从不正常返回”的语义；相反，编译器知道该值将始终为 null。
 
 
 
