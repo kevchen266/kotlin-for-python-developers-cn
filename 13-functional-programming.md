@@ -1,25 +1,25 @@
 ## 函数类型
 
-Like in Python, functions in Kotlin are first-class values - they can be assigned to variables and passed around as parameters. The type a function is a _function type_, which is indicated with a parenthesized parameter type list and an arrow to the return type. Consider this function:
+与 Python 中一样，Kotlin 中的函数是一等值——它们可以分配给变量并作为参数传递。函数的类型是 _function type_，用括号括起来的参数类型列表和返回类型的箭头指示。参考以下函数：
 
 ```kotlin
 fun safeDivide(numerator: Int, denominator: Int) =
     if (denominator == 0) 0.0 else numerator.toDouble() / denominator
 ```
 
-It takes two `Int` parameters and returns a `Double`, so its type is `(Int, Int) -> Double`. We can reference the function itself by prefixing its name with `::`, and we can assign it to a variable (whose type would normally be inferred, but we show the type signature for demonstration):
+它带有两个 `Int` 参数并返回 `Double`，因此其类型为 `(Int, Int) -> Double`。可以通过在函数名称前加上 `::` 来引用函数本身，并且可以将其分配给变量（通常会推断出其类型，但为了演示将显示类型签名）：
 
 ```kotlin
 val f: (Int, Int) -> Double = ::safeDivide
 ```
 
-When you have a variable or parameter of function type (sometimes called a _function reference_), you can call it as if it were an ordinary function, and that will cause the referenced function to be called:
+当具有函数类型的变量或参数（有时称为 _函数引用_）时，可以像调用普通函数一样对其进行调用，这将导致引用的函数被调用：
 
 ```kotlin
 val quotient = f(3, 0)
 ```
 
-It is possible for a class to implement a function type as if it were an interface. It must then supply an operator function called `invoke` with the given signature, and instances of that class may then be assigned to a variable of that function type:
+类有可能像执行接口一样实现函数类型。然后，它必须提供一个具有给定签名的称为 `invoke` 的运算符函数，然后可以将该类的实例分配给该函数类型的变量：
 
 ```kotlin
 class Divider : (Int, Int) -> Double {
