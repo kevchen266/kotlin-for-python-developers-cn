@@ -1168,7 +1168,7 @@ Lambda 表达式和匿名函数统称为 _函数字面值_。
 
 ### 集合推导
 
-Kotlin can get quite close to the compactness of Python's `list`/`dict`/`set` comprehensions. Assuming that `people` is a collection of `Person` objects with a `name` property:
+Kotlin 可以非常接近 Python 的 `list`、`dict`、`set` 理解的紧凑性。假设 `people` 是具有 `name` 属性的 `Person` 对象的集合：
 
 ```kotlin
 val shortGreetings = people
@@ -1176,7 +1176,7 @@ val shortGreetings = people
     .map { "Hello, ${it.name}!" }
 ```
 
-corresponds to
+相当于
 
 ```python
 short_greetings = [
@@ -1186,11 +1186,11 @@ short_greetings = [
 ]
 ```
 
-In some ways, this is easier to read because the operations are specified in the order they are applied to the values. The result will be an immutable `List<T>`, where `T` is whichever type is produced by the transformations you use (in this case, `String`). If you need a mutable list, call `toMutableList()` at the end. If you want a set, call `toSet()` or `toMutableSet()` at the end. If you want to transform a collection into a map, call `associateBy()`, which takes two lambdas that specify how to extract the key and the value from each element: `people.associateBy({it.ssn}, {it.name})` (you can omit the second lambda if you want the entire element to be the value, and you can call `toMutableMap()` at the end if you want the result to be mutable).
+在某些方面，这更易于阅读，因为操作是按照它们应用于值的顺序指定的。结果将是一个不变的 `List<T>`，其中 `T` 是使用的转换（在这种情况下为 `String`）生成的任何类型。如果需要可变列表，请在最后调用 `toMutableList()`。如果需要 Set，请在最后调用 `toSet()` 或 `toMutableSet()`。如果要将 Set 转换为 Map，请调用 `associateBy()`，它需要两个 lambda，用于指定如何从每个元素提取键和值：`people.associateBy({it.ssn}, {it.name})`（如果希望整个元素作为值，则可以省略第二个 lambda；如果希望结果可变，则可以在最后调用 `toMutableMap()`）。
 
-These transformations can also be applied to `Sequence<T>`, which is similar to Python's generators and allows for lazy evaluation. If you have a huge list and you want to process it lazily, you can call `asSequence()` on it.
+这些转换也可以应用于 `Sequence<T>`，它与 Python 的生成器类似，并且允许进行惰性求值。如果有一个庞大的列表，并且想要延迟处理它，则可以在其上调用 `asSequence()`。
 
-There's a vast collection of functional programming-style operations available in the [`kotlin.collections` package](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html).
+[`kotlin.collections` 包](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html)中提供了大量功能编程风格的操作。
 
 
 ### 接收者
