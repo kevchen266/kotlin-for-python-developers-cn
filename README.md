@@ -1073,7 +1073,7 @@ The above could also be a oneliner - and note that the compiler knows that becau
 
 ### 函数类型
 
-与 Python 中一样，Kotlin 中的函数是一等值——它们可以分配给变量并作为参数传递。函数的类型是 _function type_，用括号括起来的参数类型列表和返回类型的箭头指示。参考以下函数：
+像在 Python 中一样，Kotlin 中的函数是一等值——它们可以分配给变量并作为参数传递。函数的类型是 _function type_，用括号括起来的参数类型列表和返回类型的箭头指示。参考以下函数：
 
 ```kotlin
 fun safeDivide(numerator: Int, denominator: Int) =
@@ -1103,7 +1103,7 @@ class Divider : (Int, Int) -> Double {
 
 ### 函数字面值：lambda 表达式与匿名函数
 
-Like in Python, you can write _lambda expressions_: unnamed function declarations with a very compact syntax, which evaluate to callable function objects. In Kotlin, lambdas can contain multiple statements, which make them useful for [more complex tasks](#接收者) than the single-expression lambdas of Python. The last statement must be an expression, whose result will become the return value of the lambda (unless `Unit` is the return type of the variable/parameter that the lambda expression is assigned to, in which case the lambda has no return value). A lambda expression is enclosed in curly braces, and begins by listing its parameter names and possibly their types (unless the types can be inferred from context):
+像在 Python 中一样，可以编写 _lambda 表达式_：使用非常紧凑的语法声明并编写匿名函数，它计算可调用函数对象的值。在 Kotlin 中，lambdas 可以包含多个语句，这使得它们对于比 Python 的单表达式 lambdas 在处理[更复杂的任务](#接收者)时更有用。最后一个语句必须是一个表达式，它的结果将成为 lambda 的返回值（除非 `Unit` 是 lambda 表达式所赋值的变量或参数的返回类型，在这种情况下，lambda 没有返回值）。一个 lambda 表达式包含在花括号中，它首先列出了它的参数名和可能的类型（除非可以从上下文中推断出类型）：
 
 ```kotlin
 val safeDivide = { numerator: Int, denominator: Int ->
@@ -1111,11 +1111,11 @@ val safeDivide = { numerator: Int, denominator: Int ->
 }
 ```
 
-The type of `safeDivide` is `(Int, Int) -> Double`. Note that unlike function type declarations, the parameter list of a lambda expression must not be enclosed in parentheses.
+`safeDivide` 的类型是 `(Int, Int) -> Double`。请注意，与函数类型声明不同，lambda 表达式的参数列表不得包含在括号中。
 
-Note that the other uses of curly braces in Kotlin, such as in function and class definitions and after `if`/`else`/`for`/`while` statements, are not lambda expressions (so it is _not_ the case that `if` is a function that conditionally executes a lambda function).
+请注意，Kotlin 中花括号的其他用法（例如在函数和类定义中以及在 `if`、`else`、`for`、`while` 语句之后）不是 lambda 表达式（因此，`if` 是有条件地执行 lambda 函数的函数的情况 _并非_ 如此）。
 
-The return type of a lambda expression is inferred from the type of the last expression inside it (or from the function type of the variable/parameter that the lambda expression is assigned to). If a lambda expression is passed as a function parameter (which is the ordinary use) or assigned to a variable with a declared type, Kotlin can infer the parameter types too, and you only need to specify their names:
+Lambda 表达式的返回类型是根据其中的最后一个表达式的类型（或从 Lambda 表达式所分配给的变量或参数的函数类型）推断出来的。如果将 lambda 表达式作为函数参数（通常使用）传递或分配给具有声明类型的变量，则 Kotlin 也可以推断参数类型，只需要指定其名称即可：
 
 ```kotlin
 val safeDivide: (Int, Int) -> Double = { numerator, denominator ->
@@ -1123,7 +1123,7 @@ val safeDivide: (Int, Int) -> Double = { numerator, denominator ->
 }
 ```
 
-Or:
+或：
 
 ```kotlin
 fun callAndPrint(function: (Int, Int) -> Double) {
@@ -1135,13 +1135,13 @@ callAndPrint({ numerator, denominator ->
 })
 ```
 
-A parameterless lambda does not need the arrow. A one-parameter lambda can choose to omit the parameter name and the arrow, in which case the parameter will be called `it`:
+无参数 lambda 不需要箭头。单参数 lambda 可以选择省略参数名称和箭头，在这种情况下，该参数可通过 `it` 调用：
 
 ```kotlin
 val square: (Double) -> Double = { it * it }
 ```
 
-If the type of the last parameter to a function is a function type and you want to supply a lambda expression, you can place the lambda expression _outside_ of the parameter parentheses. If the lambda expression is the only parameter, you can omit the parentheses entirely. This is very useful for [constructing DSLs](#接收者).
+如果函数的最后一个参数的类型是函数类型，并且您想提供 lambda 表达式，则可以将 lambda 表达式放在参数括号之外。如果 lambda 表达式是唯一的参数，则可以完全省略括号。这对于[构建 DSL](#接收者) 非常有用。
 
 ```kotlin
 fun callWithPi(function: (Double) -> Double) {
@@ -1151,19 +1151,19 @@ fun callWithPi(function: (Double) -> Double) {
 callWithPi { it * it }
 ```
 
-If you want to be more explicit about the fact that you're creating a function, you can make an _anonymous function_, which is still an expression rather than a declaration:
+如果想更清楚地了解创建函数的事实，可以创建一个 _匿名函数_，该函数仍然是表达式而不是声明：
 
 ```kotlin
 callWithPi(fun(x: Double): Double { return x * x })
 ```
 
-Or:
+或：
 
 ```kotlin
 callWithPi(fun(x: Double) = x * x)
 ```
 
-Lambda expressions and anonymous functions are collectively called _function literals_.
+Lambda 表达式和匿名函数统称为 _函数字面值_。
 
 
 ### 集合推导
