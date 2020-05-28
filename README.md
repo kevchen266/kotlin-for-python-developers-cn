@@ -1285,7 +1285,7 @@ t = tree("root", init_root)
 
 ### 内联函数
 
-There's a little bit of runtime overhead associated with lambda functions: they are really objects, so they must be instantiated, and (like other functions) calling them takes a little bit of time too. If we use the `inline` keyword on a function, we tell the compiler to _inline_ both the function and its lambda parameters (if any) - that is, the compiler will copy the code of the function (and its lambda parameters) into _every_ callsite, thus eliminating the overhead of both the lambda instantiation and the calling of the function and the lambdas. This will happen unconditionally, unlike in C and C++, where `inline` is more of a hint to the compiler. This will cause the size of the compiled code to grow, but it may be worth it for certain small but frequently-called functions.
+Lambda 函数有一些运行时开销：它们实际上是对象，因此必须实例化，并且（与其他函数一样）调用它们也需要一点时间。如果在函数上使用 `inline` 关键字，则会告诉编译器内联函数和其 lambda 参数（如果有的话）——也就是说，编译器会将函数的代码（及其 lambda 参数）复制到每个调用站点中，这样就消除了 lambda 实例化以及函数和 lambda 调用的开销。这将无条件地发生，这与 C 和 C++ 中的 `inline` 更多地是对编译器的提示不同。这将导致已编译代码的大小增加，但是对于某些较小但经常调用的函数可能值得这样做。
 
 ```kotlin
 inline fun time(action: () -> Unit): Long {
@@ -1295,14 +1295,14 @@ inline fun time(action: () -> Unit): Long {
 }
 ```
 
-Now, if you do:
+现在，如果这样做：
 
 ```kotlin
 val t = time { println("Lots of code") }
 println(t)
 ```
 
-The compiler will generate something like this (except that `start` won't collide with any other identifiers with the same name):
+编译器将生成类似以下内容的代码（除了 `start` 不会与任何其他同名标识符冲突）：
 
 ```kotlin
 val start = Instant.now().toEpochMilli()
@@ -1311,7 +1311,7 @@ val t = Instant.now().toEpochMilli() - start
 println(t)
 ```
 
-In an inline function definition, you can use `noinline` in front of any function-typed parameter to prevent the lambda that will be passed to it from also being inlined.
+在内联函数定义中，可以在任何函数类型的参数前面使用 `noinline` 来防止将要传递给它的 lambda 内联。
 
 
 ### 不错的工具函数
