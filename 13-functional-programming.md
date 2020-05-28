@@ -246,13 +246,13 @@ println(t)
 
 ### `run()`、`let()` 与 `with()`
 
-`?.` is nice if you want to call a function on something that might be null. But what if you want to call a function that takes a non-null parameter, but the value you want to pass for that parameter might be null? Try `run()`, which is an extension function on `Any?` that takes a lambda with receiver as a parameter and invokes it on the value that it's called on, and use `?.` to call `run()` only if the object is non-null:
+如果想在可能为空的东西上调用函数，`?.` 很好。但是，如果要调用一个采用非空参数的函数，但要为该参数传递的值可能为空怎么办？尝试 `run()`，它是 `Any?` 上的扩展函数，该函数以带有接收者的 lambda 作为参数，并在其调用的值上调用它，然后使用 `?.` 来调用 `run()`。仅当对象为非空时：
 
 ```kotlin
 val result = maybeNull?.run { functionThatCanNotHandleNull(this) }
 ```
 
-If `maybeNull` is null, the function won't be called, and `result` will be null; otherwise, it will be the return value of `functionThatCanNotHandleNull(this)`, where `this` refers to  `maybeNull`. You can chain `run()` calls with `?.` - each one will be called on the previous result if it's not null:
+如果 `maybeNull` 为空，则不会调用该函数，而 `result` 为空。否则，它将是 `functionThatCanNotHandleNull(this)` 的返回值，其中 `this` 是指 `maybeNull`。可以使用 `?.` 链接 `run()` 调用——如果前一个结果不为空，则每个调用都会被调用：
 
 ```kotlin
 val result = maybeNull
@@ -260,11 +260,11 @@ val result = maybeNull
     ?.run { secondFunction(this) }
 ```
 
-The first `this` refers to `maybeNull`, the second one refers to the result of `firstFunction()`, and `result` will be the result of `secondFunction()` (or null if `maybeNull` or any of the intermediate results were null).
+第一个 `this` 是指 `maybeNull`，第二个是 `firstFunction()` 的结果，`result` 将是 `secondFunction()` 的结果（如果 `maybeNull` 或任何中间结果为空）。
 
-A syntactic variation of `run()` is `let()`, which takes an ordinary function type instead of a function type with receiver, so the expression that might be null will be referred to as `it` instead of `this`.
+`run()` 的语法变体是 `let()`，它采用普通函数类型而不是带有接收器的函数类型，因此可能为空的表达式将称为 `it` 而不是 `this`。 。
 
-Both `run()` and `let()` are also useful if you've got an expression that you need to use multiple times, but you don't care to come up with a variable name for it and make a null check:
+如果有一个需要多次使用的表达式，但 `run()` 和 `let()` 都非常有用，但是不必为它提供一个变量名并进行空检查：
 
 ```kotlin
 val result = someExpression?.let {
@@ -273,7 +273,7 @@ val result = someExpression?.let {
 }
 ```
 
-Yet another version is `with()`, which you can also use to avoid coming up with a variable name for an expression, but only if you know that its result will be non-null:
+还有一个版本是 `with()`，也可以使用它来避免为表达式提供变量名，但前提是您知道其结果不为空：
 
 ```kotlin
 val result = with(someExpression) {
@@ -282,12 +282,12 @@ val result = with(someExpression) {
 }
 ```
 
-In the last line, there's an implicit `this.` in front of both `memberFunction()` and `memberProperty` (if these exist on the type of `someExpression`). The return value is that of the last expression.
+在最后一行，在 `memberFunction()` 与 `memberProperty` 之前都有一个隐含的`this.`（如果这些存在于 `someExpression` 类型）。返回值是最后一个表达式的值。
 
 
 ### `apply()` 与 `also()`
 
-If you don't care about the return value from the function, but you want to make one or more calls involving something that might be null and then keep on using that value, try `apply()`, which returns the value it's called on. This is particularly useful if you want to work with many members of the object in question:
+如果不关心函数的返回值，但是想进行一个或多个涉及空值的调用，然后继续使用该值，请尝试 `apply()`，它返回被调用的值。如果要使用所讨论对象的许多成员，这特别有用：
 
 ```kotlin
 maybeNull?.apply {
@@ -297,9 +297,9 @@ maybeNull?.apply {
 }?.memberFunctionB()
 ```
 
-Inside the `apply` block, `this` refers to `maybeNull`. There's an implicit `this` in front of `memberPropertyA`, `memberPropertyB`, and `memberFunctionA` (unless these don't exist on `maybeNull`, in which case they'll be looked for in the containing scopes). Afterwards, `memberFunctionB()` is also invoked on `maybeNull`.
+在 `apply` 块中，`this 是指 `maybeNull`。在 `memberPropertyA`，`memberPropertyB` 与 `memberFunctionA` 之前有一个隐含的 `this`（除非这些在 `maybeNull` 上不存在，在这种情况下将在包含的作用域中查找它们）。此后，也可以在 `maybeNull` 上调用 `memberFunctionB()`。
 
-If you find the `this` syntax to be confusing, you can use `also` instead, which takes ordinary lambdas:
+如果发现 `this` 语法令人困惑，则可以改用 `also`，它需要普通的 lambda：
 
 ```kotlin
 maybeNull?.also {
@@ -312,7 +312,7 @@ maybeNull?.also {
 
 ### `takeIf()` 与 `takeUnless()`
 
-If you want to use a value only if it satisfies a certain condition, try `takeIf()`, which returns the value it's called on if it satisfies the given predicate, and null otherwise. There's also `takeUnless()`, which inverts the logic. You can follow this with a `?.` to perform an operation on the value only if it satisfies the predicate. Below, we compute the square of some expression, but only if the expression value is at least 42:
+如果仅在满足特定条件时才使用值，请尝试 `takeIf()`，如果满足给定谓词，则返回它被调用的值，否则返回空值。还有 `takeUnless()`，它反转逻辑。可以在其后接一个 `?.`，以仅在满足谓词的情况下对该值执行运算。下面，计算某些表达式的平方，但前提是表达式的值至少为 42：
 
 ```kotlin
 val result = someExpression.takeIf { it >= 42 } ?.let { it * it }
