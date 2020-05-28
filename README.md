@@ -1195,9 +1195,9 @@ short_greetings = [
 
 ### 接收者
 
-The signature of a member function or an [extension function](#扩展函数属性) begins with a _receiver_: the type upon which the function can be invoked. For example, the signature of `toString()` is `Any.() -> String` - it can be called on any non-null object (the receiver), it takes no parameters, and it returns a `String`. It is possible to write a lambda function with such a signature - this is called a _function literal with receiver_, and is extremely useful for building DSLs.
+成员函数或[扩展函数](#扩展函数属性)的签名始于 _接收者_：可以在其上调用函数的类型。例如，`toString()` 的签名是 `Any.() -> String`——可以在任何非空对象（接收者）上调用它，它不带任何参数，并且返回 `String`。可以使用这样的签名来编写 lambda 函数——这被称为 _带有接收者的函数字面值_，对于构建DSL非常有用。
 
-A function literal with receiver is perhaps easiest to think of as an extension function in the form of a lambda expression. The declaration looks like an ordinary lambda expression; what makes it take a receiver is the context - it must be passed to a function that takes a function with receiver as a parameter, or assigned to a variable/property whose type is a function type with receiver. The only way to use a function with receiver is to invoke it on an instance of the receiver class, as if it were a member function or extension function. For example:
+带接收者的函数文字可能最容易被认为是 lambda 表达式形式的扩展函数。该声明看起来像一个普通的 lambda 表达式。使其成为接收者的是上下文——必须将其传递给以接收者作为参数的函数，或者将其分配给类型为接收者的函数类型的变量或属性。将函数与接收者一起使用的唯一方法是在接收者类的实例上调用它，就像它是成员函数或扩展函数一样。例如：
 
 ```kotlin
 class Car(val horsepowers: Int)
@@ -1208,11 +1208,11 @@ val car = Car(120)
 println(car.boast())
 ```
 
-Inside a lambda expression with receiver, you can use `this` to refer to the receiver object (in this case, `car`). As usual, you can omit `this` if there are no naming conflicts, which is why we can simply say `$horsepowers` instead of `${this.horsepowers}`. So beware that in Kotlin, `this` can have different meanings depending on the context: if used inside (possibly nested) lambda expressions with receivers, it refers to the receiver object of the innermost enclosing lambda expression with receiver. If you need to "break out" of the function literal and get the "original" `this` (the instance the member function you're inside is executing on), mention the containing class name after `this@` - so if you're inside a function literal with receiver inside a member function of Car, use `this@Car`.
+在带有接收者的 lambda 表达式中，您可以使用 `this` 来引用接收者对象（在本例中为 `car`）。像往常一样，如果没有命名冲突，则可以省略 `this`，这就是为什么可以简单地说 `$horsepowers` 而不是 `${this.horsepowers}` 的原因。因此请注意，在 Kotlin 中，`this` 取决于上下文可能具有不同的含义：如果在内部（可能嵌套的）lambda 表达式与接收者一起使用，它指的是最内部包含接收者的 lambda 表达式的接收者对象。如果需要“突破”函数文字并获取“原始”`this`（正在其中执行的成员函数的实例），请在 `this@` 之后提及包含的类名——如果在函数字面量内，而接收方在 Car 的成员函数内，请使用 `this@Car`。
 
-As with other function literals, if the function takes one parameter (other than the receiver object that it is invoked on), the single parameter is implicitly called `it`, unless you declare another name. If it takes more than one parameter, you must declare their names.
+与其他函数字面值一样，如果函数采用一个参数（调用该参数的接收方对象除外），则除非您声明另一个名称，否则单个参数将隐式称为 `it`。如果使用多个参数，则必须声明其名称。
 
-Here's a small DSL example for constructing tree structures:
+这是一个用于构建树形结构的小型 DSL 示例：
 
 ```kotlin
 class TreeNode(val name: String) {
@@ -1246,9 +1246,9 @@ val t = tree("root") {
 }
 ```
 
-The block after `tree("root")` is the first function literal with receiver, which will be passed to `tree()` as the `initialize` parameter. According to the parameter list of `tree()`, the receiver is of type `TreeNode`, and therefore, `tree()` can call `initialize()` on `root`. `root` then becomes `this` inside the scope of that lambda expression, so when we call `node("math")`, it implicitly says `this.node("math")`, where `this` refers to the same `TreeNode` as `root`. The next block is passed to `TreeNode.node()`, and is invoked on the first child of the `root` node, namely `math`, and inside it, `this` will refer to `math`.
+在 `tree("root")` 之后的块是带有接收者的第一个函数字面值，它将作为 `initialize` 参数传递给 `tree()`。根据 `tree()` 的参数列表，接收者的类型为 `TreeNode`，因此，`tree()` 可以在 `root` 上调用 `initialize()`。然后，`root` 在该 lambda 表达式的范围内变为 `this`，因此，当调用 `node("math")` 时，它隐式地表示为 `this.node("math")`，其中 `this` 与 `root` 所指的是相同的 `TreeNode`。下一个块传递给 `TreeNode.node()`，并在 `root` 节点的第一个子节点上调用，即 `math`，在其内部，`this` 将引用 `math`。
 
-If we had wanted to express the same thing in Python, it would have looked like this, and we would be hamstrung by the fact that lambda functions can only contain one expression, so we need explicit function definitions for everything but the oneliners:
+如果想在 Python 中表达相同的内容，它将看起来像这样，而 lambda 函数只能包含一个表达式将会受阻，所以需要显式的函数定义来处理除单行之外的所有内容
 
 ```python
 class TreeNode:
@@ -1280,7 +1280,7 @@ def init_math(math):
 t = tree("root", init_root)
 ```
 
-The official docs also have a very cool example with a [ DSL for constructing HTML documents](https://www.kotlincn.net/docs/reference/type-safe-builders.html).
+官方文档还有一个非常酷的示例，其中包含[用于构造 HTML 文档的 DSL](https://www.kotlincn.net/docs/reference/type-safe-builders.html)。
 
 
 ### 内联函数
