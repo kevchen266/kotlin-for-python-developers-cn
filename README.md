@@ -1319,13 +1319,13 @@ println(t)
 
 #### `run()`、`let()` 与 `with()`
 
-如果想在可能为空的东西上调用函数，`?.` 很好。但是，如果要调用一个采用非空参数的函数，但要为该参数传递的值可能为空怎么办？尝试 `run()`，它是 `Any?` 上的扩展函数，该函数以带有接收者的 lambda 作为参数，并在其调用的值上调用它，然后使用 `?.` 来调用 `run()`。仅当对象为非空时：
+如果想在可能为空的东西上调用函数，`?.` 很好。但是，如果要调用一个采用非空参数的函数，但要为该参数传递的值可能为空怎么办？尝试 `run()`，它是 `Any?` 上的扩展函数，该函数以带有接收者的 lambda 作为参数，并在其调用的值上调用它，而用 `?.` 来调用 `run()` 仅当该对象非空时才会调用：
 
 ```kotlin
 val result = maybeNull?.run { functionThatCanNotHandleNull(this) }
 ```
 
-如果 `maybeNull` 为空，则不会调用该函数，而 `result` 为空。否则，它将是 `functionThatCanNotHandleNull(this)` 的返回值，其中 `this` 是指 `maybeNull`。可以使用 `?.` 链接 `run()` 调用——如果前一个结果不为空，则每个调用都会被调用：
+如果 `maybeNull` 为空，则不会调用该函数，而 `result` 为空。否则，它将是 `functionThatCanNotHandleNull(this)` 的返回值，其中 `this` 是指 `maybeNull`。可以使用 `?.` 链接 `run()` 调用——如果前一个结果不为空，那么每个 `run()` 都会调用：
 
 ```kotlin
 val result = maybeNull
@@ -1333,11 +1333,11 @@ val result = maybeNull
     ?.run { secondFunction(this) }
 ```
 
-第一个 `this` 是指 `maybeNull`，第二个是 `firstFunction()` 的结果，`result` 将是 `secondFunction()` 的结果（如果 `maybeNull` 或任何中间结果为空）。
+第一个 `this` 是指 `maybeNull`，第二个是 `firstFunction()` 的结果，`result` 将是 `secondFunction()` 的结果（如果 `maybeNull` 或任何中间结果为空，则返回空）。
 
-`run()` 的语法变体是 `let()`，它采用普通函数类型而不是带有接收器的函数类型，因此可能为空的表达式将称为 `it` 而不是 `this`。 。
+`run()` 的语法变体是 `let()`，它以普通函数类型作为参数而不是带有接收器的函数类型，因此可能为空的表达式将称为 `it` 而不是 `this`。 。
 
-如果有一个需要多次使用的表达式，但 `run()` 和 `let()` 都非常有用，但是不必为它提供一个变量名并进行空检查：
+如果有一个需要多次使用的表达式，但是不必为它提供一个变量名并进行空检测，`run()` 与 `let()` 都非常有用：
 
 ```kotlin
 val result = someExpression?.let {
@@ -1346,7 +1346,7 @@ val result = someExpression?.let {
 }
 ```
 
-还有一个版本是 `with()`，也可以使用它来避免为表达式提供变量名，但前提是您知道其结果不为空：
+还有一个版本是 `with()`，也可以使用它来避免为表达式提供变量名，但前提是知道其结果不为空：
 
 ```kotlin
 val result = with(someExpression) {
@@ -1372,7 +1372,7 @@ maybeNull?.apply {
 
 在 `apply` 块中，`this 是指 `maybeNull`。在 `memberPropertyA`，`memberPropertyB` 与 `memberFunctionA` 之前有一个隐含的 `this`（除非这些在 `maybeNull` 上不存在，在这种情况下将在包含的作用域中查找它们）。此后，也可以在 `maybeNull` 上调用 `memberFunctionB()`。
 
-如果发现 `this` 语法令人困惑，则可以改用 `also`，它需要普通的 lambda：
+如果发现 `this` 语法令人困惑，则可以改用 `also`，它以普通的 lambda 作为参数：
 
 ```kotlin
 maybeNull?.also {
@@ -1385,7 +1385,7 @@ maybeNull?.also {
 
 #### `takeIf()` 与 `takeUnless()`
 
-如果仅在满足特定条件时才使用值，请尝试 `takeIf()`，如果满足给定谓词，则返回它被调用的值，否则返回空值。还有 `takeUnless()`，它反转逻辑。可以在其后接一个 `?.`，以仅在满足谓词的情况下对该值执行运算。下面，计算某些表达式的平方，但前提是表达式的值至少为 42：
+如果仅在满足特定条件时才使用值，请尝试 `takeIf()`，如果满足给定谓词，则返回它被调用的值，否则返回空值。还有 `takeUnless()`，其逻辑正好相反。可以在其后接一个 `?.`，以仅在满足谓词的情况下对该值执行运算。下面，计算某些表达式的平方，但前提是表达式的值至少为 42：
 
 ```kotlin
 val result = someExpression.takeIf { it >= 42 } ?.let { it * it }
