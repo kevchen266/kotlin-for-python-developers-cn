@@ -260,9 +260,9 @@ val result = maybeNull
     ?.run { secondFunction(this) }
 ```
 
-第一个 `this` 是指 `maybeNull`，第二个是 `firstFunction()` 的结果，`result` 将是 `secondFunction()` 的结果（如果 `maybeNull` 或任何中间结果为空，则返回空）。
+第一个 `this` 是指 `maybeNull`，第二个是 `firstFunction()` 的结果，`result` 将是 `secondFunction()` 的结果（如果 `maybeNull` 或任何中间结果为空，那么返回空）。
 
-`run()` 的语法变体是 `let()`，它以普通函数类型作为参数而不是带有接收器的函数类型，因此可能为空的表达式将称为 `it` 而不是 `this`。 。
+`run()` 的语法变体是 `let()`，它以普通函数类型而不是带有接收器的函数类型作为参数，因此可能为空的表达式将称为 `it` 而不是 `this`。 。
 
 如果有一个需要多次使用的表达式，但是不必为它提供一个变量名并进行空检测，`run()` 与 `let()` 都非常有用：
 
