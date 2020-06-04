@@ -1414,39 +1414,39 @@ package content.exercises
 
 ### 导入
 
-In order to use something from a package, it is sufficient to use the package name to fully qualify the name of the symbol at the place where you use the symbol:
+为了使用包中的内容，只需在使用符号的地方使用包名称来完全限定符号的名称即可：
 
 ```kotlin
 val exercise = content.exercises.Exercise()
 ```
 
-This quickly gets unwieldy, so you will typically _import_ the symbols you need. You can import a specific symbol:
+这很快变得很笨拙，因此通常将 _导入_ 所需的符号。可以导入特定的符号：
 
 ```kotlin
 import content.exercises.Exercise
 ```
 
-Or an entire package, which will bring in all the symbols from that package:
+或一个完整的包装，它将带入该包中的所有符号：
 
 ```kotlin
 import content.exercises.*
 ```
 
-With either version of the import, you can now simply do:
+无论使用哪个版本的导入，现在都可以执行以下操作：
 
 ```kotlin
 val exercise = Exercise()
 ```
 
-If there is a naming conflict, you should usually import just one of the symbols and fully qualify the usages of the other. If both are heavily used, you can rename the symbol at import time:
+如果存在命名冲突，通常应该只导入其中一个符号，并完全限定另一个符号的用法。如果两者都被大量使用，则可以在导入时重命名符号：
 
 ```kotlin
 import content.exercises.Exercise as Ex
 ```
 
-In Kotlin, importing is a compile-time concept - importing something does not actually cause any code to run (unlike Python, where all top-level statements in a file are executed at import time). Therefore, circular imports are allowed, but they might suggest a design problem in your code. However, during execution, a class will be loaded the first time it (or any of its properties or functions) is referenced, and class loading causes [伴生对象](#伴生对象) to be initialized - this can lead to runtime exceptions if you have circular dependencies.
+在 Kotlin 中，导入是一个编译时概念——导入内容实际上不会导致任何代码运行（与 Python 不同，在 Python 中，文件中的所有顶级语句都在导入时执行）。因此，允许循环导入，但是它们可能会在代码中提示设计问题。但是，在执行期间，将在首次引用类（或其任何属性或函数）时加载类，并且类加载会导致初始化 [伴生对象](#伴生对象)——如果具有循环依赖项，则可能导致运行时异常。
 
-Every file implicitly imports its own package and a number of built-in Kotlin and Java packages.
+每个文件都隐式导入其自己的程序包以及许多内置的 Kotlin 与 Java 程序包。
 
 
 ## 可见性修饰符
