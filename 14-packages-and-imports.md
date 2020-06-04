@@ -1,18 +1,18 @@
 ## 包
 
-Every Kotlin file should belong to a _package_. This is somewhat similar to modules in Python, but files need to explicitly declare which package they belong to, and a package implicitly comes into existence whenever any file declares itself to belong to that package (as opposed to explicitly defining a module with `__init__.py` and having all the files in that directory implicitly belong to the module). The package declaration must go on the top of the file:
+每个 Kotlin 文件都应属于一个 _包_。这有点类似于 Python 中的模块，但是文件需要显式声明它们属于哪个包，并且每当任何文件声明自己属于该包时，就隐式地存在一个包（与使用 `__init__.py` 显式定义一个模块相反）。并使该目录中的所有文件隐式属于该模块）。软件包声明必须放在文件顶部：
 
 ```kotlin
 package content.exercises
 ```
 
-If a file doesn't declare a package, it belongs to the nameless _default package_. This should be avoided, as it will make it hard to reference the symbols from that file in case of naming conflicts (you can't explicitly import the empty package).
+如果文件没有声明包，则它属于无名 _默认包_。应该避免这种情况，因为在命名冲突的情况下，这将使引用该文件中的符号变得困难（不能显式导入空包）。
 
-Package names customarily correspond to the directory structure - note that the source file name should _not_ be a part of the package name (so if you follow this, file-level symbol names must be unique within an entire directory, not just within a file). However, this correspondence is not required, so if you're going to do interop with Java code and all your package names must start with the same prefix, e.g. `org.khanacademy`, you might be relieved to learn that you don't need to put all your code inside `org/khanacademy` (which is what Java would have forced you to do) - instead, you could start out with a directory called e.g. `content`, and the files inside it could declare that they belong to the package `org.khanacademy.content`. However, if you have a mixed project with both Kotlin and Java code, the convention is to use the Java-style package directories for Kotlin code too.
+程序包名称通常与目录结构相对应——请注意，源文件名 _不_ 应该是程序包名称的一部分（因此，如果遵循此名称，则文件级符号名在整个目录中必须唯一，而不仅仅是在文件中）。但是，这种对应关系不是必需的，因此，如果要与 Java 代码进行互操作，并且所有包名称都必须以相同的前缀开头，例如：`org.khanacademy`，可能会发现不需要将所有代码都放在 `org/khanacademy` 中（这是 Java 会强迫执行的操作）而感到宽慰，——相反，可以从例如名为 `content` 的目录开始。并且其中的文件可以声明它们属于软件包 `org.khanacademy.content`。但是，如果有一个同时包含 Kotlin 与 Java 代码的项目，则约定也将 Java 风格的软件包目录也用于 Kotlin 代码。
 
-While the dots suggest that packages are nested inside each other, that's not actually the case from a language standpoint. While it's a good idea to organize your code such that the "subpackages" of `content`, such as  `content.exercises` and `content.articles`, both contain content-related code, these three packages are unrelated from a language standpoint. However, if you use _modules_ (as defined by your build system), it is typically the case that all "subpackages" go in the same module, in which case symbols with [`internal` visibility](visibility-modifiers.html) are visible throughout the subpackages.
+尽管这些点表明程序包彼此嵌套，但从语言角度来看实际上并非如此。虽然最好组织代码以使诸如 `content.exercises` 与 `content.articles` 之类的 `content` 的“子包”都包含与内容相关的代码，但是从语言的角度来看，这三个包是无关的。但是，如果使用 _模块_（由构建系统定义），通常所有“子包”都放在同一个模块中，在这种情况下，带有 [`internal` 可见性](visibility-modifiers.html) 的符号在整个子包中都是可见的。
 
-Package names customarily contain only lowercase letters (no underscores) and the separating dots.
+程序包名称通常只包含小写字母（没有下划线）和分隔点。
 
 
 ## 导入
