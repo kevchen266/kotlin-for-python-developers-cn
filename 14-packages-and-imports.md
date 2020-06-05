@@ -1,55 +1,55 @@
 ## 包
 
-Every Kotlin file should belong to a _package_. This is somewhat similar to modules in Python, but files need to explicitly declare which package they belong to, and a package implicitly comes into existence whenever any file declares itself to belong to that package (as opposed to explicitly defining a module with `__init__.py` and having all the files in that directory implicitly belong to the module). The package declaration must go on the top of the file:
+每个 Kotlin 文件都应属于一个 _包_。这有点类似于 Python 中的模块，但是文件需要显式声明它们属于哪个包，并且每当任何文件声明自己属于该包时，就隐式地存在一个包（与使用 `__init__.py` 显式定义一个模块相反）。并使该目录中的所有文件隐式属于该模块）。软件包声明必须放在文件顶部：
 
 ```kotlin
 package content.exercises
 ```
 
-If a file doesn't declare a package, it belongs to the nameless _default package_. This should be avoided, as it will make it hard to reference the symbols from that file in case of naming conflicts (you can't explicitly import the empty package).
+如果文件没有声明包，则它属于无名 _默认包_。应该避免这种情况，因为在命名冲突的情况下，这将使引用该文件中的符号变得困难（不能显式导入空包）。
 
-Package names customarily correspond to the directory structure - note that the source file name should _not_ be a part of the package name (so if you follow this, file-level symbol names must be unique within an entire directory, not just within a file). However, this correspondence is not required, so if you're going to do interop with Java code and all your package names must start with the same prefix, e.g. `org.khanacademy`, you might be relieved to learn that you don't need to put all your code inside `org/khanacademy` (which is what Java would have forced you to do) - instead, you could start out with a directory called e.g. `content`, and the files inside it could declare that they belong to the package `org.khanacademy.content`. However, if you have a mixed project with both Kotlin and Java code, the convention is to use the Java-style package directories for Kotlin code too.
+程序包名称通常与目录结构相对应——请注意，源文件名 _不_ 应该是程序包名称的一部分（因此，如果遵循此名称，则文件级符号名在整个目录中必须唯一，而不仅仅是在文件中）。但是，这种对应关系不是必需的，因此，如果要与 Java 代码进行互操作，并且所有包名称都必须以相同的前缀开头，例如：`org.khanacademy`，可能会发现不需要将所有代码都放在 `org/khanacademy` 中（这是 Java 会强迫执行的操作）而感到宽慰，——相反，可以从例如名为 `content` 的目录开始。并且其中的文件可以声明它们属于软件包 `org.khanacademy.content`。但是，如果有一个同时包含 Kotlin 与 Java 代码的项目，则约定也将 Java 风格的软件包目录也用于 Kotlin 代码。
 
-While the dots suggest that packages are nested inside each other, that's not actually the case from a language standpoint. While it's a good idea to organize your code such that the "subpackages" of `content`, such as  `content.exercises` and `content.articles`, both contain content-related code, these three packages are unrelated from a language standpoint. However, if you use _modules_ (as defined by your build system), it is typically the case that all "subpackages" go in the same module, in which case symbols with [`internal` visibility](visibility-modifiers.html) are visible throughout the subpackages.
+尽管这些点表明程序包彼此嵌套，但从语言角度来看实际上并非如此。虽然最好组织代码以使诸如 `content.exercises` 与 `content.articles` 之类的 `content` 的“子包”都包含与内容相关的代码，但是从语言的角度来看，这三个包是无关的。但是，如果使用 _模块_（由构建系统定义），通常所有“子包”都放在同一个模块中，在这种情况下，带有 [`internal` 可见性](visibility-modifiers.html) 的符号在各个子包中都是可见的。
 
-Package names customarily contain only lowercase letters (no underscores) and the separating dots.
+程序包名称通常只包含小写字母（没有下划线）和分隔点。
 
 
 ## 导入
 
-In order to use something from a package, it is sufficient to use the package name to fully qualify the name of the symbol at the place where you use the symbol:
+为了使用包中的内容，只需在使用符号的地方使用包名称来完全限定符号的名称即可：
 
 ```kotlin
 val exercise = content.exercises.Exercise()
 ```
 
-This quickly gets unwieldy, so you will typically _import_ the symbols you need. You can import a specific symbol:
+这很快变得很笨拙，因此通常将 _导入_ 所需的符号。可以导入特定的符号：
 
 ```kotlin
 import content.exercises.Exercise
 ```
 
-Or an entire package, which will bring in all the symbols from that package:
+或一个完整的包装，它将带入该包中的所有符号：
 
 ```kotlin
 import content.exercises.*
 ```
 
-With either version of the import, you can now simply do:
+无论使用哪个版本的导入，现在都可以执行以下操作：
 
 ```kotlin
 val exercise = Exercise()
 ```
 
-If there is a naming conflict, you should usually import just one of the symbols and fully qualify the usages of the other. If both are heavily used, you can rename the symbol at import time:
+如果存在命名冲突，通常应该只导入其中一个符号，并完全限定另一个符号的用法。如果两者都被大量使用，则可以在导入时重命名符号：
 
 ```kotlin
 import content.exercises.Exercise as Ex
 ```
 
-In Kotlin, importing is a compile-time concept - importing something does not actually cause any code to run (unlike Python, where all top-level statements in a file are executed at import time). Therefore, circular imports are allowed, but they might suggest a design problem in your code. However, during execution, a class will be loaded the first time it (or any of its properties or functions) is referenced, and class loading causes [伴生对象](objects-and-companion-objects.html#伴生对象) to be initialized - this can lead to runtime exceptions if you have circular dependencies.
+在 Kotlin 中，导入是一个编译期概念——导入内容实际上不会导致任何代码运行（与 Python 不同，在 Python 中，文件中的所有顶级语句都在导入时执行）。因此，允许循环导入，但是它们可能会在代码中提示设计问题。但是，在执行期间，将在首次引用类（或其任何属性或函数）时加载类，并且类加载会导致初始化[伴生对象](objects-and-companion-objects.html#伴生对象)——如果具有循环依赖项，则可能导致运行时异常。
 
-Every file implicitly imports its own package and a number of built-in Kotlin and Java packages.
+每个文件都隐式导入其自己的程序包以及许多内置的 Kotlin 与 Java 程序包。
 
 
 
