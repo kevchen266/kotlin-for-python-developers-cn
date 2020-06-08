@@ -1451,15 +1451,15 @@ import content.exercises.Exercise as Ex
 
 ## 可见性修饰符
 
-Kotlin allows you to enforce symbol visibility (which Python only does via underscore conventions) via _visibility modifiers_, which can be placed on symbol declarations. If you don't supply a visibility modifier, you get the default visibility level, which is _public_.
+Kotlin 允许通过 _可见性修饰符_（可以放置在符号声明上）强制执行符号可见性（Python 仅通过下划线约定来实现）。如果不提供可见性修饰符，那么会获得默认的 _可见性_ 级别，该级别为 _public_ 。
 
-The meaning of a visibility modifier depends on whether it's applied to a top-level declaration or to a declaration inside a class. For top-level declarations:
+可见性修饰符的含义取决于它是应用于顶级声明还是应用于类内的声明。对于顶级声明：
 
-* `public` (or omitted): this symbol is visible throughout the entire codebase
-* `internal`: this symbol is only visible inside files that belong to the same _module_ (a source code grouping which is defined by your IDE or build tool) as the file where this symbol is declared
-* `private`: this symbol is only visible inside the file where this symbol is declared
+* `public`（或省略）：此符号在整个代码库中可见
+* `internal`：此符号仅在与声明该符号的文件属于同一 _模块_（由 IDE 或构建工具定义的源代码分组）的文件内部可见
+* `private`：此符号仅在声明该符号的文件内部可见
 
-For example, `private` could be used to define a property or helper function that is needed by several functions in one file, or a complex type returned by one of your private functions, without leaking them to the rest of the codebase:
+例如，可以使用 `private` 来定义一个文件中的多个函数所需的属性或辅助函数，或者定义其中一个私有函数返回的复杂类型，而无需将其泄漏给代码库的其余部分：
 
 ```kotlin
 private class ReturnType(val a: Int, val b: Double, val c: String)
@@ -1469,20 +1469,20 @@ private fun secretHelper(x: Int) = x * x
 private const val secretValue = 3.14
 ```
 
-For a symbol that is declared inside a class:
+对于在类内部声明的符号：
 
-* `public` (or omitted): this symbol is visible to any code that can see the containing class
-* `internal`: this symbol is only visible to code that exists inside a file that belongs to the same module as the file where this symbol is declared, and that can also see the containing class
-* `protected`: this symbol is only visible inside the containing class and all of its subclasses, no matter where they are declared (so if your class is public and [open](#子类化), anyone can subclass it and thus get to see and use the protected members). If you have used Java: this does _not_ also grant access from the rest of the package.
-* `private`: this symbol is only visible inside the containing class
+* `public`（或省略）：任何可以看到包含该符号的类的代码都可以看到该符号
+* `internal`：该符号仅对在这样的文件内的代码可见，该文件与声明该符号的文件属于同一模块，并且还可以看到文件中包含的类
+* `protected`：此符号仅在包含类及其所有子类中可见，无论它们在何处声明（因此，如果类是公有的且[开放](#子类化)的，则任何人都可以对其进行子类化，从而查看并使用受保护的成员）。如果使用过 Java：这也 _不_ 会授予其余包的访问权限。
+* `private`：此符号仅在包含的类中可见
 
-A constructor can also have a visibility modifier. If you want to place one on the primary constructor (which you might want to do if you have a number of secondary constructors which all invoke a complicated primary constructor that you don't want to expose), you need to include the `constructor` keyword: `class Person private constructor(val name: String)`.
+构造函数也可以具有可见性修饰符。如果要在主要构造函数上放置一个（如果有许多次要构造函数，它们全部调用了不想公开的复杂主要构造函数，则可能要这样做），需要包括 `constructor` 关键字：`class Person private constructor(val name: String)`。
 
-Visibility modifiers can't be placed on local variables, since their visibility is always limited to the containing block.
+可见性修饰符不能放在局部变量上，因为它们的可见性始终限于包含块。
 
-The type of a property, and the types that are used for the parameters and the return type of a function, must be "at least as visible" as the property/function itself. For example, a public function can't take a private type as a parameter.
+属性的类型以及用于参数的类型和函数的返回类型，必须与属性/函数本身“至少一样可见”。例如，公有函数不能将私有类型作为参数。
 
-The visibility level only affects the _lexical visibility_ of the _symbol_ - i.e., where the compiler allows you to type out the symbol. It does not affect where _instances_ are used: for example, a public top-level function may well return an instance of a private class, as long as the return type doesn't mention the private class name but is instead a public base class of the private class (possibly `Any`) or a public interface that the private class implements. When you [subclass](#子类化) a class, its private members are also inherited by the subclass, but are not directly accessible there - however, if you call an inherited public function that happens to access a private member, that's fine.
+可见性级别仅影响 _符号_ 的 _词法可见性_ ——也就是说，编译器允许键入符号。它不会影响 _实例_ 的使用位置：例如，公有顶级函数很可能会返回私有类的实例，只要返回类型没有提及私有类名称，而是它的公有基类即可。私有类（可能是 `Any`）或私有类实现的公有接口。当对某个子类进行[子类化](#子类化)时，子类也继承了它的私有成员，但是在该子类中不能直接访问它——但是，如果调用碰巧访问了私有成员的继承的公有函数，那也没关系。
 
 
 ## 继承
