@@ -93,24 +93,24 @@ open class MotorVehicle(
 
 ## 抽象类
 
-Some superclasses are very useful as a grouping mechanism for related classes and for providing shared functions, but are so general that they're not useful on their own. `MotorVehicle` seems to fit this description. Such a class should be declared _abstract_, which will prevent the class from being instantiated directly:
+某些超类作为相关类的分组机制和提供共享功能非常有用，但它们是如此笼统，以至于它们本身并没有用。`MotorVehicle` 似乎符合此描述。应该将此类声明为 _抽象类_，以防止直接实例化该类：
 
 ```kotlin
 abstract class MotorVehicle(val maxSpeed: Double, val wheelCount: Int)
 ```
 
-Now, you can no longer say `val mv = MotorVehicle(100, 4)`.
+现在，不能如此声明：`val mv = MotorVehicle(100, 4)`。
 
-Abstract classes are implicitly open, since they are useless if they don't have any concrete subclasses.
+抽象类是隐式开放的，因为如果它们没有任何具体的子类，它们将无用。
 
-When an abstract class implements one or more interfaces, it is not required to provide definitions of the members of its interfaces (but it can if it wants to). It must still _declare_ such members, using `abstract override` and not providing any body for the function or property:
+当抽象类实现一个或多个接口时，不需要提供其接口成员的定义（但如果需要，可以提供）。它仍必须使用 `abstract override` _声明_ 此类成员，并且不为函数或属性提供任何主体：
 
 ```kotlin
 abstract override val foo: String
 abstract override fun bar(): Int
 ```
 
-Being abstract is the only way to "escape" from having to implement the members of your interfaces, by offloading the work onto your subclasses - if a subclass wants to be concrete, it must implement all the "missing" members.
+通过将工作分担到子类上，抽象是“逃避”必须实现接口成员的唯一方法——如果子类想要具体化，则必须实现所有“缺失”成员。
 
 
 ## 多态
