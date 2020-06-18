@@ -27,7 +27,7 @@ class Car(
 
 请注意，不用在 `Car` 中的 `maxSpeed` 前面使用 `val`——这样做会在 `Car` 中引入一个独特的属性，从而 _覆盖_ 了从 `MotorVehicle` 继承的属性。如所写，它只是一个构造函数参数，将其传递给超级构造函数。
 
-`private`（私有）成员（以及其他模块中超类的 `internal`（内部）成员）也被继承，但不能直接访问：如果超类包含由公共函数 `bar()` 引用的私有属性 `foo`，则子类的实例将包含 `foo`；不能直接使用它，但是可以调用 `bar()`。
+`private` 成员（以及其他模块中超类的 `internal` 成员）也被继承，但不能直接访问：如果超类包含由公共函数 `bar()` 引用的私有属性 `foo`，则子类的实例将包含 `foo`；不能直接使用它，但是可以调用 `bar()`。
 
 构造子类的实例时，首先构造超类“part”（通过超类构造函数）。这意味着在执行打开类的构造函数期间，可能正在构造的对象是子类的实例，在这种情况下，子类特定的属性尚未初始化。因此，从构造函数中调用开放函数是有风险的：它可能在子类中被覆盖，并且如果它正在访问子类特定的属性，则这些属性将不会被初始化。
 
@@ -60,9 +60,9 @@ override fun drive() =
 
 ## 接口
 
-The single-parent rule often becomes too limiting, as you'll often find commonalities between classes in different branches of a class hierarchy. These commonalities can be expressed in _interfaces_.
+单继承规则经常变得过于局限，因为经常会发现类层次结构不同分支中的类之间存在共性。这些共同点可以在 _接口_ 中表达。
 
-An interface is essentially a contract that a class may choose to sign; if it does, the class is obliged to provide implementations of the properties and functions of the interface. However, an interface may (but typically doesn't) provide a default implementation of some or all of its properties and functions. If a property or function has a default implementation, the class may choose to override it, but it doesn't have to. Here's an interface without any default implementations:
+接口本质上是类可以选择签署的合同；如果确实如此，则该类必须提供接口属性与函数的实现。但是，接口可以（但通常不提供）部分或全部属性与函数的默认实现。如果属性或函数具有默认实现，则该类可以选择重写它，但不必这样做。这是一个没有任何默认实现的接口：
 
 ```kotlin
 interface Driveable {
@@ -71,7 +71,7 @@ interface Driveable {
 }
 ```
 
-We can choose to let `MotorVehicle` implement that interface, since it's got the required members - but now we need to mark those members with `override`, and we can remove `open` since an overridden function is implicitly open:
+可以选择让 `MotorVehicle` 实现该接口，因为它具有所需的成员——但现在需要用 `override` 标记这些成员，并且由于覆盖的函数是隐式开放的，因此我们可以删除 `open`：
 
 ```kotlin
 open class MotorVehicle(
@@ -82,13 +82,13 @@ open class MotorVehicle(
 }
 ```
 
-If we were to introduce another class `Bicycle`, which should be neither a subclass nor a superclass of `MotorVehicle`, we could still make it implement `Driveable`, as long as we declare `maxSpeed` and `drive` in `Bicycle`.
+如果要引入另一个类 `Bicycle`，该类既不应该是 `MotorVehicle` 的子类也不可以是其超类，只要在 `Bicycle` 中声明 `maxSpeed` 与 `drive`，仍然可以使其实现 `Driveable`。
 
-Subclasses of a class that implements an interface (in this case, `Car`) are also considered to be implementing the interface.
+实现接口的类的子类（在本例中为 `Car`）也被视为正在实现接口。
 
-A symbol that is declared inside an interface normally should be public. The only other legal visibility modifier is `private`, which can only be used if the function body is supplied - that function may then be called by each class that implements the interface, but not by anyone else.
+在接口内部声明的符号通常应该是 public。唯一的其他合法可见性修饰符是 `private`，只有在提供了函数体时才能使用——可以由实现该接口的每个类调用该函数，而不能由其他任何人调用。
 
-As for why you would want to create an interface, other than as a reminder to have your classes implement certain members, see the section on [多态](inheritance.html#多态).
+至于为什么要创建一个接口，除了提醒类实现某些成员外，请参见[多态](inheritance.html#多态)一节。
 
 
 ## 抽象类
