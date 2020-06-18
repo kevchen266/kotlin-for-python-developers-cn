@@ -34,23 +34,23 @@ class Car(
 
 ## 覆盖
 
-If a member function or property is declared as `open`, subclasses may _override_ it by providing a new implementation. Let's say that `MotorVehicle` declares this function:
+如果成员函数或属性被声明为 `open`，则子类可以通过提供新的实现 _覆盖_ 它。假设 `MotorVehicle` 声明了此函数：
 
 ```kotlin
 open fun drive() =
     "$horsepowers HP motor vehicle driving at $maxSpeed MPH"
 ```
 
-If `Car` does nothing, it will inherit this function as-is, and it will return a message with the car's horsepowers and max speed. If we want a car-specific message, `Car` can override the function by redeclaring it with the `override` keyword:
+如果 `Car` 不执行任何操作，它将按原样继承此功能，并且将返回一条消息，其中包含汽车的功率和最大速度。如果想要特定于汽车的消息，`Car` 可以通过使用 `override` 关键字重新声明该函数来覆盖该函数：
 
 ```kotlin
 override fun drive() =
    "$seatCount-seat car driving at $maxSpeed MPH"
 ```
 
-The signature of the overriding function must exactly match the overridden one, except that the return type in the overriding function may be a subtype of the return type of the overridden function.
+覆盖的函数名必须与被覆盖的函数名完全匹配，但覆盖函数中的返回类型可以是被覆盖函数的返回类型的子类型。
 
-If what the overriding function wants to do is an extension of what the overridden function did, you can call the overridden function via `super` (either before, after, or between other code):
+如果覆盖函数想要做的是对被覆盖函数所做的扩展，则可以通过 `super`（在其他代码之前、之后或之间）调用被覆盖函数：
 
 ```kotlin
 override fun drive() =
