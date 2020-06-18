@@ -1531,7 +1531,7 @@ open fun drive() =
     "$horsepowers HP motor vehicle driving at $maxSpeed MPH"
 ```
 
-如果 `Car` 不执行任何操作，它将按原样继承此功能，并且将返回一条消息，其中包含汽车的功率和最大速度。如果想要特定于汽车的消息，`Car` 可以通过使用 `override` 关键字重新声明该函数来覆盖该函数：
+如果 `Car` 不执行任何操作，它将按原样继承此函数，并且将返回一条消息，其中包含汽车的功率和最大速度。如果想要特定于汽车的消息，`Car` 可以通过使用 `override` 关键字重新声明该函数来覆盖该函数：
 
 ```kotlin
 override fun drive() =
@@ -1583,7 +1583,7 @@ open class MotorVehicle(
 
 ### 抽象类
 
-某些超类作为相关类的分组机制和提供共享功能非常有用，但它们是如此笼统，以至于它们本身并没有用。`MotorVehicle` 似乎符合此描述。应该将此类声明为 _抽象类_，以防止直接实例化该类：
+某些超类作为相关类的分组机制和提供共享函数非常有用，但它们是如此笼统，以至于它们本身并没有用。`MotorVehicle` 似乎符合此描述。应该将此类声明为 _抽象类_，以防止直接实例化该类：
 
 ```kotlin
 abstract class MotorVehicle(val maxSpeed: Double, val wheelCount: Int)
@@ -1605,9 +1605,9 @@ abstract override fun bar(): Int
 
 ### 多态
 
-Polymorphism is the ability to treat objects with similar traits in a common way. In Python, this is achieved via _ducktyping_: if `x` refers to some object, you can call `x.quack()` as long as the object happens to have the function `quack()` - nothing else needs to be known (or rather, assumed) about the object. That's very flexible, but also risky: if `x` is a parameter, every caller of your function must be aware that the object they pass to it must have `quack()`, and if someone gets it wrong, the program blows up at runtime.
+多态是一种以通用方式处理具有相似特征的对象的能力。在 Python 中，这是通过 _ducktyping_ 实现的：如果 `x` 指向某个对象，则只要该对象碰巧具有函数 `quack()`，就可以调用 `x.quack()`——关于该对象，不需要知道（或者更确切地说，假设）其他任何内容。这非常灵活，但是也很冒险：如果 `x` 是一个参数，则函数的每个调用者都必须知道传递给它的对象必须具有 `quack()`，并且如果有人弄错了，程序就会在运行时崩溃。
 
-In Kotlin, polymorphism is achieved via the class hierarchy, in such a way that it is impossible to run into a situation where a property or function is missing. The basic rule is that a variable/property/parameter whose declared type is `A` may refer to an instance of a class `B` if and only if `B` is a subtype of `A`. This means that either, `A` must be a class and `B` must be a subclass of `A`, or that `A` must be an interface and `B` must be a class that implements that interface or be a subclass of a class that does. With our classes and interfaces from the previous sections, we can define these functions:
+在 Kotlin 中，多态性是通过类层次结构来实现的，这样就不可能遇到缺少属性或函数的情况。基本规则是，当且仅当 `B` 是 `A` 的子类型时，声明类型为 `A` 的变量/属性/参数才可以引用 `B` 类的实例。这意味着，`A` 必须是一个类，而 `B` 必须是 `A` 的子类，或者 `A` 必须是一个接口，而 `B` 必须是实现该接口的类，或者是该类的子类。使用上一部分中的类和接口，可以定义以下函数：
 
 ```kotlin
 fun boast(mv: MotorVehicle) =
@@ -1617,7 +1617,7 @@ fun ride(d: Driveable) =
     "I'm riding my ${d.drive()}"
 ```
 
-and call them like this:
+并这样调用它们：
 
 ```kotlin
 val car = Car(4, 120)
@@ -1625,9 +1625,9 @@ boast(car)
 ride(car)
 ```
 
-We're allowed to pass a `Car` to `boast()` because `Car` is a subclass of `MotorVehicle`. We're allowed to pass a `Car` to `ride()` because `Car` implements `Driveable` (thanks to being a subclass `MotorVehicle`). Inside `boast()`, we're only allowed to access the members of the declared parameter type `MotorVehicle`, even if we're in a situation where we know that it's really a `Car` (because there could be other callers that pass a non-`Car`). Inside `ride()`, we're only allowed to access the members of the declared parameter type `Driveable`. This ensures that every member lookup is safe - the compiler only allows you to pass objects that are guaranteed to have the necessary members. The downside is that you will sometimes be forced to declare "unnecessary" interfaces or wrapper classes in order to make a function accept instances of different classes.
+可以将 `Car` 传递给 `boast()`，因为 `Car` 是 `MotorVehicle` 的子类。可以将 `Car` 传递给 `ride()`，因为 `Car` 实现了 `Driveable`（由于是 `MotorVehicle` 的子类）。在 `boast()` 内部，即使处在已知它确实是 `Car` 的情况下，也只能访问声明的参数类型为 `MotorVehicle` 的成员（因为可能会有其他调用而并非通过 `Car`）。在 `ride()` 内部，仅允许访问声明的参数类型 `Driveable` 的成员。这样可以确保每个成员查找都是安全的——编译器仅允许传递保证具有必需成员的对象。缺点是有时会迫使声明“不必要的”接口或包装器类，以使函数接受不同类的实例。
 
-With collections and functions, polymorphism becomes more complicated - see the section on [泛型](#泛型).
+使用集合和函数，多态性变得更加复杂——请参见[泛型](#泛型)部分。
 
 
 [//]: TODO (Overload resolution rules)
