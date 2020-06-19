@@ -285,7 +285,7 @@ val name: String? by lazy {
 
 ## 密封类
 
-If you want to restrict the set of subclasses of a base class, you can declare the base class to be `sealed` (which also makes it abstract), in which case you can only declare subclasses in the same file. The compiler then knows the complete set of possible subclasses, which will let you do exhaustive `when` expression for all the possible subtypes without the need for an `else` clause (and if you add another subclass in the future and forget to update the `when`, the compiler will let you know).
+如果要限制基类的子类集，则可以将基类声明为 `sealed`（这也使其抽象化），在这种情况下，只能在同一文件中声明子类。然后，编译器知道了所有可能的子类的完整集合，这将使在不需要 `else` 子句的情况下对所有可能的子类型进行详尽的 `when` 表达（如果以后添加另一个子类而忘记更新 `when`，编译器会告知）。
 
 
 
