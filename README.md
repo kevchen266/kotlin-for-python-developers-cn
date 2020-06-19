@@ -1635,35 +1635,35 @@ ride(car)
 
 ### 类型转换与类型检测
 
-When you take an interface or an open class as a parameter, you generally don't know the real type of the parameter at runtime, since it could be an instance of a subclass or of any class that implements the interface. It is possible to check what the exact type is, but like in Python, you should generally avoid it and instead design your class hierarchy such that you can do what you need by proper overriding of functions or properties.
+当将接口或开放类作为参数时，通常在运行时不知道参数的实际类型，因为它可能是子类的实例，也可能是实现该接口的任何类的实例。可以检查确切的类型，但是像在 Python 中一样，通常应避免使用它，而应设计类层次结构，以便可以通过适当地覆盖函数或属性来执行所需的操作。
 
-If there's no nice way around it, and you need to take special actions based on what type something is or to access functions/properties that only exist on some classes, you can use `is` to check if the real type of an object is a particular class or a subclass thereof (or an implementor of an interface). When this is used as the condition in an `if`, the compiler will let you perform type-specific operations on the object inside the `if` body:
+如果没有很好的解决方法，并且需要根据某种事物的类型采取特殊的操作或访问仅在某些类中存在的函数/属性，则可以使用 `is` 检查对象的真实类型是否为特定的类或其子类（或接口的实现者）。当将它用作 `if` 中的条件时，编译器将允许对 `if` 主体内的对象执行特定于类型的操作：
 
 ```kotlin
 fun foo(x: Any) {
     if (x is Person) {
-        println("${x.name}") // This wouldn't compile outside the if
+        println("${x.name}") // 这不会在 if 之外编译
     }
 }
 ```
 
-If you want to check for _not_ being an instance of a type, use `!is`. Note that `null` is never an instance of any non-nullable type, but it is always an "instance" of any nullable type (even though it technically isn't an instance, but an absence of any instance).
+如果要检查 _not_ 是否是类型的实例，请使用 `!is`。请注意，`null` 绝不是任何非空类型的实例，但它始终是任何可为空类型的“实例”（即使从技术上讲它不是实例，但它没有任何实例）。
 
-The compiler will not let you perform checks that can't possibly succeed because the declared type of the variable is a class that is on an unrelated branch of the class hierarchy from the class you're checking against - if the declared type of `x` is `MotorVehicle`, you can't check if `x` is a `Person`. If the right-hand side of `is` is an interface, Kotlin will allow the type of the left-hand side to be any interface or open class, because it could be that some subclass thereof implements the interface.
+编译器不会执行无法成功执行的检查，因为变量的声明类型是要检查的类的类层次结构的不相关分支上的类——如果声明的类型为 `x` 是 `MotorVehicle`，不能检查 `x` 是否是 `Person`。如果 `is` 的右侧是接口，则 Kotlin 将允许左侧的类型为任何接口或开放类，因为它的某些子类可以实现该接口。
 
-If your code is too clever for the compiler, and you know without the help of `is` that `x` is an instance of `Person` but the compiler doesn't, you can _cast_ your value with `as`:
+如果代码对于编译器来说太聪明了，并且知道在没有 `is` 的帮助下，`x` 是 `Person` 的实例，但是编译器却不是，则可以使用 `as` _转换（cast）_ 的值：
 
 ```kotlin
 val p = x as Person
 ```
 
-This will raise a `ClassCastException` if the object is not actually an instance of `Person` or any of its subclasses. If you're not sure what `x` is, but you're happy to get null if it's not a `Person`, you can use `as?`, which will return null if the cast fails. Note that the resulting type is `Person?`:
+如果对象实际上不是 `Person` 或其任何子类的实例，则将引发 `ClassCastException`（类强制转换异常）。如果不确定 `x` 是什么，但是如果它不是 `Person`，则很高兴获得 null，则可以使用 `as?`，如果强制转换失败，它将返回 null。请注意，结果类型为 `Person?`：
 
 ```kotlin
 val p = x as? Person
 ```
 
-You can also use `as` to cast to a nullable type. The difference between this and the previous `as?` cast is that this one will fail if `x` is a non-null instance of another type than `Person`:
+也可以使用 `as` 强制转换为可为空的类型。这个和之前的 `as?` 转换之间的区别是，如果 `x` 是除 `Person` 之外的其他类型的非null实例，则此转换将失败：
 
 ```kotlin
 val p = x as Person?
