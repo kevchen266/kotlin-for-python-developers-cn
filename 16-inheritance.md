@@ -199,7 +199,7 @@ open class MotorVehicle(val engine: Engine): PowerSource by engine
 
 ## 属性委托
 
-Let's say that you're writing a simple ORM. Your database library represents a row as instances of a class `Entity`, with functions like `getString("name")` and `getLong("age")` for getting typed values from the given columns. We could create a typed wrapper class like this:
+假设正在编写一个简单的 <abbr title="对象关系映射（Object Relational Mapping）">ORM</abbr>。数据库库将一行表示为类 `Entity` 的实例，并具有诸如 `getString("name")` 与 `getLong("age")` 之类的函数，用于从给定列中获取键入的值。可以这样创建一个类型化的包装类：
 
 ```kotlin
 abstract class DbModel(val entity: Entity)
@@ -210,7 +210,7 @@ class Person(val entity: Entity) : DbModel(entity) {
 }
 ```
 
-That was easy, but maybe we'd want to do lazy-loading so that we won't spend time on extracting the fields that won't be used (especially if some of them contain a lot of data in a format that it is time-consuming to parse), and maybe we'd like support for default values. While we could implement that logic in a `get()` block, it would need to be duplicated in every property. Alternatively, we could implement the logic in a separate `StringProperty` class (note that this simple example is not thread-safe):
+这很容易，但是也许要进行延迟加载，这样就不会花时间来提取不会使用的字段（特别是如果其中一些包含大量数据，而这种格式解析起来会很费时），也许希望支持默认值。虽然可以在 `get()` 块中实现该逻辑，但需要在每个属性中重复该逻辑。另外，可以在一个单独的 `StringProperty` 类中实现逻辑（请注意，这个简单的示例不是线程安全的）：
 
 ```kotlin
 class StringProperty(
@@ -222,7 +222,7 @@ class StringProperty(
     private var loaded = false
     val value: String?
         get() {
-            // Warning: This is not thread-safe!
+            // 警告：这不是线程安全的！
             if (loaded) return _value
             if (model.entity.contains(fieldName)) {
                 _value = model.entity.getString(fieldName)
@@ -232,19 +232,19 @@ class StringProperty(
         }
 }
 
-// In Person
+// 在 Person 里
 val name = StringProperty(this, "name", "Unknown Name")
 ```
 
-Unfortunately, using this would require us to type `p.name.value` every time we wanted to use the property. We could do the following, but that's also not great since it introduces an extra property:
+不幸的是，使用此属性会要求每次要使用该属性时都键入 `p.name.value`。可以执行以下操作，但这也不好，因为它引入了额外的属性：
 
 ```kotlin
-// In Person
+// 在 Person 里
 private val _name = StringProperty(this, "name", "Unknown Name")
 val name get() = _name.value
 ```
 
-The solution is a _delegated property_, which allows you to specify the behavior of getting and setting a property (somewhat similar to implementing `__getattribute__()` and `__setattribute__()` in Python, but for one property at a time).
+该解决方案是一个委托的属性，它允许指定获取和设置属性的行为（与在 Python 中实现 `__getattribute__()` 与 `__setattribute__()` 类似，但一次只设置一个属性）。
 
 ```kotlin
 class DelegatedStringProperty(
@@ -264,15 +264,15 @@ class DelegatedStringProperty(
 }
 ```
 
-The delegated property can be used like this to declare a property in `Person` - note the use of `by` instead of `=`:
+可以像这样使用委派的属性在 `Person` 中声明属性——请注意，使用 `by` 代替 `=`：
 
 ```kotlin
 val name by DelegatedStringProperty(this, "name", "Unknown Name")
 ```
 
-Now, whenever anyone reads `p.name`, `getValue()` will be invoked with `p` as `thisRef` and metadata about the `name` property as `property`. Since `thisRef` is a `DbModel`, this delegated property can only be used inside `DbModel` and its subclasses.
+现在，只要有人读 `p.name`、`getValue()` 都将以 `p` 作为 `thisRef` 调用，并将 `name` 属性的元数据作为 `property` 调用。由于 `thisRef` 是 `DbModel`，因此只能在 `DbModel` 及其子类内部使用此委托属性。
 
-A nice built-in delegated property is `lazy`, which is a properly threadsafe implementation of the lazy loading pattern. The supplied lambda expression will only be evaluated once, the first time the property is accessed.
+一个好用的内置委托属性 `lazy`，它是惰性加载模式的适当线程安全实现。首次访问该属性时，将仅对提供的 ​​lambda 表达式求值一次。
 
 ```kotlin
 val name: String? by lazy {
