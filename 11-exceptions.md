@@ -32,14 +32,14 @@ return try {
 }
 ```
 
-基本异常类是 `Throwable`（但是扩展其子类 `Exception` 更为常见），并且有大量内置的异常类。如果找不到满足需求的异常类，则可以通过从现有异常类继承来创建自己的异常类。
+基本异常类是 `Throwable`（但是扩展其子类 `Exception` 更为常见），并且有大量内置的异常类。如果找不到满足需求的异常类，那么可以通过从现有异常类继承来创建自己的异常类。
 
 请注意，除了与 Java 代码进行交互时，在 Kotlin 中不建议使用异常。与其在自己的代码中引发异常，不如考虑使用特殊的返回类型，例如 [Arrow 库](https://arrow-kt.io/)中的 [Option](https://arrow-kt.io/docs/datatypes/option/) 或 [Either](https://arrow-kt.io/docs/datatypes/either/)。
 
 
 ## Nothing
 
-`throw` 也是一个表达式，其返回类型是特殊类 `Nothing`，它没有任何实例。编译器知道类型为 `Nothing` 的表达式永远不会正常返回，因此即使通常需要使用其他类型（例如在 [Elvis 操作符](null-safety.html#elvis-操作符)之后）的情况下，也通常会接受其使用。如果创建一个始终抛出异常的函数，或者开始一个无限循环，则可以将其返回类型声明为 `Nothing`，以使编译器意识到这一点。一个有趣的例子是内置函数 `TODO`，可以在任何表达式中调用它（可能提供一个字符串参数），它会引发 `NotImplementedError`。
+`throw` 也是一个表达式，其返回类型是特殊类 `Nothing`，它没有任何实例。编译器知道类型为 `Nothing` 的表达式永远不会正常返回，因此即使通常需要使用其他类型（例如在 [Elvis 操作符](null-safety.html#elvis-操作符)之后）的情况下，也通常会接受其使用。如果创建一个始终抛出异常的函数，或者开始一个无限循环，那么可以将其返回类型声明为 `Nothing`，以使编译器意识到这一点。一个有趣的例子是内置函数 `TODO`，可以在任何表达式中调用它（可能提供一个字符串参数），它会引发 `NotImplementedError`。
 
 可为空版本 `Nothing?` 在当使用 null 初始化某些内容且没有其他类型信息时，编译器将使用它。在 `val x = null` 中，`x` 的类型将为 `Nothing?`。此类型没有“从不正常返回”的语义；相反，编译器知道该值将始终为 null。
 
