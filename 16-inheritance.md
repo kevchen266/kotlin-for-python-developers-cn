@@ -182,7 +182,7 @@ val p = x as Person?
 
 ## 委托
 
-If you find that an interface that you want a class to implement is already implemented by one of the properties of the class, you can _delegate_ the implementation of that interface to that property with `by`:
+如果发现要通过类的属性之一实现了要实现类的接口，则可以通过 `by` 将该接口的实现 _委托_ 给该属性的实现：
 
 ```kotlin
 interface PowerSource {
@@ -194,7 +194,7 @@ class Engine(override val horsepowers: Int) : PowerSource
 open class MotorVehicle(val engine: Engine): PowerSource by engine
 ```
 
-This will automatically implement all the interface members of `PowerSource` in `MotorVehicle` by invoking the same member on `engine`. This only works for properties that are declared in the constructor.
+通过在 `engine` 上调用相同的成员，这将自动在 `MotorVehicle` 中实现 `PowerSource` 的所有接口成员。这仅适用于在构造函数中声明的属性。
 
 
 ## 属性委托
