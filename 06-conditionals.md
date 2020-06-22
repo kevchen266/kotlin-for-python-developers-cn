@@ -29,7 +29,7 @@ if/else 语句也是一个表达式，这意味着在 Kotlin 中，三元运算�
 val result = if (condition) trueBody else falseBody
 ```
 
-使用 if/else 作为表达式时，`else` 部分是必需的（但也可以有 `else if` 部分）。如果最后要求值的主体包含多行，则返回最后一行的结果作为 `if`/`else` 的结果。
+使用 if/else 作为表达式时，`else` 部分是必需的（但也可以有 `else if` 部分）。如果最后要求值的主体包含多行，那么返回最后一行的结果作为 `if`/`else` 的结果。
 
 
 ## 比较

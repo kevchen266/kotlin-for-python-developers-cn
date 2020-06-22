@@ -1,13 +1,13 @@
 ## 子类化
 
-Kotlin supports single-parent class inheritance - so each class (except the root class `Any`) has got exactly one parent class, called a _superclass_. Kotlin wants you to think through your class design to make sure that it's actually safe to _subclass_ it, so classes are _closed_ by default and can't be inherited from unless you explicitly declare the class to be _open_ or _abstract_. You can then subclass from that class by declaring a new class which mentions its parent class after a colon:
+Kotlin 支持单父类继承——因此，每个类（根类 `Any` 除外）都只有一个父类，称为 _超类_。Kotlin 需要仔细考虑类的设计，以确保对其进行 _子类化_ 实际上是安全的，因此，默认情况下类是 _关闭的_，除非明确声明该类为 _开放类_ 或 _抽象类_，否则无法继承。然后，可以通过声明一个新类来从该类中子类化，该新类在冒号后提及其父类：
 
 ```kotlin
 open class MotorVehicle
 class Car : MotorVehicle()
 ```
 
-Classes that don't declare a superclass implicitly inherit from `Any`. The subclass must invoke one of the constructors of the base class, passing either parameters from its own constructor or constant values:
+没有声明超类的类隐式地继承自 `Any`。子类必须调用基类的构造函数之一，并传递其自身构造函数的参数或常量值：
 
 ```kotlin
 open class MotorVehicle(val maxSpeed: Double, val horsepowers: Int)
@@ -17,40 +17,40 @@ class Car(
 ) : MotorVehicle(maxSpeed, 100)
 ```
 
-The subclass _inherits_ all members that exist in its superclass - both those that are directly defined in the superclass and the ones that the superclass itself has inherited. In this example, `Car` contains the following members:
+子类 _继承_ 其超类中存在的所有成员——既直接在超类中定义的成员，也包括超类本身已继承的成员。在此示例中，`Car` 包含以下成员：
 
-* `seatCount`, which is `Car`'s own property
-* `maxSpeed` and `horsepowers`, which are inherited from `MotorVehicle`
-* `toString()`, `equals()`, and `hashCode()`, which are inherited from `Any`
+* `seatCount`，这是 `Car` 的属性
+* `maxSpeed` 与 `horsepowers`，继承自 `MotorVehicle`
+* `toString()`、`equals()`、与 `hashCode()`，继承自 `Any`
 
-Note that the terms "subclass" and "superclass" can span multiple levels of inheritance - `Car` is a subclass of `Any`, and `Any` is the superclass of everything. If we want to restrict ourselves to one level of inheritance, we will say "direct subclass" or "direct superclass".
+请注意，术语“子类”和“超类”可以跨越多个继承级别——`Car` 是 `Any` 的子类，而 `Any` 是所有东西的超类。如果想要限制在一个继承级别，将说“直接子类”或“直接超类”。
 
-Note that we do not use `val` in front of `maxSpeed` in `Car` - doing so would have introduced a distinct property in `Car` that would have _shadowed_ the one inherited from `MotorVehicle`. As written, it's just a constructor parameter that we pass on to the superconstructor.
+请注意，不用在 `Car` 中的 `maxSpeed` 前面使用 `val`——这样做会在 `Car` 中引入一个独特的属性，从而 _覆盖_ 了从 `MotorVehicle` 继承的属性。如所写，它只是一个构造函数参数，将其传递给超级构造函数。
 
-`private` members (and `internal` members from superclasses in other modules) are also inherited, but are not directly accessible: if the superclass contains a private property `foo` that is referenced by a public function `bar()`, instances of the subclass will contain a `foo`; they can't use it directly, but they are allowed to call `bar()`.
+`private` 成员（以及其他模块中超类的 `internal` 成员）也被继承，但不能直接访问：如果超类包含由公共函数 `bar()` 引用的私有属性 `foo`，那么子类的实例将包含 `foo`；不能直接使用它，但是可以调用 `bar()`。
 
-When an instance of a subclass is constructed, the superclass "part" is constructed first (via the superclass constructor). This means that during execution of the constructor of an open class, it could be that the object being constructed is an instance of a subclass, in which case the subclass-specific properties have not been initialized yet. For that reason, calling an open function from a constructor is risky: it might be overridden in the subclass, and if it is accessing subclass-specific properties, those won't be initialized yet.
+构造子类的实例时，首先构造超类“part”（通过超类构造函数）。这意味着在执行打开类的构造函数期间，可能正在构造的对象是子类的实例，在这种情况下，子类特定的属性尚未初始化。因此，从构造函数中调用开放函数是有风险的：它可能在子类中被覆盖，并且如果它正在访问子类特定的属性，那么这些属性将不会被初始化。
 
 
 ## 覆盖
 
-If a member function or property is declared as `open`, subclasses may _override_ it by providing a new implementation. Let's say that `MotorVehicle` declares this function:
+如果成员函数或属性被声明为 `open`，那么子类可以通过提供新的实现 _覆盖_ 它。假设 `MotorVehicle` 声明了此函数：
 
 ```kotlin
 open fun drive() =
     "$horsepowers HP motor vehicle driving at $maxSpeed MPH"
 ```
 
-If `Car` does nothing, it will inherit this function as-is, and it will return a message with the car's horsepowers and max speed. If we want a car-specific message, `Car` can override the function by redeclaring it with the `override` keyword:
+如果 `Car` 不执行任何操作，它将按原样继承此函数，并且将返回一条消息，其中包含汽车的功率和最大速度。如果想要特定于汽车的消息，`Car` 可以通过使用 `override` 关键字重新声明该函数来覆盖该函数：
 
 ```kotlin
 override fun drive() =
    "$seatCount-seat car driving at $maxSpeed MPH"
 ```
 
-The signature of the overriding function must exactly match the overridden one, except that the return type in the overriding function may be a subtype of the return type of the overridden function.
+覆盖的函数名必须与被覆盖的函数名完全匹配，但覆盖函数中的返回类型可以是被覆盖函数的返回类型的子类型。
 
-If what the overriding function wants to do is an extension of what the overridden function did, you can call the overridden function via `super` (either before, after, or between other code):
+如果覆盖函数想要做的是对被覆盖函数所做的扩展，那么可以通过 `super`（在其他代码之前、之后或之间）调用被覆盖函数：
 
 ```kotlin
 override fun drive() =
@@ -60,9 +60,9 @@ override fun drive() =
 
 ## 接口
 
-The single-parent rule often becomes too limiting, as you'll often find commonalities between classes in different branches of a class hierarchy. These commonalities can be expressed in _interfaces_.
+单继承规则经常变得过于局限，因为经常会发现类层次结构不同分支中的类之间存在共性。这些共同点可以在 _接口_ 中表达。
 
-An interface is essentially a contract that a class may choose to sign; if it does, the class is obliged to provide implementations of the properties and functions of the interface. However, an interface may (but typically doesn't) provide a default implementation of some or all of its properties and functions. If a property or function has a default implementation, the class may choose to override it, but it doesn't have to. Here's an interface without any default implementations:
+接口本质上是类可以选择签署的契约；如果确实如此，那么该类必须提供接口属性与函数的实现。但是，接口可以提供（但通常不提供）部分或全部属性与函数的默认实现。如果属性或函数具有默认实现，那么该类可以选择覆盖它，但这不是必须的。这是一个没有任何默认实现的接口：
 
 ```kotlin
 interface Driveable {
@@ -71,7 +71,7 @@ interface Driveable {
 }
 ```
 
-We can choose to let `MotorVehicle` implement that interface, since it's got the required members - but now we need to mark those members with `override`, and we can remove `open` since an overridden function is implicitly open:
+可以选择让 `MotorVehicle` 实现该接口，因为它具有所需的成员——但现在需要用 `override` 标记这些成员，并且由于覆盖的函数是隐式开放的，因此可以删除 `open`：
 
 ```kotlin
 open class MotorVehicle(
@@ -82,42 +82,42 @@ open class MotorVehicle(
 }
 ```
 
-If we were to introduce another class `Bicycle`, which should be neither a subclass nor a superclass of `MotorVehicle`, we could still make it implement `Driveable`, as long as we declare `maxSpeed` and `drive` in `Bicycle`.
+如果要引入另一个类 `Bicycle`，该类既不应该是 `MotorVehicle` 的子类也不可以是其超类，只要在 `Bicycle` 中声明 `maxSpeed` 与 `drive`，仍然可以使其实现 `Driveable`。
 
-Subclasses of a class that implements an interface (in this case, `Car`) are also considered to be implementing the interface.
+实现接口的类的子类（在本例中为 `Car`）也被视为正在实现该接口。
 
-A symbol that is declared inside an interface normally should be public. The only other legal visibility modifier is `private`, which can only be used if the function body is supplied - that function may then be called by each class that implements the interface, but not by anyone else.
+在接口内部声明的符号通常应该是 public。唯一的其他合法可见性修饰符是 `private`，只有在提供了函数体时才能使用——可以由实现该接口的每个类调用该函数，而不能由其他任何类调用。
 
-As for why you would want to create an interface, other than as a reminder to have your classes implement certain members, see the section on [多态](inheritance.html#多态).
+至于为什么要创建一个接口，除了提醒类实现某些成员外，请参见[多态](inheritance.html#多态)一节。
 
 
 ## 抽象类
 
-Some superclasses are very useful as a grouping mechanism for related classes and for providing shared functions, but are so general that they're not useful on their own. `MotorVehicle` seems to fit this description. Such a class should be declared _abstract_, which will prevent the class from being instantiated directly:
+某些超类作为相关类的分组机制和提供共享函数非常有用，但它们是如此笼统，以至于它们本身并没有用。`MotorVehicle` 似乎符合此描述。应该将此类声明为 _抽象类_，以防止直接实例化该类：
 
 ```kotlin
 abstract class MotorVehicle(val maxSpeed: Double, val wheelCount: Int)
 ```
 
-Now, you can no longer say `val mv = MotorVehicle(100, 4)`.
+现在，不能如此声明：`val mv = MotorVehicle(100, 4)`。
 
-Abstract classes are implicitly open, since they are useless if they don't have any concrete subclasses.
+抽象类是隐式开放的，因为如果它们没有任何具体的子类，它们将无用。
 
-When an abstract class implements one or more interfaces, it is not required to provide definitions of the members of its interfaces (but it can if it wants to). It must still _declare_ such members, using `abstract override` and not providing any body for the function or property:
+当抽象类实现一个或多个接口时，不必提供其接口成员的定义（但如果需要，可以提供）。它仍必须使用 `abstract override` _声明_ 此类成员，并且不为函数或属性提供任何主体：
 
 ```kotlin
 abstract override val foo: String
 abstract override fun bar(): Int
 ```
 
-Being abstract is the only way to "escape" from having to implement the members of your interfaces, by offloading the work onto your subclasses - if a subclass wants to be concrete, it must implement all the "missing" members.
+通过将工作分担到子类上，抽象是“逃避”必须实现接口成员的唯一方法——如果子类想要具体化，那么必须实现所有“缺失”成员。
 
 
 ## 多态
 
-Polymorphism is the ability to treat objects with similar traits in a common way. In Python, this is achieved via _ducktyping_: if `x` refers to some object, you can call `x.quack()` as long as the object happens to have the function `quack()` - nothing else needs to be known (or rather, assumed) about the object. That's very flexible, but also risky: if `x` is a parameter, every caller of your function must be aware that the object they pass to it must have `quack()`, and if someone gets it wrong, the program blows up at runtime.
+多态是一种以通用方式处理具有相似特征的对象的能力。在 Python 中，这是通过 _[鸭子类型](https://zh.wikipedia.org/wiki/%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B)_ 实现的：如果 `x` 指向某个对象，那么只要该对象碰巧具有函数 `quack()`，就可以调用 `x.quack()`——关于该对象，不需要知道（或者更确切地说，假设）其他任何内容。这非常灵活，但是也很冒险：如果 `x` 是一个参数，那么函数的每个调用者都必须知道传递给它的对象必须具有 `quack()`，并且如果有人弄错了，程序就会在运行时崩溃。
 
-In Kotlin, polymorphism is achieved via the class hierarchy, in such a way that it is impossible to run into a situation where a property or function is missing. The basic rule is that a variable/property/parameter whose declared type is `A` may refer to an instance of a class `B` if and only if `B` is a subtype of `A`. This means that either, `A` must be a class and `B` must be a subclass of `A`, or that `A` must be an interface and `B` must be a class that implements that interface or be a subclass of a class that does. With our classes and interfaces from the previous sections, we can define these functions:
+在 Kotlin 中，多态性是通过类层次结构来实现的，这样就不可能遇到缺少属性或函数的情况。基本规则是，当且仅当 `B` 是 `A` 的子类型时，声明类型为 `A` 的变量/属性/参数才可以引用 `B` 类的实例。这意味着，`A` 必须是一个类，而 `B` 必须是 `A` 的子类，或者 `A` 必须是一个接口，而 `B` 必须是实现该接口的类，或者是该类的子类。使用上一部分中的类和接口，可以定义以下函数：
 
 ```kotlin
 fun boast(mv: MotorVehicle) =
@@ -127,7 +127,7 @@ fun ride(d: Driveable) =
     "I'm riding my ${d.drive()}"
 ```
 
-and call them like this:
+并这样调用它们：
 
 ```kotlin
 val car = Car(4, 120)
@@ -135,9 +135,9 @@ boast(car)
 ride(car)
 ```
 
-We're allowed to pass a `Car` to `boast()` because `Car` is a subclass of `MotorVehicle`. We're allowed to pass a `Car` to `ride()` because `Car` implements `Driveable` (thanks to being a subclass `MotorVehicle`). Inside `boast()`, we're only allowed to access the members of the declared parameter type `MotorVehicle`, even if we're in a situation where we know that it's really a `Car` (because there could be other callers that pass a non-`Car`). Inside `ride()`, we're only allowed to access the members of the declared parameter type `Driveable`. This ensures that every member lookup is safe - the compiler only allows you to pass objects that are guaranteed to have the necessary members. The downside is that you will sometimes be forced to declare "unnecessary" interfaces or wrapper classes in order to make a function accept instances of different classes.
+可以将 `Car` 传递给 `boast()`，因为 `Car` 是 `MotorVehicle` 的子类。可以将 `Car` 传递给 `ride()`，因为 `Car` 实现了 `Driveable`（由于是 `MotorVehicle` 的子类）。在 `boast()` 内部，即使处在已知它确实是 `Car` 的情况下，也只能访问声明的参数类型为 `MotorVehicle` 的成员（因为可能会有其他调用而并非通过 `Car`）。在 `ride()` 内部，仅允许访问声明的参数类型 `Driveable` 的成员。这样可以确保每个成员查找都是安全的——编译器仅允许传递保证具有必需成员的对象。缺点是有时会迫使声明“不必要的”接口或包装器类，以使函数接受不同类的实例。
 
-With collections and functions, polymorphism becomes more complicated - see the section on [泛型](generics.html).
+使用集合和函数，多态性变得更加复杂——请参见[泛型](generics.html)部分。
 
 
 [//]: TODO (Overload resolution rules)
@@ -145,35 +145,35 @@ With collections and functions, polymorphism becomes more complicated - see the 
 
 ## 类型转换与类型检测
 
-When you take an interface or an open class as a parameter, you generally don't know the real type of the parameter at runtime, since it could be an instance of a subclass or of any class that implements the interface. It is possible to check what the exact type is, but like in Python, you should generally avoid it and instead design your class hierarchy such that you can do what you need by proper overriding of functions or properties.
+当将接口或开放类作为参数时，通常在运行时不知道参数的实际类型，因为它可能是子类的实例，也可能是实现该接口的任何类的实例。可以检测确切的类型，但是像在 Python 中一样，通常应避免使用它，而应设计类层次结构，以便可以通过适当地覆盖函数或属性来执行所需的操作。
 
-If there's no nice way around it, and you need to take special actions based on what type something is or to access functions/properties that only exist on some classes, you can use `is` to check if the real type of an object is a particular class or a subclass thereof (or an implementor of an interface). When this is used as the condition in an `if`, the compiler will let you perform type-specific operations on the object inside the `if` body:
+如果没有很好的解决方法，并且需要根据某种事物的类型采取特殊的操作或访问仅在某些类中存在的函数/属性，那么可以使用 `is` 检测对象的真实类型是否为特定的类或其子类（或接口的实现者）。当将它用作 `if` 中的条件时，编译器将允许对 `if` 主体内的对象执行特定于类型的操作：
 
 ```kotlin
 fun foo(x: Any) {
     if (x is Person) {
-        println("${x.name}") // This wouldn't compile outside the if
+        println("${x.name}") // 这不会在 if 之外编译
     }
 }
 ```
 
-If you want to check for _not_ being an instance of a type, use `!is`. Note that `null` is never an instance of any non-nullable type, but it is always an "instance" of any nullable type (even though it technically isn't an instance, but an absence of any instance).
+如果要检测 _不_ 是类型的实例，请使用 `!is`。请注意，`null` 绝不是任何非空类型的实例，但它始终是任何可为空类型的“实例”（即使从技术上讲它不是实例，但它没有任何实例）。
 
-The compiler will not let you perform checks that can't possibly succeed because the declared type of the variable is a class that is on an unrelated branch of the class hierarchy from the class you're checking against - if the declared type of `x` is `MotorVehicle`, you can't check if `x` is a `Person`. If the right-hand side of `is` is an interface, Kotlin will allow the type of the left-hand side to be any interface or open class, because it could be that some subclass thereof implements the interface.
+编译器不会执行无法成功执行的检测，因为变量的声明类型是要检测的类的类层次结构的不相关分支上的类——如果声明的类型为 `x` 是 `MotorVehicle`，不能检测 `x` 是否是 `Person`。如果 `is` 的右侧是接口，那么 Kotlin 将允许左侧的类型为任何接口或开放类，因为它的某些子类可以实现该接口。
 
-If your code is too clever for the compiler, and you know without the help of `is` that `x` is an instance of `Person` but the compiler doesn't, you can _cast_ your value with `as`:
+如果代码对于编译器来说太聪明了，并且知道在没有 `is` 的帮助下，`x` 是 `Person` 的实例，但是编译器却不是，那么可以使用 `as` _转换（cast）_ 的值：
 
 ```kotlin
 val p = x as Person
 ```
 
-This will raise a `ClassCastException` if the object is not actually an instance of `Person` or any of its subclasses. If you're not sure what `x` is, but you're happy to get null if it's not a `Person`, you can use `as?`, which will return null if the cast fails. Note that the resulting type is `Person?`:
+如果对象实际上不是 `Person` 或其任何子类的实例，那么将引发 `ClassCastException`（类强制转换异常）。如果不确定 `x` 是什么，如果它不是 `Person`，但是乐于获得 null，那么可以使用 `as?`，如果强制转换失败，它将返回 null。请注意，结果类型为 `Person?`：
 
 ```kotlin
 val p = x as? Person
 ```
 
-You can also use `as` to cast to a nullable type. The difference between this and the previous `as?` cast is that this one will fail if `x` is a non-null instance of another type than `Person`:
+也可以使用 `as` 强制转换为可为空的类型。这个和之前的 `as?` 转换之间的区别是，如果 `x` 是除 `Person` 之外的其他类型的非空实例，那么此转换将失败：
 
 ```kotlin
 val p = x as Person?
@@ -182,7 +182,7 @@ val p = x as Person?
 
 ## 委托
 
-If you find that an interface that you want a class to implement is already implemented by one of the properties of the class, you can _delegate_ the implementation of that interface to that property with `by`:
+如果发现要通过类的属性之一实现了要实现类的接口，那么可以通过 `by` 将该接口的实现 _委托_ 给该属性的实现：
 
 ```kotlin
 interface PowerSource {
@@ -194,12 +194,12 @@ class Engine(override val horsepowers: Int) : PowerSource
 open class MotorVehicle(val engine: Engine): PowerSource by engine
 ```
 
-This will automatically implement all the interface members of `PowerSource` in `MotorVehicle` by invoking the same member on `engine`. This only works for properties that are declared in the constructor.
+通过在 `engine` 上调用相同的成员，这将自动在 `MotorVehicle` 中实现 `PowerSource` 的所有接口成员。这仅适用于在构造函数中声明的属性。
 
 
 ## 属性委托
 
-Let's say that you're writing a simple ORM. Your database library represents a row as instances of a class `Entity`, with functions like `getString("name")` and `getLong("age")` for getting typed values from the given columns. We could create a typed wrapper class like this:
+假设正在编写一个简单的 <abbr title="对象关系映射（Object Relational Mapping）">ORM</abbr>。数据库库将一行表示为类 `Entity` 的实例，并具有诸如 `getString("name")` 与 `getLong("age")` 之类的函数，用于从给定列中获取键入的值。可以这样创建一个类型化的包装类：
 
 ```kotlin
 abstract class DbModel(val entity: Entity)
@@ -210,7 +210,7 @@ class Person(val entity: Entity) : DbModel(entity) {
 }
 ```
 
-That was easy, but maybe we'd want to do lazy-loading so that we won't spend time on extracting the fields that won't be used (especially if some of them contain a lot of data in a format that it is time-consuming to parse), and maybe we'd like support for default values. While we could implement that logic in a `get()` block, it would need to be duplicated in every property. Alternatively, we could implement the logic in a separate `StringProperty` class (note that this simple example is not thread-safe):
+这很容易，但是也许要进行延迟加载，这样就不会花时间来提取不会使用的字段（特别是如果其中一些包含大量数据，而这种格式解析起来会很费时），也许希望支持默认值。虽然可以在 `get()` 块中实现该逻辑，但需要在每个属性中重复该逻辑。另外，可以在一个单独的 `StringProperty` 类中实现逻辑（请注意，这个简单的示例不是线程安全的）：
 
 ```kotlin
 class StringProperty(
@@ -222,7 +222,7 @@ class StringProperty(
     private var loaded = false
     val value: String?
         get() {
-            // Warning: This is not thread-safe!
+            // 警告：这不是线程安全的！
             if (loaded) return _value
             if (model.entity.contains(fieldName)) {
                 _value = model.entity.getString(fieldName)
@@ -232,19 +232,19 @@ class StringProperty(
         }
 }
 
-// In Person
+// 在 Person 里
 val name = StringProperty(this, "name", "Unknown Name")
 ```
 
-Unfortunately, using this would require us to type `p.name.value` every time we wanted to use the property. We could do the following, but that's also not great since it introduces an extra property:
+不幸的是，使用此属性会要求每次要使用该属性时都键入 `p.name.value`。可以执行以下操作，但这也不好，因为它引入了额外的属性：
 
 ```kotlin
-// In Person
+// 在 Person 里
 private val _name = StringProperty(this, "name", "Unknown Name")
 val name get() = _name.value
 ```
 
-The solution is a _delegated property_, which allows you to specify the behavior of getting and setting a property (somewhat similar to implementing `__getattribute__()` and `__setattribute__()` in Python, but for one property at a time).
+该解决方案是一个委托的属性，它允许指定获取和设置属性的行为（与在 Python 中实现 `__getattribute__()` 与 `__setattribute__()` 类似，但一次只设置一个属性）。
 
 ```kotlin
 class DelegatedStringProperty(
@@ -264,15 +264,15 @@ class DelegatedStringProperty(
 }
 ```
 
-The delegated property can be used like this to declare a property in `Person` - note the use of `by` instead of `=`:
+可以像这样使用委派的属性在 `Person` 中声明属性——请注意，使用 `by` 代替 `=`：
 
 ```kotlin
 val name by DelegatedStringProperty(this, "name", "Unknown Name")
 ```
 
-Now, whenever anyone reads `p.name`, `getValue()` will be invoked with `p` as `thisRef` and metadata about the `name` property as `property`. Since `thisRef` is a `DbModel`, this delegated property can only be used inside `DbModel` and its subclasses.
+现在，只要有人读 `p.name`、`getValue()` 都将以 `p` 作为 `thisRef` 调用，并将 `name` 属性的元数据作为 `property` 调用。由于 `thisRef` 是 `DbModel`，因此只能在 `DbModel` 及其子类内部使用此委托属性。
 
-A nice built-in delegated property is `lazy`, which is a properly threadsafe implementation of the lazy loading pattern. The supplied lambda expression will only be evaluated once, the first time the property is accessed.
+一个好用的内置委托属性 `lazy`，它是惰性加载模式的适当线程安全实现。首次访问该属性时，将仅对提供的 ​​lambda 表达式求值一次。
 
 ```kotlin
 val name: String? by lazy {
@@ -285,7 +285,7 @@ val name: String? by lazy {
 
 ## 密封类
 
-If you want to restrict the set of subclasses of a base class, you can declare the base class to be `sealed` (which also makes it abstract), in which case you can only declare subclasses in the same file. The compiler then knows the complete set of possible subclasses, which will let you do exhaustive `when` expression for all the possible subtypes without the need for an `else` clause (and if you add another subclass in the future and forget to update the `when`, the compiler will let you know).
+如果要限制基类的子类集，那么可以将基类声明为 `sealed`（这也使其抽象化），在这种情况下，只能在同一文件中声明子类。然后，编译器知道了所有可能的子类的完整集合，这将使在不需要 `else` 子句的情况下对所有可能的子类型进行穷尽的 `when` 表达（如果以后添加另一个子类而忘记更新 `when`，编译器会告知）。
 
 
 

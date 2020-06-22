@@ -8,7 +8,7 @@
 
 Kotlin 是一种编译型的静态类型语言，这可能会给习惯于解释型、动态类型的 Python 用户带来一些初始障碍。本文档旨在解释 Kotlin 的大部分语法、概念以及与 Python 中相应概念的比较。
 
-Kotlin 可以为多个不同平台编译。在本文档中，我们假定目标平台是 Java 虚拟机，它提供了一些附加功能——尤其是会将代码编译为 Java 字节码，进而能够与 Java 库的庞大生态系统互操作。
+Kotlin 可以为多个不同平台编译。在本文档中，假定目标平台是 Java 虚拟机，它提供了一些附加功能——尤其是会将代码编译为 Java 字节码，进而能够与 Java 库的庞大生态系统互操作。
 
 即使你不了解 Python，这篇文档应该也是对 Kotlin 的有用介绍，尤其是如果你已习惯于其他动态类型语言。但是如果你有 Java 背景，最好直接去看优秀的[官方网文档](https://www.kotlincn.net/docs/reference/)（本文档也从中汲取了很多灵感）。一定程度上讲，你可以按照 Java 代码的方式编写，并在所尝试的内容不起作用时查找资料——一些 IDE 甚至可以自动将 Java 代码转换为 Kotlin 代码。
 
@@ -162,7 +162,7 @@ x.foo()
  + 3)
 ```
 
-如果将一行拆分为两行后各自作为独立行语法上都有效（即使导致与 Kotlin 语法没有直接关系的编译错误），就不要拆分该行。以下代码实际上并不会返回 `foo()` 的结果——它返回一个称为 `Unit` 的特殊值（稍后我们会介绍它），并且永远不会调用 `foo()`。
+如果将一行拆分为两行后各自作为独立行语法上都有效（即使导致与 Kotlin 语法没有直接关系的编译错误），就不要拆分该行。以下代码实际上并不会返回 `foo()` 的结果——它返回一个称为 `Unit` 的特殊值（稍后会介绍它），并且永远不会调用 `foo()`。
 
 ```kotlin
 return    // 空 return 语句
@@ -223,12 +223,12 @@ val number = 42
 
 关键字 `var` 声明了一个 _可变_ 变量，而 `val` 声明了一个 _只读_ 或者说 _只赋值一次_ 的变量——因此这两种都称为 _变量_。
 
-请注意，只读变量本身不是常量：可以使用变量的值进行初始化（因此，在编译期不需要知道其值），如果在构造函数中声明了该变量，并反复调用（例如函数或循环），则每次调用时可以采用不同的值。同样，尽管只读变量在作用域内可能无法重新赋值，但它仍可以引用自身是可变的对象（例如列表）。
+请注意，只读变量本身不是常量：可以使用变量的值进行初始化（因此，在编译期不需要知道其值），如果在构造函数中声明了该变量，并反复调用（例如函数或循环），那么每次调用时可以采用不同的值。同样，尽管只读变量在作用域内可能无法重新赋值，但它仍可以引用自身是可变的对象（例如列表）。
 
 
 ### 常量
 
-如果有一个真正常量的值，并且该值是在编译期已知的字符串或原生类型（请参见下文），则可以声明一个实际常量。只能在文件的顶层或[对象声明](#对象声明)内（但不能在类声明内）执行此操作：
+如果有一个真正常量的值，并且该值是在编译期已知的字符串或原生类型（请参见下文），那么可以声明一个实际常量。只能在文件的顶层或[对象声明](#对象声明)内（但不能在类声明内）执行此操作：
 
 ```kotlin
 const val x = 2
@@ -245,7 +245,7 @@ val characters: CharSequence = "abc"
 
 在本文档中，有时会不必要地指定类型，以突出显示表达式产生的类型。（此外，良好的 IDE 可以显示结果类型。）
 
-为了完整起见：也可以（但不鼓励）拆分声明与初始赋值，甚至可以根据某些条件在多个位置进行初始化。只能在编译器可以证明每个可能的执行路径都已将其初始化的点读取变量。如果以这种方式创建只读变量，则还必须确保每个可能的执行路径都 _刚好只_ 赋值一次。
+为了完整起见：也可以（但不鼓励）拆分声明与初始赋值，甚至可以根据某些条件在多个位置进行初始化。只能在编译器可以证明每个可能的执行路径都已将其初始化的点读取变量。如果以这种方式创建只读变量，那么还必须确保每个可能的执行路径都 _刚好只_ 赋值一次。
 
 ```kotlin
 val x: String
@@ -255,7 +255,7 @@ x = 3
 
 ### 作用域与命名
 
-变量仅存在于其中声明了它的 _作用域_（花括号括起来的代码块；稍后会详细介绍）内——因此，在循环内声明的变量仅存在于该循环内。无法在循环后检测其最终值。可以在嵌套作用域内重新声明变量——因此，如果函数有一个参数 `x`，在该函数内创建一个循环并在该循环内声明一个 `x`，则该循环内的 `x` 与函数内的 `x` 不同。
+变量仅存在于其中声明了它的 _作用域_（花括号括起来的代码块；稍后会详细介绍）内——因此，在循环内声明的变量仅存在于该循环内。无法在循环后检测其最终值。可以在嵌套作用域内重新声明变量——因此，如果函数有一个参数 `x`，在该函数内创建一个循环并在该循环内声明一个 `x`，那么该循环内的 `x` 与函数内的 `x` 不同。
 
 变量名称应使用 `lowerCamelCase`（小写驼峰命名）而不是 `snake_case`（下划线命名）。
 
@@ -278,9 +278,9 @@ _原生数据类型_ 是 Kotlin 中最基本的类型。所有其他类型均由
 `Short` | 16 | -32768 | 32767
 `Byte` | 8 | -128 | 127
 
-由于 Kotlin 继承了 Java 的不良设计决策，因此字节数为 -128 至 127。为了获得介于 0 与 255 之间的传统字节值，如果该值是正数，则将其保持原样；如果它是负数，则将其加上 256（因此，-128 实际上是 128，而 -1 是真正的 255）。请参见[扩展函数](#扩展函数属性)部分，以获取解决方案。
+由于 Kotlin 继承了 Java 的不良设计决策，因此字节数为 -128 至 127。为了获得介于 0 与 255 之间的传统字节值，如果该值是正数，那么将其保持原样；如果它是负数，那么将其加上 256（因此，-128 实际上是 128，而 -1 是真正的 255）。请参见[扩展函数](#扩展函数属性)部分，以获取解决方案。
 
-如果整数字面的值适合 `Int`，则其类型为 `Int`，否则为 `Long`。为清晰起见，`Long` 字面量应加 `L` 后缀，这也使得可以将“小”值设为 `Long`。`Short` 或 `Byte` 没有字面后缀，因此此类值需要显式类型声明或使用显式转换函数。
+如果整数字面的值适合 `Int`，那么其类型为 `Int`，否则为 `Long`。为清晰起见，`Long` 字面量应加 `L` 后缀，这也使得可以将“小”值设为 `Long`。`Short` 或 `Byte` 没有字面后缀，因此此类值需要显式类型声明或使用显式转换函数。
 
 ```kotlin
 val anInt = 3
@@ -294,7 +294,7 @@ val aByte: Byte = 65
 val anotherByte = -32.toByte()
 ```
 
-请注意，将整数除以整数会产生整数（类似于 Python 2，但与 Python 3不同）。如果需要浮点结果，则至少一个操作数需要为浮点数（并且请记住，就像在大多数语言中一样，浮点运算通常是不精确的）：
+请注意，将整数除以整数会产生整数（类似于 Python 2，但与 Python 3不同）。如果需要浮点结果，那么至少一个操作数需要为浮点数（并且请记住，就像在大多数语言中一样，浮点运算通常是不精确的）：
 
 ```kotlin
 println(7 / 3)            // 输出 2
@@ -304,7 +304,7 @@ println(7 / x)            // 输出 2
 println(7 / x.toDouble()) // 输出 2.3333333333333335
 ```
 
-每当对相同类型的两个整数使用算术运算符时（或使用例如 `-` 之类的一元运算符时），_如果结果不适合操作数的类型，则不会自动进行“升级”！_ 试试这个：
+每当对相同类型的两个整数使用算术运算符时（或使用例如 `-` 之类的一元运算符时），_如果结果不适合操作数的类型，那么不会自动进行“升级”！_ 试试这个：
 
 ```kotlin
 val mostPositive = 2147483647
@@ -346,7 +346,7 @@ val m = message[0] // Char
 
 因此，单引号不能用于声明字符串字面值。
 
-给定字符串 `s`，可以通过调用 `s.toByteArray()` 获得带有字符串 UTF-8 编码的 `ByteArray`，或者可以指定其他编码，例如 `s.toByteArray(Charsets.US_ASCII)` ——就像 Python 中的 `encode()` 一样。给定一个字节数组 `b`，其中包含一个 UTF-8 编码的字符串，则可以通过调用 `String(b)` 获得 `String`。如果使用其他编码，请使用例如 `String(b, Charsets.US_ASCII)`，就像 Python 中的 `decode()` 一样。也可以调用例如 `b.toString(Charsets.US_ASCII)`，但 _不要_ 在没有参数的情况下调用 `b.toString()`（这只会输出对字节数组的内部引用）。
+给定字符串 `s`，可以通过调用 `s.toByteArray()` 获得带有字符串 UTF-8 编码的 `ByteArray`，或者可以指定其他编码，例如 `s.toByteArray(Charsets.US_ASCII)` ——就像 Python 中的 `encode()` 一样。给定一个字节数组 `b`，其中包含一个 UTF-8 编码的字符串，那么可以通过调用 `String(b)` 获得 `String`。如果使用其他编码，请使用例如 `String(b, Charsets.US_ASCII)`，就像 Python 中的 `decode()` 一样。也可以调用例如 `b.toString(Charsets.US_ASCII)`，但 _不要_ 在没有参数的情况下调用 `b.toString()`（这只会输出对字节数组的内部引用）。
 
 可以使用 `$` 进行字符串插值，并对表达式使用花括号：
 
@@ -357,7 +357,7 @@ val yearNow = 2018
 val message = "$name is ${yearNow - yearOfBirth} years old"
 ```
 
-如果要使用文本 `$`，则需要​​对其进行转义：`\$`。转义通常以与 Python 中相同的方式工作，并具有一组类似的标准转义序列。
+如果要使用文本 `$`，那么需要​​对其进行转义：`\$`。转义通常以与 Python 中相同的方式工作，并具有一组类似的标准转义序列。
 
 
 
@@ -395,7 +395,7 @@ if/else 语句也是一个表达式，这意味着在 Kotlin 中，三元运算�
 val result = if (condition) trueBody else falseBody
 ```
 
-使用 if/else 作为表达式时，`else` 部分是必需的（但也可以有 `else if` 部分）。如果最后要求值的主体包含多行，则返回最后一行的结果作为 `if`/`else` 的结果。
+使用 if/else 作为表达式时，`else` 部分是必需的（但也可以有 `else if` 部分）。如果最后要求值的主体包含多行，那么返回最后一行的结果作为 `if`/`else` 的结果。
 
 
 ### 比较
@@ -468,7 +468,7 @@ for (name in names) {
 }
 ```
 
-请注意，`for` 循环始终隐式声明一个新的只读变量（在本示例中为 `name`）——如果外部作用域已经包含一个具有相同名称的变量，则该变量将被不相关的循环变量遮盖。出于同样的原因，循环变量的最终值在循环后不可访问。
+请注意，`for` 循环始终隐式声明一个新的只读变量（在本示例中为 `name`）——如果外部作用域已经包含一个具有相同名称的变量，那么该变量将被不相关的循环变量遮盖。出于同样的原因，循环变量的最终值在循环后不可访问。
 
 还可以使用 `..` 运算符创建区间——但要注意，与 Python 的 `range()` 不同，它 _包含_ 其端点：
 
@@ -545,7 +545,7 @@ while (x < 10) {
 }
 ```
 
-循环变量（如果有）必须在 `while` 循环外声明，因此可以在以后检查，此时它们将包含使循环条件为假的值。
+循环变量（如果有）必须在 `while` 循环外声明，因此可以在以后检测，此时它们将包含使循环条件为假的值。
 
 
 ### `continue` 与 `break`
@@ -596,12 +596,12 @@ fun square(number: Int) = number * number
 val greeting = happyBirthday("Anne", 32)
 ```
 
-如果不需要返回值，则无需赋值给任何变量。
+如果不需要返回值，那么无需赋值给任何变量。
 
 
 ### 返回
 
-与 Python 相反，在函数末尾省略 `return` 不会隐式返回 null；如果要返回 null，则必须使用 `return null`。如果一个函数不需要任何返回值，则该函数应该声明返回类型为 `Unit`（或者根本不声明返回类型，在这种情况下，返回类型默认为 `Unit`）。在这样的函数中，可能根本没有 `return` 语句，或只有 `return`。`Unit` 既是一个单例对象（在 Python 中也恰好是 `None`），也是该对象的类型，它表示“此函数不会返回任何信息”（而不是“此函数可能返回信息，但这次没有返回信息”——这或多或少是返回 null 的语义）。
+与 Python 相反，在函数末尾省略 `return` 不会隐式返回 null；如果要返回 null，那么必须使用 `return null`。如果一个函数不需要任何返回值，那么该函数应该声明返回类型为 `Unit`（或者根本不声明返回类型，在这种情况下，返回类型默认为 `Unit`）。在这样的函数中，可能根本没有 `return` 语句，或只有 `return`。`Unit` 既是一个单例对象（在 Python 中也恰好是 `None`），也是该对象的类型，它表示“此函数不会返回任何信息”（而不是“此函数可能返回信息，但这次没有返回信息”——这或多或少是返回 null 的语义）。
 
 
 ### 重载
@@ -625,7 +625,7 @@ square(3.14) // 调用第二个函数；结果为 9.8596 (Double)
 
 ### Vararg 与可选/命名参数
 
-函数可以接受任意数量的参数，类似于 Python 中的 `*args`，但它们必须都属于同一类型。与 Python 不同的是，可以在可变参数之后声明其他位置参数，但最多可以有一个可变参数。如果其类型为 `X` 并且 `X` 是基本类型，则参数的类型为 `XArray`，否则为 `Array<X>`。
+函数可以接受任意数量的参数，类似于 Python 中的 `*args`，但它们必须都属于同一类型。与 Python 不同的是，可以在可变参数之后声明其他位置参数，但最多可以有一个可变参数。如果其类型为 `X` 并且 `X` 是基本类型，那么参数的类型为 `XArray`，否则为 `Array<X>`。
 
 ```kotlin
 fun countAndPrintArgs(vararg numbers: Int) {
@@ -661,7 +661,7 @@ fun tricky(x: Int, numbers: MutableList<Int> = mutableListOf()) {
 }
 ```
 
-因此，不应该将带有副作用的函数用作默认值初始化程序，因为副作用将在每次调用时发生。如果仅引用变量而不是调用函数，则每次调用该函数时都会读取相同的变量：`numbers: MutableList<Int> = myMutableList`。如果变量是不可变的，则每个调用将看到相同的值（但如果该值本身是可变的，则在两次调用之间可能会更改），如果变量是可变的，则每个调用将看到该变量的当前值。不用说，这些情况很容易引起混淆，因此默认值初始化器应该是一个常数或一个函数调用，该调用总是产生具有相同值的新对象。
+因此，不应该将带有副作用的函数用作默认值初始化程序，因为副作用将在每次调用时发生。如果仅引用变量而不是调用函数，那么每次调用该函数时都会读取相同的变量：`numbers: MutableList<Int> = myMutableList`。如果变量是不可变的，那么每个调用将看到相同的值（但如果该值本身是可变的，那么在两次调用之间可能会更改），如果变量是可变的，那么每个调用将看到该变量的当前值。不用说，这些情况很容易引起混淆，因此默认值初始化器应该是一个常数或一个函数调用，该调用总是产生具有相同值的新对象。
 
 可以使用包含所有可变参数的一个数组（而不是列表或任何其他可迭代对象）来调用可变参数函数，使用 `*` 运算符（与 Python 相同的语法）将数组 _展开_：
 
@@ -672,7 +672,7 @@ countAndPrintArgs(*numbers.toIntArray())
 
 Kotlin 继承了 Java 烦躁的数组系统，因此原始类型具有自己的数组类型与转换函数，而其他任何类型都使用通用 `Array` 类型，可以使用 `.toTypedArray()` 转换为该类型。
 
-但是，不能将 Map 展开到函数调用中，然后期望将 Map 中的值传递给以键命名的参数——必须在编译时知道参数的名称。如果需要运行时定义的参数名称，则函数必须采用 Map 或采用 `vararg kwargs: Pair<String, X>`（其中 `X` 是参数类型的“最低公分母”，在最坏的情况下 `Any?`——做好必须强制转换参数值的准备，并注意将失去类型安全性）。可以调用这样的函数：`foo("bar" to 42, "test" to "hello")`，因为 `to` 是创建 `Pair` 的[中缀函数](#中缀函数)。
+但是，不能将 Map 展开到函数调用中，然后期望将 Map 中的值传递给以键命名的参数——必须在编译时知道参数的名称。如果需要运行时定义的参数名称，那么函数必须采用 Map 或采用 `vararg kwargs: Pair<String, X>`（其中 `X` 是参数类型的“最低公分母”，在最坏的情况下 `Any?`——做好必须强制转换参数值的准备，并注意将失去类型安全性）。可以调用这样的函数：`foo("bar" to 42, "test" to "hello")`，因为 `to` 是创建 `Pair` 的[中缀函数](#中缀函数)。
 
 
 ## 类
@@ -702,8 +702,8 @@ val object = Empty()
 每个未明确声明父类的类都从 `Any` 继承，Any 是类层次结构的根（类似于 Python 中的 `object`）——有关[继承](#继承)的更多信息见下文。通过 `Any`，每个类自动具有以下函数：
 
 * `toString()` 返回对象的字符串表示形式，类似于 Python 中的 `__str__()`（默认实现相当有趣，因为它仅返回类名与类似于对象 ID 的名称）
-* `equals(x)` 检查此对象是否与任何类的某个其他对象 `x` 相同（默认情况下，它仅检查该对象是否与 `x` 是 _相同的_ 对象——类似 Python 中的 `is`——但可以被子类覆盖以进行属性值的自定义比较）
-* `hashCode()` 返回一个整数，哈希表可以使用该整数并用于简化复杂的相等比较（根据 `equals()` 相等的对象必须具有相同的哈希码，因此，如果两个对象的哈希码不同，则这些对象不能相等）
+* `equals(x)` 检测此对象是否与任何类的某个其他对象 `x` 相同（默认情况下，它仅检测该对象是否与 `x` 是 _相同的_ 对象——类似 Python 中的 `is`——但可以被子类覆盖以进行属性值的自定义比较）
+* `hashCode()` 返回一个整数，哈希表可以使用该整数并用于简化复杂的相等比较（根据 `equals()` 相等的对象必须具有相同的哈希码，因此，如果两个对象的哈希码不同，那么这些对象不能相等）
 
 
 ### 属性
@@ -749,13 +749,13 @@ class Person(firstName: String, lastName: String, yearOfBirth: Int) {
 }
 ```
 
-如果想要对构造函数参数值进行的所有操作就是声明指定名称的属性，则可以在主构造函数参数列表中声明该属性（下面的单行代码足以声明属性，声明构造函数参数以及使用参数初始化属性）：
+如果想要对构造函数参数值进行的所有操作就是声明指定名称的属性，那么可以在主构造函数参数列表中声明该属性（下面的单行代码足以声明属性，声明构造函数参数以及使用参数初始化属性）：
 
 ```kotlin
 class Person(val name: String, var age: Int)
 ```
 
-如果需要多种方法来初始化类，则可以创建 _次构造函数_，每个构造函数看起来都像一个名称为 `constructor` 的函数。每个次构造函数都必须使用 `this` 关键字来调用另一个（主或次）构造函数，就好像它是一个函数一样（以便每个实例构造最终都调用该主构造函数）。
+如果需要多种方法来初始化类，那么可以创建 _次构造函数_，每个构造函数看起来都像一个名称为 `constructor` 的函数。每个次构造函数都必须使用 `this` 关键字来调用另一个（主或次）构造函数，就好像它是一个函数一样（以便每个实例构造最终都调用该主构造函数）。
 
 ```kotlin
 class Person(val name: String, var age: Int) {
@@ -765,7 +765,7 @@ class Person(val name: String, var age: Int) {
 }
 ```
 
-（如果需要做的事情比主构造函数还要多，则次构造函数也可以使用花括号括起来。）这些构造函数通过其参数类型彼此区分开，就像在普通函数重载中一样。这就是必须在最后一个次构造函数中翻转参数顺序的原因——否则，它与主构造函数将无法区分（参数名称不是函数签名的一部分，并且对重载解析没有任何影响）。在以下示例中，可以通过三种不同的方式创建一个 `Person`：
+（如果需要做的事情比主构造函数还要多，那么次构造函数也可以使用花括号括起来。）这些构造函数通过其参数类型彼此区分开，就像在普通函数重载中一样。这就是必须在最后一个次构造函数中翻转参数顺序的原因——否则，它与主构造函数将无法区分（参数名称不是函数签名的一部分，并且对重载解析没有任何影响）。在以下示例中，可以通过三种不同的方式创建一个 `Person`：
 
 ```kotlin
 val a = Person("Jaime", 35)
@@ -773,7 +773,7 @@ val b = Person("Jack") // age = 0
 val c = Person(1995, "Lynne") // age = 23
 ```
 
-请注意，如果一个类具有主构造函数，则无法在不提供任何参数的情况下创建其实例（除非其中一个次构造函数是无参数的）。
+请注意，如果一个类具有主构造函数，那么无法在不提供任何参数的情况下创建其实例（除非其中一个次构造函数是无参数的）。
 
 
 ### Setter 与 Getter
@@ -797,7 +797,7 @@ class Person(age: Int) {
 
 烦人的是，初始化未调用 Setter 逻辑，而是直接设置了幕后字段——这就是为什么在此示例中必须使用初始化块来验证新创建的 Person 也不会得到负年龄的原因。请注意在初始化程序块中使用 `this.age` 以便区分同名属性和构造函数参数。
 
-如果由于某种原因想要在幕后字段中存储与赋值给该属性值不同的值，则可以自由地这样做，但是可能会希望使用 Getter 将调用代码返回给它们期望的结果：如果在 Setter 中声明 `field = value * 2`，则在初始化块中声明 `this.age = age * 2`，那么还应该有 `get() = field / 2`。
+如果由于某种原因想要在幕后字段中存储与赋值给该属性值不同的值，那么可以自由地这样做，但是可能会希望使用 Getter 将调用代码返回给它们期望的结果：如果在 Setter 中声明 `field = value * 2`，那么在初始化块中声明 `this.age = age * 2`，那么还应该有 `get() = field / 2`。
 
 还可以创建实际上没有幕后字段的属性，而只需引用另一个属性：
 
@@ -851,7 +851,7 @@ lateinit var name: String
 
 Kotlin 将允许声明该属性而无需初始化它，并且可以在构造后的某个时候（直接或通过函数）设置属性值。类本身及其用户都有责任注意在设置属性之前不要读取该属性，并且 Kotlin 允许编写读取 `name` 的代码，就像它是一个普通的，不可为空的属性一样。但是，编译器无法强制正确使用，因此，如果在设置属性之前先读取该属性，将在运行时抛出 `UninitializedPropertyAccessException`。
 
-在声明了 Lateinit 属性的类中，可以检查它是否已初始化：
+在声明了 Lateinit 属性的类中，可以检测它是否已初始化：
 
 ```kotlin
 if (::name.isInitialized) println(name)
@@ -897,7 +897,7 @@ operator fun plus(spouse: Person) {
 lisa + anne // 输出 "Lisa and Anne are getting married!"
 ```
 
-一个特别有趣的操作符是函数调用括号对，其函数名称为 `invoke`——如果实现此功能，则可以像使用函数一样调用类的实例。甚至可以重载它以提供不同的函数签名。
+一个特别有趣的操作符是函数调用括号对，其函数名称为 `invoke`——如果实现此功能，那么可以像使用函数一样调用类的实例。甚至可以重载它以提供不同的函数签名。
 
 `operator` 也可以用于某些其他预定义功能，以创建精美的效果，例如[属性委托](#属性委托)。
 
@@ -906,7 +906,7 @@ lisa + anne // 输出 "Lisa and Anne are getting married!"
 
 ### 枚举类
 
-每当想要一个只能包含有限数量的值的变量，而每个值的唯一特征是与所有其他值都不同时，则可以创建一个 _枚举类_：
+每当想要一个只能包含有限数量的值的变量，而每个值的唯一特征是与所有其他值都不同时，那么可以创建一个 _枚举类_：
 
 ```kotlin
 enum class ContentKind {
@@ -938,7 +938,7 @@ enum class ContentKind(val kind: String) {
 
 ### 数据类
 
-通常——尤其是想要从函数的复杂返回类型或 Map 的复杂键——将需要一个糙快猛的类，该类仅包含一些属性，但对于相等性仍可比较，并且可用作 Map 键。如果创建 _数据类_，则将自动实现以下函数：`toString()`（将产生包含所有属性名称和值的字符串）、`equals()`（将按属性进行 `equals()`）、`hashCode()`（将散列各个属性并组合散列）以及使 Kotlin 将类的实例解构为声明所需的函数（`component1()`、`component2()` 等）：
+通常——尤其是想要从函数的复杂返回类型或 Map 的复杂键——将需要一个糙快猛的类，该类仅包含一些属性，但对于相等性仍可比较，并且可用作 Map 键。如果创建 _数据类_，那么将自动实现以下函数：`toString()`（将产生包含所有属性名称和值的字符串）、`equals()`（将按属性进行 `equals()`）、`hashCode()`（将散列各个属性并组合散列）以及使 Kotlin 将类的实例解构为声明所需的函数（`component1()`、`component2()` 等）：
 
 ```kotlin
 data class ContentDescriptor(val kind: ContentKind, val id: String) {
@@ -986,14 +986,14 @@ return try {
 }
 ```
 
-基本异常类是 `Throwable`（但是扩展其子类 `Exception` 更为常见），并且有大量内置的异常类。如果找不到满足需求的异常类，则可以通过从现有异常类继承来创建自己的异常类。
+基本异常类是 `Throwable`（但是扩展其子类 `Exception` 更为常见），并且有大量内置的异常类。如果找不到满足需求的异常类，那么可以通过从现有异常类继承来创建自己的异常类。
 
 请注意，除了与 Java 代码进行交互时，在 Kotlin 中不建议使用异常。与其在自己的代码中引发异常，不如考虑使用特殊的返回类型，例如 [Arrow 库](https://arrow-kt.io/)中的 [Option](https://arrow-kt.io/docs/datatypes/option/) 或 [Either](https://arrow-kt.io/docs/datatypes/either/)。
 
 
 ### Nothing
 
-`throw` 也是一个表达式，其返回类型是特殊类 `Nothing`，它没有任何实例。编译器知道类型为 `Nothing` 的表达式永远不会正常返回，因此即使通常需要使用其他类型（例如在 [Elvis 操作符](#elvis-操作符)之后）的情况下，也通常会接受其使用。如果创建一个始终抛出异常的函数，或者开始一个无限循环，则可以将其返回类型声明为 `Nothing`，以使编译器意识到这一点。一个有趣的例子是内置函数 `TODO`，可以在任何表达式中调用它（可能提供一个字符串参数），它会引发 `NotImplementedError`。
+`throw` 也是一个表达式，其返回类型是特殊类 `Nothing`，它没有任何实例。编译器知道类型为 `Nothing` 的表达式永远不会正常返回，因此即使通常需要使用其他类型（例如在 [Elvis 操作符](#elvis-操作符)之后）的情况下，也通常会接受其使用。如果创建一个始终抛出异常的函数，或者开始一个无限循环，那么可以将其返回类型声明为 `Nothing`，以使编译器意识到这一点。一个有趣的例子是内置函数 `TODO`，可以在任何表达式中调用它（可能提供一个字符串参数），它会引发 `NotImplementedError`。
 
 可为空版本 `Nothing?` 在当使用 null 初始化某些内容且没有其他类型信息时，编译器将使用它。在 `val x = null` 中，`x` 的类型将为 `Nothing?`。此类型没有“从不正常返回”的语义；相反，编译器知道该值将始终为 null。
 
@@ -1115,7 +1115,7 @@ val safeDivide = { numerator: Int, denominator: Int ->
 
 请注意，Kotlin 中花括号的其他用法（例如在函数和类定义中以及在 `if`、`else`、`for`、`while` 语句之后）不是 lambda 表达式（因此，`if` 是有条件地执行 lambda 函数的函数的情况 _并非_ 如此）。
 
-Lambda 表达式的返回类型是根据其中的最后一个表达式的类型（或从 Lambda 表达式所分配给的变量或参数的函数类型）推断出来的。如果将 lambda 表达式作为函数参数（通常使用）传递或分配给具有声明类型的变量，则 Kotlin 也可以推断参数类型，只需要指定其名称即可：
+Lambda 表达式的返回类型是根据其中的最后一个表达式的类型（或从 Lambda 表达式所分配给的变量或参数的函数类型）推断出来的。如果将 lambda 表达式作为函数参数（通常使用）传递或分配给具有声明类型的变量，那么 Kotlin 也可以推断参数类型，只需要指定其名称即可：
 
 ```kotlin
 val safeDivide: (Int, Int) -> Double = { numerator, denominator ->
@@ -1141,7 +1141,7 @@ callAndPrint({ numerator, denominator ->
 val square: (Double) -> Double = { it * it }
 ```
 
-如果函数的最后一个参数的类型是函数类型，并且您想提供 lambda 表达式，则可以将 lambda 表达式放在参数括号之外。如果 lambda 表达式是唯一的参数，则可以完全省略括号。这对于[构建 DSL](#接收者) 非常有用。
+如果函数的最后一个参数的类型是函数类型，并且想提供 lambda 表达式，那么可以将 lambda 表达式放在参数括号之外。如果 lambda 表达式是唯一的参数，那么可以完全省略括号。这对于[构建 DSL](#接收者) 非常有用。
 
 ```kotlin
 fun callWithPi(function: (Double) -> Double) {
@@ -1186,9 +1186,9 @@ short_greetings = [
 ]
 ```
 
-在某些方面，这更易于阅读，因为操作是按照它们应用于值的顺序指定的。结果将是一个不变的 `List<T>`，其中 `T` 是使用的转换（在这种情况下为 `String`）生成的任何类型。如果需要可变列表，请在最后调用 `toMutableList()`。如果需要 Set，请在最后调用 `toSet()` 或 `toMutableSet()`。如果要将 Set 转换为 Map，请调用 `associateBy()`，它需要两个 lambda，用于指定如何从每个元素提取键和值：`people.associateBy({it.ssn}, {it.name})`（如果希望整个元素作为值，则可以省略第二个 lambda；如果希望结果可变，则可以在最后调用 `toMutableMap()`）。
+在某些方面，这更易于阅读，因为操作是按照它们应用于值的顺序指定的。结果将是一个不变的 `List<T>`，其中 `T` 是使用的转换（在这种情况下为 `String`）生成的任何类型。如果需要可变列表，请在最后调用 `toMutableList()`。如果需要 Set，请在最后调用 `toSet()` 或 `toMutableSet()`。如果要将 Set 转换为 Map，请调用 `associateBy()`，它需要两个 lambda，用于指定如何从每个元素提取键和值：`people.associateBy({it.ssn}, {it.name})`（如果希望整个元素作为值，那么可以省略第二个 lambda；如果希望结果可变，那么可以在最后调用 `toMutableMap()`）。
 
-这些转换也可以应用于 `Sequence<T>`，它与 Python 的生成器类似，并且允许进行惰性求值。如果有一个庞大的列表，并且想要延迟处理它，则可以在其上调用 `asSequence()`。
+这些转换也可以应用于 `Sequence<T>`，它与 Python 的生成器类似，并且允许进行惰性求值。如果有一个庞大的列表，并且想要延迟处理它，那么可以在其上调用 `asSequence()`。
 
 [`kotlin.collections` 包](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html)中提供了大量功能编程风格的操作。
 
@@ -1208,9 +1208,9 @@ val car = Car(120)
 println(car.boast())
 ```
 
-在带有接收者的 lambda 表达式中，您可以使用 `this` 来引用接收者对象（在本例中为 `car`）。像往常一样，如果没有命名冲突，则可以省略 `this`，这就是为什么可以简单地说 `$horsepowers` 而不是 `${this.horsepowers}` 的原因。因此请注意，在 Kotlin 中，`this` 取决于上下文可能具有不同的含义：如果在内部（可能嵌套的）lambda 表达式与接收者一起使用，它指的是最内部包含接收者的 lambda 表达式的接收者对象。如果需要“突破”函数文字并获取“原始”`this`（正在其中执行的成员函数的实例），请在 `this@` 之后提及包含的类名——如果在函数字面量内，而接收方在 Car 的成员函数内，请使用 `this@Car`。
+在带有接收者的 lambda 表达式中，可以使用 `this` 来引用接收者对象（在本例中为 `car`）。像往常一样，如果没有命名冲突，那么可以省略 `this`，这就是为什么可以简单地说 `$horsepowers` 而不是 `${this.horsepowers}` 的原因。因此请注意，在 Kotlin 中，`this` 取决于上下文可能具有不同的含义：如果在内部（可能嵌套的）lambda 表达式与接收者一起使用，它指的是最内部包含接收者的 lambda 表达式的接收者对象。如果需要“突破”函数文字并获取“原始”`this`（正在其中执行的成员函数的实例），请在 `this@` 之后提及包含的类名——如果在函数字面量内，而接收方在 Car 的成员函数内，请使用 `this@Car`。
 
-与其他函数字面值一样，如果函数采用一个参数（调用该参数的接收方对象除外），则除非您声明另一个名称，否则单个参数将隐式称为 `it`。如果使用多个参数，则必须声明其名称。
+与其他函数字面值一样，如果函数采用一个参数（调用该参数的接收方对象除外），那么除非声明另一个名称，否则单个参数将隐式称为 `it`。如果使用多个参数，那么必须声明其名称。
 
 这是一个用于构建树形结构的小型 DSL 示例：
 
@@ -1285,7 +1285,7 @@ t = tree("root", init_root)
 
 ### 内联函数
 
-Lambda 函数有一些运行时开销：它们实际上是对象，因此必须实例化，并且（与其他函数一样）调用它们也需要一点时间。如果在函数上使用 `inline` 关键字，则会告诉编译器内联函数和其 lambda 参数（如果有的话）——也就是说，编译器会将函数的代码（及其 lambda 参数）复制到每个调用站点中，这样就消除了 lambda 实例化以及函数和 lambda 调用的开销。这将无条件地发生，这与 C 和 C++ 中的 `inline` 更多地是对编译器的提示不同。这将导致已编译代码的大小增加，但是对于某些较小但经常调用的函数可能值得这样做。
+Lambda 函数有一些运行时开销：它们实际上是对象，因此必须实例化，并且（与其他函数一样）调用它们也需要一点时间。如果在函数上使用 `inline` 关键字，那么会告诉编译器内联函数和其 lambda 参数（如果有的话）——也就是说，编译器会将函数的代码（及其 lambda 参数）复制到每个调用站点中，这样就消除了 lambda 实例化以及函数和 lambda 调用的开销。这将无条件地发生，这与 C 和 C++ 中的 `inline` 更多地是对编译器的提示不同。这将导致已编译代码的大小增加，但是对于某些较小但经常调用的函数可能值得这样做。
 
 ```kotlin
 inline fun time(action: () -> Unit): Long {
@@ -1325,7 +1325,7 @@ println(t)
 val result = maybeNull?.run { functionThatCanNotHandleNull(this) }
 ```
 
-如果 `maybeNull` 为空，则不会调用该函数，而 `result` 为空。否则，它将是 `functionThatCanNotHandleNull(this)` 的返回值，其中 `this` 是指 `maybeNull`。可以使用 `?.` 链接 `run()` 调用——如果前一个结果不为空，那么每个 `run()` 都会调用：
+如果 `maybeNull` 为空，那么不会调用该函数，而 `result` 为空。否则，它将是 `functionThatCanNotHandleNull(this)` 的返回值，其中 `this` 是指 `maybeNull`。可以使用 `?.` 链接 `run()` 调用——如果前一个结果不为空，那么每个 `run()` 都会调用：
 
 ```kotlin
 val result = maybeNull
@@ -1372,7 +1372,7 @@ maybeNull?.apply {
 
 在 `apply` 块中，`this 是指 `maybeNull`。在 `memberPropertyA`，`memberPropertyB` 与 `memberFunctionA` 之前有一个隐含的 `this`（除非这些在 `maybeNull` 上不存在，在这种情况下将在包含的作用域中查找它们）。此后，也可以在 `maybeNull` 上调用 `memberFunctionB()`。
 
-如果发现 `this` 语法令人困惑，则可以改用 `also`，它以普通的 lambda 作为参数：
+如果发现 `this` 语法令人困惑，那么可以改用 `also`，它以普通的 lambda 作为参数：
 
 ```kotlin
 maybeNull?.also {
@@ -1385,7 +1385,7 @@ maybeNull?.also {
 
 #### `takeIf()` 与 `takeUnless()`
 
-如果仅在满足特定条件时才使用值，请尝试 `takeIf()`，如果满足给定谓词，则返回它被调用的值，否则返回空值。还有 `takeUnless()`，其逻辑正好相反。可以在其后接一个 `?.`，以仅在满足谓词的情况下对该值执行运算。下面，计算某些表达式的平方，但前提是表达式的值至少为 42：
+如果仅在满足特定条件时才使用值，请尝试 `takeIf()`，如果满足给定谓词，那么返回它被调用的值，否则返回空值。还有 `takeUnless()`，其逻辑正好相反。可以在其后接一个 `?.`，以仅在满足谓词的情况下对该值执行运算。下面，计算某些表达式的平方，但前提是表达式的值至少为 42：
 
 ```kotlin
 val result = someExpression.takeIf { it >= 42 } ?.let { it * it }
@@ -1403,9 +1403,9 @@ val result = someExpression.takeIf { it >= 42 } ?.let { it * it }
 package content.exercises
 ```
 
-如果文件没有声明包，则它属于无名 _默认包_。应该避免这种情况，因为在命名冲突的情况下，这将使引用该文件中的符号变得困难（不能显式导入空包）。
+如果文件没有声明包，那么它属于无名 _默认包_。应该避免这种情况，因为在命名冲突的情况下，这将使引用该文件中的符号变得困难（不能显式导入空包）。
 
-程序包名称通常与目录结构相对应——请注意，源文件名 _不_ 应该是程序包名称的一部分（因此，如果遵循此名称，则文件级符号名在整个目录中必须唯一，而不仅仅是在文件中）。但是，这种对应关系不是必需的，因此，如果要与 Java 代码进行互操作，并且所有包名称都必须以相同的前缀开头，例如：`org.khanacademy`，可能会发现不需要将所有代码都放在 `org/khanacademy` 中（这是 Java 会强迫执行的操作）而感到宽慰，——相反，可以从例如名为 `content` 的目录开始。并且其中的文件可以声明它们属于软件包 `org.khanacademy.content`。但是，如果有一个同时包含 Kotlin 与 Java 代码的项目，则约定也将 Java 风格的软件包目录也用于 Kotlin 代码。
+程序包名称通常与目录结构相对应——请注意，源文件名 _不_ 应该是程序包名称的一部分（因此，如果遵循此名称，那么文件级符号名在整个目录中必须唯一，而不仅仅是在文件中）。但是，这种对应关系不是必需的，因此，如果要与 Java 代码进行互操作，并且所有包名称都必须以相同的前缀开头，例如：`org.khanacademy`，可能会发现不需要将所有代码都放在 `org/khanacademy` 中（这是 Java 会强迫执行的操作）而感到宽慰，——相反，可以从例如名为 `content` 的目录开始。并且其中的文件可以声明它们属于软件包 `org.khanacademy.content`。但是，如果有一个同时包含 Kotlin 与 Java 代码的项目，那么约定也将 Java 风格的软件包目录也用于 Kotlin 代码。
 
 尽管这些点表明程序包彼此嵌套，但从语言角度来看实际上并非如此。虽然最好组织代码以使诸如 `content.exercises` 与 `content.articles` 之类的 `content` 的“子包”都包含与内容相关的代码，但是从语言的角度来看，这三个包是无关的。但是，如果使用 _模块_（由构建系统定义），通常所有“子包”都放在同一个模块中，在这种情况下，带有 [`internal` 可见性](#可见性修饰符) 的符号在各个子包中都是可见的。
 
@@ -1438,13 +1438,13 @@ import content.exercises.*
 val exercise = Exercise()
 ```
 
-如果存在命名冲突，通常应该只导入其中一个符号，并完全限定另一个符号的用法。如果两者都被大量使用，则可以在导入时重命名符号：
+如果存在命名冲突，通常应该只导入其中一个符号，并完全限定另一个符号的用法。如果两者都被大量使用，那么可以在导入时重命名符号：
 
 ```kotlin
 import content.exercises.Exercise as Ex
 ```
 
-在 Kotlin 中，导入是一个编译期概念——导入内容实际上不会导致任何代码运行（与 Python 不同，在 Python 中，文件中的所有顶级语句都在导入时执行）。因此，允许循环导入，但是它们可能会在代码中提示设计问题。但是，在执行期间，将在首次引用类（或其任何属性或函数）时加载类，并且类加载会导致初始化[伴生对象](#伴生对象)——如果具有循环依赖项，则可能导致运行时异常。
+在 Kotlin 中，导入是一个编译期概念——导入内容实际上不会导致任何代码运行（与 Python 不同，在 Python 中，文件中的所有顶级语句都在导入时执行）。因此，允许循环导入，但是它们可能会在代码中提示设计问题。但是，在执行期间，将在首次引用类（或其任何属性或函数）时加载类，并且类加载会导致初始化[伴生对象](#伴生对象)——如果具有循环依赖项，那么可能导致运行时异常。
 
 每个文件都隐式导入其自己的程序包以及许多内置的 Kotlin 与 Java 程序包。
 
@@ -1473,10 +1473,10 @@ private const val secretValue = 3.14
 
 * `public`（或省略）：任何可以看到包含该符号的类的代码都可以看到该符号
 * `internal`：该符号仅对在这样的文件内的代码可见，该文件与声明该符号的文件属于同一模块，并且还可以看到文件中包含的类
-* `protected`：此符号仅在包含类及其所有子类中可见，无论它们在何处声明（因此，如果类是公有的且[开放](#子类化)的，则任何人都可以对其进行子类化，从而查看并使用受保护的成员）。如果使用过 Java：这也 _不_ 会授予其余包的访问权限。
+* `protected`：此符号仅在包含类及其所有子类中可见，无论它们在何处声明（因此，如果类是公有的且[开放](#子类化)的，那么任何人都可以对其进行子类化，从而查看并使用受保护的成员）。如果使用过 Java：这也 _不_ 会授予其余包的访问权限。
 * `private`：此符号仅在包含的类中可见
 
-构造函数也可以具有可见性修饰符。如果要在主要构造函数上放置一个（如果有许多次要构造函数，它们全部调用了不想公开的复杂主要构造函数，则可能要这样做），需要包括 `constructor` 关键字：`class Person private constructor(val name: String)`。
+构造函数也可以具有可见性修饰符。如果要在主要构造函数上放置一个（如果有许多次要构造函数，它们全部调用了不想公开的复杂主要构造函数，那么可能要这样做），需要包括 `constructor` 关键字：`class Person private constructor(val name: String)`。
 
 可见性修饰符不能放在局部变量上，因为它们的可见性始终限于包含块。
 
@@ -1490,14 +1490,14 @@ private const val secretValue = 3.14
 
 ### 子类化
 
-Kotlin supports single-parent class inheritance - so each class (except the root class `Any`) has got exactly one parent class, called a _superclass_. Kotlin wants you to think through your class design to make sure that it's actually safe to _subclass_ it, so classes are _closed_ by default and can't be inherited from unless you explicitly declare the class to be _open_ or _abstract_. You can then subclass from that class by declaring a new class which mentions its parent class after a colon:
+Kotlin 支持单父类继承——因此，每个类（根类 `Any` 除外）都只有一个父类，称为 _超类_。Kotlin 需要仔细考虑类的设计，以确保对其进行 _子类化_ 实际上是安全的，因此，默认情况下类是 _关闭的_，除非明确声明该类为 _开放类_ 或 _抽象类_，否则无法继承。然后，可以通过声明一个新类来从该类中子类化，该新类在冒号后提及其父类：
 
 ```kotlin
 open class MotorVehicle
 class Car : MotorVehicle()
 ```
 
-Classes that don't declare a superclass implicitly inherit from `Any`. The subclass must invoke one of the constructors of the base class, passing either parameters from its own constructor or constant values:
+没有声明超类的类隐式地继承自 `Any`。子类必须调用基类的构造函数之一，并传递其自身构造函数的参数或常量值：
 
 ```kotlin
 open class MotorVehicle(val maxSpeed: Double, val horsepowers: Int)
@@ -1507,40 +1507,40 @@ class Car(
 ) : MotorVehicle(maxSpeed, 100)
 ```
 
-The subclass _inherits_ all members that exist in its superclass - both those that are directly defined in the superclass and the ones that the superclass itself has inherited. In this example, `Car` contains the following members:
+子类 _继承_ 其超类中存在的所有成员——既直接在超类中定义的成员，也包括超类本身已继承的成员。在此示例中，`Car` 包含以下成员：
 
-* `seatCount`, which is `Car`'s own property
-* `maxSpeed` and `horsepowers`, which are inherited from `MotorVehicle`
-* `toString()`, `equals()`, and `hashCode()`, which are inherited from `Any`
+* `seatCount`，这是 `Car` 的属性
+* `maxSpeed` 与 `horsepowers`，继承自 `MotorVehicle`
+* `toString()`、`equals()`、与 `hashCode()`，继承自 `Any`
 
-Note that the terms "subclass" and "superclass" can span multiple levels of inheritance - `Car` is a subclass of `Any`, and `Any` is the superclass of everything. If we want to restrict ourselves to one level of inheritance, we will say "direct subclass" or "direct superclass".
+请注意，术语“子类”和“超类”可以跨越多个继承级别——`Car` 是 `Any` 的子类，而 `Any` 是所有东西的超类。如果想要限制在一个继承级别，将说“直接子类”或“直接超类”。
 
-Note that we do not use `val` in front of `maxSpeed` in `Car` - doing so would have introduced a distinct property in `Car` that would have _shadowed_ the one inherited from `MotorVehicle`. As written, it's just a constructor parameter that we pass on to the superconstructor.
+请注意，不用在 `Car` 中的 `maxSpeed` 前面使用 `val`——这样做会在 `Car` 中引入一个独特的属性，从而 _覆盖_ 了从 `MotorVehicle` 继承的属性。如所写，它只是一个构造函数参数，将其传递给超级构造函数。
 
-`private` members (and `internal` members from superclasses in other modules) are also inherited, but are not directly accessible: if the superclass contains a private property `foo` that is referenced by a public function `bar()`, instances of the subclass will contain a `foo`; they can't use it directly, but they are allowed to call `bar()`.
+`private` 成员（以及其他模块中超类的 `internal` 成员）也被继承，但不能直接访问：如果超类包含由公共函数 `bar()` 引用的私有属性 `foo`，那么子类的实例将包含 `foo`；不能直接使用它，但是可以调用 `bar()`。
 
-When an instance of a subclass is constructed, the superclass "part" is constructed first (via the superclass constructor). This means that during execution of the constructor of an open class, it could be that the object being constructed is an instance of a subclass, in which case the subclass-specific properties have not been initialized yet. For that reason, calling an open function from a constructor is risky: it might be overridden in the subclass, and if it is accessing subclass-specific properties, those won't be initialized yet.
+构造子类的实例时，首先构造超类“part”（通过超类构造函数）。这意味着在执行打开类的构造函数期间，可能正在构造的对象是子类的实例，在这种情况下，子类特定的属性尚未初始化。因此，从构造函数中调用开放函数是有风险的：它可能在子类中被覆盖，并且如果它正在访问子类特定的属性，那么这些属性将不会被初始化。
 
 
 ### 覆盖
 
-If a member function or property is declared as `open`, subclasses may _override_ it by providing a new implementation. Let's say that `MotorVehicle` declares this function:
+如果成员函数或属性被声明为 `open`，那么子类可以通过提供新的实现 _覆盖_ 它。假设 `MotorVehicle` 声明了此函数：
 
 ```kotlin
 open fun drive() =
     "$horsepowers HP motor vehicle driving at $maxSpeed MPH"
 ```
 
-If `Car` does nothing, it will inherit this function as-is, and it will return a message with the car's horsepowers and max speed. If we want a car-specific message, `Car` can override the function by redeclaring it with the `override` keyword:
+如果 `Car` 不执行任何操作，它将按原样继承此函数，并且将返回一条消息，其中包含汽车的功率和最大速度。如果想要特定于汽车的消息，`Car` 可以通过使用 `override` 关键字重新声明该函数来覆盖该函数：
 
 ```kotlin
 override fun drive() =
    "$seatCount-seat car driving at $maxSpeed MPH"
 ```
 
-The signature of the overriding function must exactly match the overridden one, except that the return type in the overriding function may be a subtype of the return type of the overridden function.
+覆盖的函数名必须与被覆盖的函数名完全匹配，但覆盖函数中的返回类型可以是被覆盖函数的返回类型的子类型。
 
-If what the overriding function wants to do is an extension of what the overridden function did, you can call the overridden function via `super` (either before, after, or between other code):
+如果覆盖函数想要做的是对被覆盖函数所做的扩展，那么可以通过 `super`（在其他代码之前、之后或之间）调用被覆盖函数：
 
 ```kotlin
 override fun drive() =
@@ -1550,9 +1550,9 @@ override fun drive() =
 
 ### 接口
 
-The single-parent rule often becomes too limiting, as you'll often find commonalities between classes in different branches of a class hierarchy. These commonalities can be expressed in _interfaces_.
+单继承规则经常变得过于局限，因为经常会发现类层次结构不同分支中的类之间存在共性。这些共同点可以在 _接口_ 中表达。
 
-An interface is essentially a contract that a class may choose to sign; if it does, the class is obliged to provide implementations of the properties and functions of the interface. However, an interface may (but typically doesn't) provide a default implementation of some or all of its properties and functions. If a property or function has a default implementation, the class may choose to override it, but it doesn't have to. Here's an interface without any default implementations:
+接口本质上是类可以选择签署的契约；如果确实如此，那么该类必须提供接口属性与函数的实现。但是，接口可以提供（但通常不提供）部分或全部属性与函数的默认实现。如果属性或函数具有默认实现，那么该类可以选择覆盖它，但这不是必须的。这是一个没有任何默认实现的接口：
 
 ```kotlin
 interface Driveable {
@@ -1561,7 +1561,7 @@ interface Driveable {
 }
 ```
 
-We can choose to let `MotorVehicle` implement that interface, since it's got the required members - but now we need to mark those members with `override`, and we can remove `open` since an overridden function is implicitly open:
+可以选择让 `MotorVehicle` 实现该接口，因为它具有所需的成员——但现在需要用 `override` 标记这些成员，并且由于覆盖的函数是隐式开放的，因此可以删除 `open`：
 
 ```kotlin
 open class MotorVehicle(
@@ -1572,42 +1572,42 @@ open class MotorVehicle(
 }
 ```
 
-If we were to introduce another class `Bicycle`, which should be neither a subclass nor a superclass of `MotorVehicle`, we could still make it implement `Driveable`, as long as we declare `maxSpeed` and `drive` in `Bicycle`.
+如果要引入另一个类 `Bicycle`，该类既不应该是 `MotorVehicle` 的子类也不可以是其超类，只要在 `Bicycle` 中声明 `maxSpeed` 与 `drive`，仍然可以使其实现 `Driveable`。
 
-Subclasses of a class that implements an interface (in this case, `Car`) are also considered to be implementing the interface.
+实现接口的类的子类（在本例中为 `Car`）也被视为正在实现该接口。
 
-A symbol that is declared inside an interface normally should be public. The only other legal visibility modifier is `private`, which can only be used if the function body is supplied - that function may then be called by each class that implements the interface, but not by anyone else.
+在接口内部声明的符号通常应该是 public。唯一的其他合法可见性修饰符是 `private`，只有在提供了函数体时才能使用——可以由实现该接口的每个类调用该函数，而不能由其他任何类调用。
 
-As for why you would want to create an interface, other than as a reminder to have your classes implement certain members, see the section on [多态](#多态).
+至于为什么要创建一个接口，除了提醒类实现某些成员外，请参见[多态](#多态)一节。
 
 
 ### 抽象类
 
-Some superclasses are very useful as a grouping mechanism for related classes and for providing shared functions, but are so general that they're not useful on their own. `MotorVehicle` seems to fit this description. Such a class should be declared _abstract_, which will prevent the class from being instantiated directly:
+某些超类作为相关类的分组机制和提供共享函数非常有用，但它们是如此笼统，以至于它们本身并没有用。`MotorVehicle` 似乎符合此描述。应该将此类声明为 _抽象类_，以防止直接实例化该类：
 
 ```kotlin
 abstract class MotorVehicle(val maxSpeed: Double, val wheelCount: Int)
 ```
 
-Now, you can no longer say `val mv = MotorVehicle(100, 4)`.
+现在，不能如此声明：`val mv = MotorVehicle(100, 4)`。
 
-Abstract classes are implicitly open, since they are useless if they don't have any concrete subclasses.
+抽象类是隐式开放的，因为如果它们没有任何具体的子类，它们将无用。
 
-When an abstract class implements one or more interfaces, it is not required to provide definitions of the members of its interfaces (but it can if it wants to). It must still _declare_ such members, using `abstract override` and not providing any body for the function or property:
+当抽象类实现一个或多个接口时，不必提供其接口成员的定义（但如果需要，可以提供）。它仍必须使用 `abstract override` _声明_ 此类成员，并且不为函数或属性提供任何主体：
 
 ```kotlin
 abstract override val foo: String
 abstract override fun bar(): Int
 ```
 
-Being abstract is the only way to "escape" from having to implement the members of your interfaces, by offloading the work onto your subclasses - if a subclass wants to be concrete, it must implement all the "missing" members.
+通过将工作分担到子类上，抽象是“逃避”必须实现接口成员的唯一方法——如果子类想要具体化，那么必须实现所有“缺失”成员。
 
 
 ### 多态
 
-Polymorphism is the ability to treat objects with similar traits in a common way. In Python, this is achieved via _ducktyping_: if `x` refers to some object, you can call `x.quack()` as long as the object happens to have the function `quack()` - nothing else needs to be known (or rather, assumed) about the object. That's very flexible, but also risky: if `x` is a parameter, every caller of your function must be aware that the object they pass to it must have `quack()`, and if someone gets it wrong, the program blows up at runtime.
+多态是一种以通用方式处理具有相似特征的对象的能力。在 Python 中，这是通过 _[鸭子类型](https://zh.wikipedia.org/wiki/%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B)_ 实现的：如果 `x` 指向某个对象，那么只要该对象碰巧具有函数 `quack()`，就可以调用 `x.quack()`——关于该对象，不需要知道（或者更确切地说，假设）其他任何内容。这非常灵活，但是也很冒险：如果 `x` 是一个参数，那么函数的每个调用者都必须知道传递给它的对象必须具有 `quack()`，并且如果有人弄错了，程序就会在运行时崩溃。
 
-In Kotlin, polymorphism is achieved via the class hierarchy, in such a way that it is impossible to run into a situation where a property or function is missing. The basic rule is that a variable/property/parameter whose declared type is `A` may refer to an instance of a class `B` if and only if `B` is a subtype of `A`. This means that either, `A` must be a class and `B` must be a subclass of `A`, or that `A` must be an interface and `B` must be a class that implements that interface or be a subclass of a class that does. With our classes and interfaces from the previous sections, we can define these functions:
+在 Kotlin 中，多态性是通过类层次结构来实现的，这样就不可能遇到缺少属性或函数的情况。基本规则是，当且仅当 `B` 是 `A` 的子类型时，声明类型为 `A` 的变量/属性/参数才可以引用 `B` 类的实例。这意味着，`A` 必须是一个类，而 `B` 必须是 `A` 的子类，或者 `A` 必须是一个接口，而 `B` 必须是实现该接口的类，或者是该类的子类。使用上一部分中的类和接口，可以定义以下函数：
 
 ```kotlin
 fun boast(mv: MotorVehicle) =
@@ -1617,7 +1617,7 @@ fun ride(d: Driveable) =
     "I'm riding my ${d.drive()}"
 ```
 
-and call them like this:
+并这样调用它们：
 
 ```kotlin
 val car = Car(4, 120)
@@ -1625,9 +1625,9 @@ boast(car)
 ride(car)
 ```
 
-We're allowed to pass a `Car` to `boast()` because `Car` is a subclass of `MotorVehicle`. We're allowed to pass a `Car` to `ride()` because `Car` implements `Driveable` (thanks to being a subclass `MotorVehicle`). Inside `boast()`, we're only allowed to access the members of the declared parameter type `MotorVehicle`, even if we're in a situation where we know that it's really a `Car` (because there could be other callers that pass a non-`Car`). Inside `ride()`, we're only allowed to access the members of the declared parameter type `Driveable`. This ensures that every member lookup is safe - the compiler only allows you to pass objects that are guaranteed to have the necessary members. The downside is that you will sometimes be forced to declare "unnecessary" interfaces or wrapper classes in order to make a function accept instances of different classes.
+可以将 `Car` 传递给 `boast()`，因为 `Car` 是 `MotorVehicle` 的子类。可以将 `Car` 传递给 `ride()`，因为 `Car` 实现了 `Driveable`（由于是 `MotorVehicle` 的子类）。在 `boast()` 内部，即使处在已知它确实是 `Car` 的情况下，也只能访问声明的参数类型为 `MotorVehicle` 的成员（因为可能会有其他调用而并非通过 `Car`）。在 `ride()` 内部，仅允许访问声明的参数类型 `Driveable` 的成员。这样可以确保每个成员查找都是安全的——编译器仅允许传递保证具有必需成员的对象。缺点是有时会迫使声明“不必要的”接口或包装器类，以使函数接受不同类的实例。
 
-With collections and functions, polymorphism becomes more complicated - see the section on [泛型](#泛型).
+使用集合和函数，多态性变得更加复杂——请参见[泛型](#泛型)部分。
 
 
 [//]: TODO (Overload resolution rules)
@@ -1635,35 +1635,35 @@ With collections and functions, polymorphism becomes more complicated - see the 
 
 ### 类型转换与类型检测
 
-When you take an interface or an open class as a parameter, you generally don't know the real type of the parameter at runtime, since it could be an instance of a subclass or of any class that implements the interface. It is possible to check what the exact type is, but like in Python, you should generally avoid it and instead design your class hierarchy such that you can do what you need by proper overriding of functions or properties.
+当将接口或开放类作为参数时，通常在运行时不知道参数的实际类型，因为它可能是子类的实例，也可能是实现该接口的任何类的实例。可以检测确切的类型，但是像在 Python 中一样，通常应避免使用它，而应设计类层次结构，以便可以通过适当地覆盖函数或属性来执行所需的操作。
 
-If there's no nice way around it, and you need to take special actions based on what type something is or to access functions/properties that only exist on some classes, you can use `is` to check if the real type of an object is a particular class or a subclass thereof (or an implementor of an interface). When this is used as the condition in an `if`, the compiler will let you perform type-specific operations on the object inside the `if` body:
+如果没有很好的解决方法，并且需要根据某种事物的类型采取特殊的操作或访问仅在某些类中存在的函数/属性，那么可以使用 `is` 检测对象的真实类型是否为特定的类或其子类（或接口的实现者）。当将它用作 `if` 中的条件时，编译器将允许对 `if` 主体内的对象执行特定于类型的操作：
 
 ```kotlin
 fun foo(x: Any) {
     if (x is Person) {
-        println("${x.name}") // This wouldn't compile outside the if
+        println("${x.name}") // 这不会在 if 之外编译
     }
 }
 ```
 
-If you want to check for _not_ being an instance of a type, use `!is`. Note that `null` is never an instance of any non-nullable type, but it is always an "instance" of any nullable type (even though it technically isn't an instance, but an absence of any instance).
+如果要检测 _不_ 是类型的实例，请使用 `!is`。请注意，`null` 绝不是任何非空类型的实例，但它始终是任何可为空类型的“实例”（即使从技术上讲它不是实例，但它没有任何实例）。
 
-The compiler will not let you perform checks that can't possibly succeed because the declared type of the variable is a class that is on an unrelated branch of the class hierarchy from the class you're checking against - if the declared type of `x` is `MotorVehicle`, you can't check if `x` is a `Person`. If the right-hand side of `is` is an interface, Kotlin will allow the type of the left-hand side to be any interface or open class, because it could be that some subclass thereof implements the interface.
+编译器不会执行无法成功执行的检测，因为变量的声明类型是要检测的类的类层次结构的不相关分支上的类——如果声明的类型为 `x` 是 `MotorVehicle`，不能检测 `x` 是否是 `Person`。如果 `is` 的右侧是接口，那么 Kotlin 将允许左侧的类型为任何接口或开放类，因为它的某些子类可以实现该接口。
 
-If your code is too clever for the compiler, and you know without the help of `is` that `x` is an instance of `Person` but the compiler doesn't, you can _cast_ your value with `as`:
+如果代码对于编译器来说太聪明了，并且知道在没有 `is` 的帮助下，`x` 是 `Person` 的实例，但是编译器却不是，那么可以使用 `as` _转换（cast）_ 的值：
 
 ```kotlin
 val p = x as Person
 ```
 
-This will raise a `ClassCastException` if the object is not actually an instance of `Person` or any of its subclasses. If you're not sure what `x` is, but you're happy to get null if it's not a `Person`, you can use `as?`, which will return null if the cast fails. Note that the resulting type is `Person?`:
+如果对象实际上不是 `Person` 或其任何子类的实例，那么将引发 `ClassCastException`（类强制转换异常）。如果不确定 `x` 是什么，如果它不是 `Person`，但是乐于获得 null，那么可以使用 `as?`，如果强制转换失败，它将返回 null。请注意，结果类型为 `Person?`：
 
 ```kotlin
 val p = x as? Person
 ```
 
-You can also use `as` to cast to a nullable type. The difference between this and the previous `as?` cast is that this one will fail if `x` is a non-null instance of another type than `Person`:
+也可以使用 `as` 强制转换为可为空的类型。这个和之前的 `as?` 转换之间的区别是，如果 `x` 是除 `Person` 之外的其他类型的非空实例，那么此转换将失败：
 
 ```kotlin
 val p = x as Person?
@@ -1672,7 +1672,7 @@ val p = x as Person?
 
 ### 委托
 
-If you find that an interface that you want a class to implement is already implemented by one of the properties of the class, you can _delegate_ the implementation of that interface to that property with `by`:
+如果发现要通过类的属性之一实现了要实现类的接口，那么可以通过 `by` 将该接口的实现 _委托_ 给该属性的实现：
 
 ```kotlin
 interface PowerSource {
@@ -1684,12 +1684,12 @@ class Engine(override val horsepowers: Int) : PowerSource
 open class MotorVehicle(val engine: Engine): PowerSource by engine
 ```
 
-This will automatically implement all the interface members of `PowerSource` in `MotorVehicle` by invoking the same member on `engine`. This only works for properties that are declared in the constructor.
+通过在 `engine` 上调用相同的成员，这将自动在 `MotorVehicle` 中实现 `PowerSource` 的所有接口成员。这仅适用于在构造函数中声明的属性。
 
 
 ### 属性委托
 
-Let's say that you're writing a simple ORM. Your database library represents a row as instances of a class `Entity`, with functions like `getString("name")` and `getLong("age")` for getting typed values from the given columns. We could create a typed wrapper class like this:
+假设正在编写一个简单的 <abbr title="对象关系映射（Object Relational Mapping）">ORM</abbr>。数据库库将一行表示为类 `Entity` 的实例，并具有诸如 `getString("name")` 与 `getLong("age")` 之类的函数，用于从给定列中获取键入的值。可以这样创建一个类型化的包装类：
 
 ```kotlin
 abstract class DbModel(val entity: Entity)
@@ -1700,7 +1700,7 @@ class Person(val entity: Entity) : DbModel(entity) {
 }
 ```
 
-That was easy, but maybe we'd want to do lazy-loading so that we won't spend time on extracting the fields that won't be used (especially if some of them contain a lot of data in a format that it is time-consuming to parse), and maybe we'd like support for default values. While we could implement that logic in a `get()` block, it would need to be duplicated in every property. Alternatively, we could implement the logic in a separate `StringProperty` class (note that this simple example is not thread-safe):
+这很容易，但是也许要进行延迟加载，这样就不会花时间来提取不会使用的字段（特别是如果其中一些包含大量数据，而这种格式解析起来会很费时），也许希望支持默认值。虽然可以在 `get()` 块中实现该逻辑，但需要在每个属性中重复该逻辑。另外，可以在一个单独的 `StringProperty` 类中实现逻辑（请注意，这个简单的示例不是线程安全的）：
 
 ```kotlin
 class StringProperty(
@@ -1712,7 +1712,7 @@ class StringProperty(
     private var loaded = false
     val value: String?
         get() {
-            // Warning: This is not thread-safe!
+            // 警告：这不是线程安全的！
             if (loaded) return _value
             if (model.entity.contains(fieldName)) {
                 _value = model.entity.getString(fieldName)
@@ -1722,19 +1722,19 @@ class StringProperty(
         }
 }
 
-// In Person
+// 在 Person 里
 val name = StringProperty(this, "name", "Unknown Name")
 ```
 
-Unfortunately, using this would require us to type `p.name.value` every time we wanted to use the property. We could do the following, but that's also not great since it introduces an extra property:
+不幸的是，使用此属性会要求每次要使用该属性时都键入 `p.name.value`。可以执行以下操作，但这也不好，因为它引入了额外的属性：
 
 ```kotlin
-// In Person
+// 在 Person 里
 private val _name = StringProperty(this, "name", "Unknown Name")
 val name get() = _name.value
 ```
 
-The solution is a _delegated property_, which allows you to specify the behavior of getting and setting a property (somewhat similar to implementing `__getattribute__()` and `__setattribute__()` in Python, but for one property at a time).
+该解决方案是一个委托的属性，它允许指定获取和设置属性的行为（与在 Python 中实现 `__getattribute__()` 与 `__setattribute__()` 类似，但一次只设置一个属性）。
 
 ```kotlin
 class DelegatedStringProperty(
@@ -1754,15 +1754,15 @@ class DelegatedStringProperty(
 }
 ```
 
-The delegated property can be used like this to declare a property in `Person` - note the use of `by` instead of `=`:
+可以像这样使用委派的属性在 `Person` 中声明属性——请注意，使用 `by` 代替 `=`：
 
 ```kotlin
 val name by DelegatedStringProperty(this, "name", "Unknown Name")
 ```
 
-Now, whenever anyone reads `p.name`, `getValue()` will be invoked with `p` as `thisRef` and metadata about the `name` property as `property`. Since `thisRef` is a `DbModel`, this delegated property can only be used inside `DbModel` and its subclasses.
+现在，只要有人读 `p.name`、`getValue()` 都将以 `p` 作为 `thisRef` 调用，并将 `name` 属性的元数据作为 `property` 调用。由于 `thisRef` 是 `DbModel`，因此只能在 `DbModel` 及其子类内部使用此委托属性。
 
-A nice built-in delegated property is `lazy`, which is a properly threadsafe implementation of the lazy loading pattern. The supplied lambda expression will only be evaluated once, the first time the property is accessed.
+一个好用的内置委托属性 `lazy`，它是惰性加载模式的适当线程安全实现。首次访问该属性时，将仅对提供的 ​​lambda 表达式求值一次。
 
 ```kotlin
 val name: String? by lazy {
@@ -1775,7 +1775,7 @@ val name: String? by lazy {
 
 ### 密封类
 
-If you want to restrict the set of subclasses of a base class, you can declare the base class to be `sealed` (which also makes it abstract), in which case you can only declare subclasses in the same file. The compiler then knows the complete set of possible subclasses, which will let you do exhaustive `when` expression for all the possible subtypes without the need for an `else` clause (and if you add another subclass in the future and forget to update the `when`, the compiler will let you know).
+如果要限制基类的子类集，那么可以将基类声明为 `sealed`（这也使其抽象化），在这种情况下，只能在同一文件中声明子类。然后，编译器知道了所有可能的子类的完整集合，这将使在不需要 `else` 子句的情况下对所有可能的子类型进行穷尽的 `when` 表达（如果以后添加另一个子类而忘记更新 `when`，编译器会告知）。
 
 
 ## 对象与伴生对象
