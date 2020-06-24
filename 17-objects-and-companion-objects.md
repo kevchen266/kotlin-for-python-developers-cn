@@ -1,6 +1,6 @@
 ## 对象声明
 
-If you need a _singleton_ - a class where only one instance exists - you can declare the class in the usual way, but use the `object` keyword instead of `class`:
+如果需要 _单例_（一个仅存在一个实例的类），那么可以按常规方式声明该类，但是使用 `object` 关键字而不是 `class`：
 
 ```kotlin
 object CarFactory {
