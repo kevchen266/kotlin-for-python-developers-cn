@@ -1,6 +1,6 @@
 ## 对象声明
 
-If you need a _singleton_ - a class where only one instance exists - you can declare the class in the usual way, but use the `object` keyword instead of `class`:
+如果需要 _单例_（一个仅存在一个实例的类），那么可以按常规方式声明该类，但是使用 `object` 关键字而不是 `class`：
 
 ```kotlin
 object CarFactory {
@@ -14,7 +14,7 @@ object CarFactory {
 }
 ```
 
-There will only ever be one instance of this class, and the instance (which is created the first time it is accessed, in a thread-safe manner) will have the same name as the class itself:
+该类将永远只有一个实例，并且该实例（以线程安全的方式在首次访问该实例时创建）将与该类本身具有相同的名称：
 
 ```kotlin
 val car = CarFactory.makeCar(150)
@@ -24,7 +24,7 @@ println(CarFactory.cars.size)
 
 ## 伴生对象
 
-If you need a function or a property to be tied to a class rather than to instances of it (similar to `@staticmethod` in Python), you can declare it inside a _companion object_:
+如果需要将函数或属性绑定到类而不是实例（类似于Python中的 `@staticmethod`），那么可以在 _伴生对象_ 中声明它：
 
 ```kotlin
 class Car(val horsepowers: Int) {
@@ -40,23 +40,23 @@ class Car(val horsepowers: Int) {
 }
 ```
 
-The companion object is a singleton, and its members can be accessed directly via the name of the containing class (although you can also insert the name of the companion object if you want to be explicit about accessing the companion object):
+伴生对象是一个单例，可以通过包含类的名称直接访问其成员（如果要明确地访问伴生对象，也可以插入伴生对象的名称）：
 
 ```kotlin
 val car = Car.makeCar(150)
 println(Car.Factory.cars.size)
 ```
 
-In spite of this syntactical convenience, the companion object is a proper object on its own, and can have its own supertypes - and you can assign it to a variable and pass it around. If you're integrating with Java code and need a true `static` member, you can [annotate](annotations.html) a member inside a companion object with `@JvmStatic`.
+尽管语法上很方便，但伴生对象本身是一个真正的对象，并且可以具有自己的超类型——可以将其赋值给变量并传递。如果要与 Java 代码集成，并且需要一个真正的 `static` 成员，那么可以使用 `@JvmStatic` 在一个伴生对象内部[注解](annotations.html)一个成员。
 
-A companion object is initialized when the class is loaded (typically the first time it's referenced by other code that is being executed), in a thread-safe manner. You can omit the name, in which case the name defaults to `Companion`. A class can only have one companion object, and companion objects can not be nested.
+当类加载时（通常是第一次被其他正在执行的代码引用该类时），将以线程安全的方式初始化一个伴生对象。可以省略名称，在这种情况下，名称默认为 `Companion`。一个类只能有一个伴生对象，并且伴生对象不能嵌套。
 
-Companion objects and their members can only be accessed via the containing class name, not via instances of the containing class. Kotlin does not support class-level functions that also can be overridden in subclasses (like `@classmethod` in Python). If you try to redeclare a companion object in a subclass, you'll just shadow the one from the base class. If you need an overridable "class-level" function, make it an ordinary open function in which you do not access any instance members - you can override it in subclasses, and when you call it via an object instance, the override in the object's class will be called. It is possible, but inconvenient, to call functions via a class reference in Kotlin, so we won't cover that here.
+伴生对象及其成员只能通过包含它的类名称访问，而不能通过包含它的类的实例访问。Kotlin 不支持也可以在子类中覆盖的类级函数（例如 Python 中的 `@classmethod`）。如果在子类中重新声明一个伴生对象，那么只需从基类中隐藏该对象即可。如果需要一个可覆盖的“类级”函数，请将其设为普通的开放函数，在该函数中不访问任何实例成员——可以在子类中覆盖它，并且当通过对象实例调用它时，将调用该对象类中的覆盖。通过 Kotlin 中的类引用来调用函数是可能的，但很不方便，因此在此不做介绍。
 
 
 ## 对象表达式
 
-Java only got support for function types and lambda expressions a few years ago. Previously, Java worked around this by using an interface to define a function signature and allowing an inline, anonymous definition of a class that implements the interface. This is also available in Kotlin, partly for compatibility with Java libraries and partly because it can be handy for specifying event handlers (in particular if there is more than one event type that must be listened for by the same listener object). Consider an interface or a (possibly abstract) class, as well a function that takes an instance of it:
+Java 几年前才获得对函数类型和 lambda 表达式的支持。以前，Java 通过使用接口定义函数签名并允许实现该接口类的内联匿名定义来解决此问题。这在 Kotlin 中也可用，部分是为了与 Java 库兼容，部分是因为它可以方便地指定事件处理程序（特别是如果同一侦听器对象必须侦听多个事件类型）。考虑一个接口或一个（可能是抽象的）类，以及一个采用其实例的函数：
 
 ```kotlin
 interface Vehicle {
@@ -66,7 +66,7 @@ interface Vehicle {
 fun start(vehicle: Vehicle) = println(vehicle.drive())
 ```
 
-By using an _object expression_, you can now define an anonymous, unnamed class and at the same time create one instance of it, called an _anonymous object_:
+通过使用 _对象表达式_，现在可以定义一个匿名的未命名类，并同时创建一个实例，称为 _匿名对象_：
 
 ```kotlin
 start(object : Vehicle {
@@ -74,13 +74,13 @@ start(object : Vehicle {
 })
 ```
 
-If the supertype has a constructor, it must be invoked with parentheses after the supertype name. You can specify multiple supertypes if need be (but as usual, at most one superclass).
+如果超类型具有构造函数，那么必须在超类型名称之后用括号将其调用。可以根据需要指定多个超类型（但通常，最多只有一个超类）。
 
-Since an anonymous class has no name, it can't be used as a return type - if you do return an anonymous object, the function's return type must be `Any`.
+由于匿名类没有名称，因此不能将其用作返回类型——如果确实返回了匿名对象，则该函数的返回类型必须为 `Any`。
 
-In spite of the `object` keyword being used, a new instance of the anonymous class will be created whenever the object expression is evaluated.
+尽管使用了 `object` 关键字，但无论何时对对象表达式求值，都会创建一个匿名类的新实例。
 
-The body of an object expression may access, and possibly modify, the local variables of the containing scope.
+对象表达式的主体可以访问并可能修改包含它的作用域的局部变量。
 
 
 

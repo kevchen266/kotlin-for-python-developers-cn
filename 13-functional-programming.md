@@ -1,13 +1,13 @@
 ## 函数类型
 
-像在 Python 中一样，Kotlin 中的函数是一等值——它们可以分配给变量并作为参数传递。函数的类型是 _function type_，用括号括起来的参数类型列表和返回类型的箭头指示。参考以下函数：
+像在 Python 中一样，Kotlin 中的函数是一等值——它们可以赋值给变量并作为参数传递。函数的类型是 _function type_，用括号括起来的参数类型列表和返回类型的箭头指示。参考以下函数：
 
 ```kotlin
 fun safeDivide(numerator: Int, denominator: Int) =
     if (denominator == 0) 0.0 else numerator.toDouble() / denominator
 ```
 
-它带有两个 `Int` 参数并返回 `Double`，因此其类型为 `(Int, Int) -> Double`。可以通过在函数名称前加上 `::` 来引用函数本身，并且可以将其分配给变量（通常会推断出其类型，但为了演示将显示类型签名）：
+它带有两个 `Int` 参数并返回 `Double`，因此其类型为 `(Int, Int) -> Double`。可以通过在函数名称前加上 `::` 来引用函数本身，并且可以将其赋值给变量（通常会推断出其类型，但为了演示将显示类型签名）：
 
 ```kotlin
 val f: (Int, Int) -> Double = ::safeDivide
@@ -19,7 +19,7 @@ val f: (Int, Int) -> Double = ::safeDivide
 val quotient = f(3, 0)
 ```
 
-类有可能像执行接口一样实现函数类型。然后，它必须提供一个具有给定签名的称为 `invoke` 的运算符函数，然后可以将该类的实例分配给该函数类型的变量：
+类有可能像执行接口一样实现函数类型。然后，它必须提供一个具有给定签名的称为 `invoke` 的运算符函数，然后可以将该类的实例赋值给该函数类型的变量：
 
 ```kotlin
 class Divider : (Int, Int) -> Double {
@@ -42,7 +42,7 @@ val safeDivide = { numerator: Int, denominator: Int ->
 
 请注意，Kotlin 中花括号的其他用法（例如在函数和类定义中以及在 `if`、`else`、`for`、`while` 语句之后）不是 lambda 表达式（因此，`if` 是有条件地执行 lambda 函数的函数的情况 _并非_ 如此）。
 
-Lambda 表达式的返回类型是根据其中的最后一个表达式的类型（或从 Lambda 表达式所分配给的变量或参数的函数类型）推断出来的。如果将 lambda 表达式作为函数参数（通常使用）传递或分配给具有声明类型的变量，那么 Kotlin 也可以推断参数类型，只需要指定其名称即可：
+Lambda 表达式的返回类型是根据其中的最后一个表达式的类型（或从 Lambda 表达式所赋值给的变量或参数的函数类型）推断出来的。如果将 lambda 表达式作为函数参数（通常使用）传递或赋值给具有声明类型的变量，那么 Kotlin 也可以推断参数类型，只需要指定其名称即可：
 
 ```kotlin
 val safeDivide: (Int, Int) -> Double = { numerator, denominator ->
@@ -124,7 +124,7 @@ short_greetings = [
 
 成员函数或[扩展函数](extension-functionsproperties.html)的签名始于 _接收者_：可以在其上调用函数的类型。例如，`toString()` 的签名是 `Any.() -> String`——可以在任何非空对象（接收者）上调用它，它不带任何参数，并且返回 `String`。可以使用这样的签名来编写 lambda 函数——这被称为 _带有接收者的函数字面值_，对于构建DSL非常有用。
 
-带接收者的函数文字可能最容易被认为是 lambda 表达式形式的扩展函数。该声明看起来像一个普通的 lambda 表达式。使其成为接收者的是上下文——必须将其传递给以接收者作为参数的函数，或者将其分配给类型为接收者的函数类型的变量或属性。将函数与接收者一起使用的唯一方法是在接收者类的实例上调用它，就像它是成员函数或扩展函数一样。例如：
+带接收者的函数文字可能最容易被认为是 lambda 表达式形式的扩展函数。该声明看起来像一个普通的 lambda 表达式。使其成为接收者的是上下文——必须将其传递给以接收者作为参数的函数，或者将其赋值给类型为接收者的函数类型的变量或属性。将函数与接收者一起使用的唯一方法是在接收者类的实例上调用它，就像它是成员函数或扩展函数一样。例如：
 
 ```kotlin
 class Car(val horsepowers: Int)
