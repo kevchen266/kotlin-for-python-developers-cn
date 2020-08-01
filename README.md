@@ -1190,7 +1190,7 @@ short_greetings = [
 
 这些转换也可以应用于 `Sequence<T>`，它与 Python 的生成器类似，并且允许进行惰性求值。如果有一个庞大的列表，并且想要延迟处理它，那么可以在其上调用 `asSequence()`。
 
-[`kotlin.collections` 包](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html)中提供了大量功能编程风格的操作。
+[`kotlin.collections` 包](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html)中提供了大量函数式编程风格的操作。
 
 
 ### 接收者
