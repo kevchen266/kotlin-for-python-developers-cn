@@ -1,18 +1,18 @@
 ## 泛型类型参数
 
-One might think that static typing would make it very impractical to make collection classes or any other class that needs to contain members whose types vary with each usage. Generics to the rescue: they allow you to specify a "placeholder" type in a class or function that must be filled in whenever the class or function is used. For example, a node in a linked list needs to contain data of some type that is not known when we write the class, so we introduce a _generic type parameter_ `T` (they are conventionally given single-letter names):
+可能有人认为静态类型会使创建集合类或需要包含其类型随每次使用而变化的成员的任何其他类变得非常不切实际。通用方法：它们可以在类或函数中指定“占位符”类型，每当使用类或函数时，都必须填写该类型。例如，链表中的节点需要包含某种类型的数据，而这些类型的数据在编写该类时是未知的，因此引入了 _泛型类型参数_ `T`（通常指定为单字母名称）：
 
 ```kotlin
 class TreeNode<T>(val value: T?, val next: TreeNode<T>? = null)
 ```
 
-Whenever you create an instance of this class, you must specify an actual type in place of `T`, unless the compiler can infer it from the constructor parameters: `TreeNode("foo")` or `TreeNode<String>(null)`. Every use of this instance will act as if it were an instance of a class that looks like this:
+每当创建此类的实例时，都必须指定一个实际的类型代替 `T`，除非编译器可以从构造函数参数 `TreeNode("foo")` 或 `TreeNode<String>(null)` 中推断出类型。每次使用此实例都会像看起来像是一个类的实例一样：
 
 ```kotlin
 class TreeNode<String>(val value: String?, val next: TreeNode<String>? = null)
 ```
 
-Member properties and member functions inside a generic class may for the most part use the class' generic type parameters as if they were ordinary types, without having to redeclare them. It is also possible to make functions that take more generic parameters than the class does, and to make generic functions inside nongeneric classes, and to make generic top-level functions (which is what we'll do in the next example). Note the different placement of the generic type parameter in generic function declarations:
+泛型类中的成员属性与成员函数在很大程度上可以像使用普通类型一样使用类的泛型类型参数，而不必重新声明它们。还可以使函数接受比类更多的泛型参数，使泛型函数驻留在非泛型类中，以及使泛型顶级函数成为泛型（将在下一个示例中执行这一操作）。请注意泛型函数声明中泛型类型参数的不同位置：
 
 ```kotlin
 fun <T> makeLinkedList(vararg elements: T): TreeNode<T>? {
@@ -27,15 +27,15 @@ fun <T> makeLinkedList(vararg elements: T): TreeNode<T>? {
 
 ## 约束
 
-You can restrict the types that can be used for a generic type parameter, by specifying that it must be an instance of a specific type or of a subclass thereof. If you've got a class or interface called `Vehicle`, you can do:
+通过指定泛型类型参数必须是特定类型或其子类的实例，可以限制可用于泛型类型参数的类型。如果有一个名为 `Vehicle` 的类或接口，那么可以这样做：
 
 ```kotlin
 class TreeNode<T : Vehicle>
 ```
 
-Now, you may not create a `TreeNode` of a type that is not a subclass/implementor of `Vehicle`. Inside the class, whenever you've got a value of type `T`, you may access all the public members of `Vehicle` on it.
+现在，可能无法创建类型不是 `Vehicle` 的子类/实现的 `TreeNode`。在类内部，只要获得类型为 `T` 的值，就可以访问其上所有 `Vehicle` 的公共成员。
 
-If you want to impose additional constraints, you must use a separate `where` clause, in which case the type parameter must be a subclass of the given class (if you specify a class, and you can specify at most one) _and_ implement all the given interfaces. You may then access all the public members of all the given types whenever you've got a value of type `T`:
+如果要施加其他约束，则必须使用单独的 `where` 子句，在这种情况下，类型参数必须是给定类的子类（如果指定了一个类，并且最多可以指定一个），_并且_ 实现所有给定的接口。然后，只要获得类型 `T` 的值，就可以访问所有给定类型的所有公共成员：
 
 ```kotlin
 class TreeNode<T> where T : Vehicle, T : HasWheels
@@ -47,22 +47,22 @@ class TreeNode<T> where T : Vehicle, T : HasWheels
 
 ### 简介
 
-Pop quiz: if `Apple` is a subtype of `Fruit`, and `Bowl` is a generic container class, is `Bowl<Apple>` a subtype of `Bowl<Fruit>`? The answer is - perhaps surprisingly - _no_. The reason is that if it were a subtype, we would be able to break the type system like this:
+流行测验：如果 `Apple` 是 `Fruit` 的子类型，并且 `Bowl` 是通用容器类，那么 `Bowl<Apple>` 是否为 `Bowl<Fruit>` 的子类型？答案为——也许令人惊讶——_否_。原因是，如果它是子类型，将能够像这样破坏类型系统：
 
 ```kotlin
 fun add(bowl: Bowl<Fruit>, fruit: Fruit) = bowl.add(fruit)
 
 val bowl = Bowl<Apple>()
-add(bowl, Pear()) // Doesn't actually compile!
-val apple = bowl.get() // Boom!
+add(bowl, Pear()) // 实际上不编译！
+val apple = bowl.get() // 裂开！
 ```
 
-If the second-to-last line compiled, it would allow us to put a pear into what is ostensibly a bowl of only apples, and your code would explode when it tried to extract the "apple" from the bowl. However, it's frequently useful to be able to let the type hierarchy of a generic type parameter "flow" to the generic class. As we saw above, though, some care must be taken - the solution is to restrict the direction in which you can move data in and out of the generic object.
+如果编译到倒数第二行，这将使可以在一个表面上只有一个苹果的盘子中放入一个梨，当尝试从盘子中提取“苹果”时，这代码就会裂开。但是，通常让泛型类型参数的类型层次结构“流”到泛型类通常很有用。但是，正如在上面看到的，必须注意一些问题——解决方案是限制将数据移入与移出通用对象的方向。
 
 
 ### 声明处协变与逆变
 
-If you have an instance of `Generic<Subtype>`, and you want to refer to it as a `Generic<Supertype>`, you can safely _get_ instances of the generic type parameter from it - these will truly be instances of `Subtype` (because they come from an instance of `Generic<Subtype>`), but they will appear to you as instances of `Supertype` (because you've told the compiler that you have a `Generic<Supertype>`). This is safe; it is called _covariance_, and Kotlin lets you do _declaration-site covariance_ by putting `out` in front of the generic type parameter. If you do, you may only use that type parameter as a return type, not as a parameter type. Here is the simplest useful covariant interface:
+如果有 `Generic<Subtype>` 的实例，并且想将其称为 `Generic<Supertype>`，则可以安全地从中 _获取_ 泛型类型参数的实例——这些将确实是 `Subtype` 的实例。（因为它们来自 `Generic<Subtype>` 的实例），但是它们看起来是 `Supertype` 的实例（因为已经告诉编译器具有 `Generic<Supertype>`）。这很安全；它被称为 _协变_，而 Kotlin 可以通过在通用类型参数前面放置 `out` 来进行 _声明处协变_。如果这样做，则只能将该类型参数用作返回类型，而不能用作参数类型。这是最简单有用的协变接口：
 
 ```kotlin
 interface Producer<out T> {
@@ -70,9 +70,9 @@ interface Producer<out T> {
 }
 ```
 
-It is safe to treat a `Producer<Apple>` as if it were a `Producer<Fruit>` - the only thing it will ever produce is `Apple` instances, but that's okay, because an `Apple` is a `Fruit`.
+将 `Producer<Apple>` 视为 `Producer<Fruit>` 是安全的——它将产生的唯一东西是 `Apple` 实例，但这没关系，因为 `Apple` 是 `Fruit`。
 
-Conversely, if you have an instance of `Generic<Supertype>`, and you want to refer to it as a `Generic<Subtype>` (which you can't do with nongeneric classes), you can safely _give_ instances of the generic type parameter to it - the compiler will require those instances to be of the type `Subtype`, which will be acceptable to the real instance because it can handle any `Supertype`. This is called _contravariance_, and Kotlin lets you do _declaration-site contravariance_ by putting `in` in front of the generic type parameter. If you do, you may only use that type parameter as a parameter type, not as a return type. Here is the simplest useful contravariant interface:
+相反，如果有  `Generic<Supertype>` 的实例，并且想将其引用为 `Generic<Subtype>`（不能使用非泛型类），则可以安全地为其 _提供_ 泛型类型参数的实例——编译器将要求这些实例的类型为 `Subtype`，这对于实际实例是可接受的，因为它可以处理任何 `Supertype`。这被称为 _逆变_，而 Kotlin 可以通过在通用类型参数的前面加 `in` 来进行 _声明处逆变_。如果这样做，则只能将该类型参数用作参数类型，而不能用作返回类型。这是最简单有用的逆变接口：
 
 ```kotlin
 interface Consumer<in T> {
@@ -80,9 +80,9 @@ interface Consumer<in T> {
 }
 ```
 
-It is safe to treat a `Consumer<Fruit>` as a `Consumer<Apple>` - you are then restricted to only adding `Apple` instances to it, but that's okay, because it is capable of receiving any `Fruit`.
+将 `Consumer <Fruit>` 视为 `Consumer <Apple>` 是安全的——然后，只能在其中添加 `Apple` 实例，但这没关系，因为它能够接收任何 `Fruit`。
 
-With these two interfaces, we can make a more versatile fruit bowl. The bowl itself needs to both produce and consume its generic type, so it can neither be covariant nor contravariant, but it can implement our covariant and contravariant interfaces:
+通过这两个接口，可以制作出更多用途的果盘。盘子本身需要产生与使用其通用类型，所以它既不能是协变的也不能是逆变的，但是它可以实现协变与逆变接口：
 
 ```kotlin
 class Bowl<T> : Producer<T>, Consumer<T> {
@@ -92,7 +92,7 @@ class Bowl<T> : Producer<T>, Consumer<T> {
 }
 ```
 
-Now, you can treat a bowl of `T` as a producer of any superclass of `T`, and as a consumer of any subclass of `T`:
+现在，您可以将盘子 `T` 视为 `T` 的任何超类的生产者，以及 `T` 的任何子类的消费者：
 
 ```kotlin
 val p: Producer<Fruit> = Bowl<Apple>()
