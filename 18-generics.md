@@ -92,7 +92,7 @@ class Bowl<T> : Producer<T>, Consumer<T> {
 }
 ```
 
-现在，您可以将盘子 `T` 视为 `T` 的任何超类的生产者，以及 `T` 的任何子类的消费者：
+现在，可以将盘子 `T` 视为 `T` 的任何超类的生产者，以及 `T` 的任何子类的消费者：
 
 ```kotlin
 val p: Producer<Fruit> = Bowl<Apple>()
@@ -102,58 +102,58 @@ val c: Consumer<Apple> = Bowl<Fruit>()
 
 ### 型变方向
 
-If the parameters or return types of the members of a variant type are themselves variant, it gets a bit complicated. Function types in parameters and return types make it even more challenging. If you're wondering whether it's safe to use a variant type parameter `T` in a particular position, ask yourself:
+如果变量类型的成员的参数或返回类型本身就是变量，则将变得有些复杂。参数中的函数类型和返回类型使其更具挑战性。如果想在特定位置使用变体类型参数 `T` 是否安全，请问自己：
 
-* If `T` is covariant: is it okay that the user of my class thinks that `T` in this position is a `Supertype`, while in reality, it's a `Subtype`?
-* If `T` is contravariant: is it okay that the user of my class thinks that `T` in this position is a `Subtype`, while in reality, it's a `Supertype`?
+* 如果 `T` 是协变的：类的用户认为处于这个位置的 `T` 是 `Supertype`，而实际上是 `Subtype` 这样可以吗？
+* 如果 `T` 是逆变的：类的用户认为处于这个位置的 `T` 是 `Subtype`，而实际上是 `Supertype` 这样可以吗？
 
-These considerations lead to the following rules. A covariant type parameter `T` (which the user of an object might think is `Fruit`, while the object in reality is tied to `Apple`) may be used as:
+这些注意事项导致以下规则。协变类型参数 `T`（对象的用户可能认为这是 `Fruit`，而实际上该对象是 `Apple`）可以用作：
 
 *   `val v: T`
 
-    A read-only property type (the user is expecting a `Fruit`, and gets an `Apple`)
+    只读属性类型（用户期望获得 `Fruit`，并获得 `Apple`）
 
 *   `val p: Producer<T>`
 
-    The covariant type parameter of a read-only property type (the user is expecting a producer of `Fruit`, and gets a producer of `Apple`)
+    只读属性类型的协变类型参数（用户期望 `Fruit` 的生产者，而得到 `Apple` 的生产者）
 
 *   `fun f(): T`
 
-    A return type (as we've already seen)
+    返回类型（正如所见）
 
 *   `fun f(): Producer<T>`
 
-    The covariant type parameter of a return type (the user is expecting that the returned value will produce a `Fruit`, so it's okay if it really produces an `Apple`)
+    返回类型的协变类型参数（用户期望返回的值将产生一个 `Fruit`，所以如果它确实产生一个 `Apple` 也是可以的）
 
 *   `fun f(consumer: Consumer<T>)`
 
-    The contravariant type parameter of a parameter type (the user is passing a consumer that can handle any `Fruit`, and it will be given an `Apple`)
+    参数类型的逆变类型参数（用户传递了可以处理任何 `Fruit` 的消费者，用户将得到一个 `Apple`）
 
 *   `fun f(function: (T) -> Unit)`
 
-    The parameter type of a function-typed parameter (the user is passing a function that can handle any `Fruit`, and it will be given an `Apple`)
+    函数类型参数的参数类型（用户正在传递可以处理任何 `Fruit` 的函数，用户将获得一个 `Apple`）
 
 *   `fun f(function: (Producer<T>) -> Unit)`
 
-    The covariant type parameter of the parameter type of a function-typed parameter (the user is passing a function that can handle any `Fruit` producer, and it will be given an `Apple` producer)
+    函数类型参数的参数类型的协变类型参数（用户正在传递可以处理任何 `Fruit` 生产者的函数，用户将获得 `Apple` 生产者）
 
 *   `fun f(function: () -> Consumer<T>)`
 
-    The contravariant type parameter of the return type of a function-typed parameter (the user is passing a function that will return a consumer of any `Fruit`, and the returned consumer will be given `Apple` instances)
+    函数类型参数的返回类型的逆变类型参数（用户传递的函数将返回任何 `Fruit` 的消费者，为返回的消费者提供 `Apple` 实例）
 
 *   `fun f(): () -> T`
 
-    The return type of a function-typed return type (the user expects the returned function to return `Fruit`, so it's okay if it really returns `Apple`)
+    函数类型的返回类型的返回类型（用户希望返回的函数返回 `Fruit`，因此，如果它确实返回 `Apple` 也是可以的）
 
 *   `fun f(): () -> Producer<T>`
 
-    The covariant type parameter of the return type of a function-typed return type (the user expects the returned function to return something that produces `Fruit`, so it's okay if it really produces `Apple`)
+    函数类型的返回类型的返回类型的协变量类型参数（用户希望返回的函数返回产生 `Fruit` 的内容，因此如果它确实产生 `Apple`，也是可以的）
 
 *   `fun f(): (Consumer<T>) -> Unit`
 
-    The contravariant type parameter of a parameter of a function-typed return type (the user will call the returned function with something that can consume any `Fruit`, so it's okay to return a function that expects to receive something that can handle `Apple`)
+    函数类型返回类型的参数的变量类型参数（用户将使用可能消耗任何 `Fruit` 的东西来调用返回的函数，因此可以返回希望接收到可以处理 `Apple` 的东西的函数）
 
-A contravariant type parameter may be used in the converse situations. It is left as an exercise to the reader to figure out the justifications for why these member signatures are legal:
+在逆变的情况下可以使用协变类型参数。至于这些成员的签名为何合法，则留给读者自行解答:
 
 * `val c: Consumer<T>`
 * `fun f(item: T)`
