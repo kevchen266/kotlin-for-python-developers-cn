@@ -62,7 +62,7 @@ val apple = bowl.get() // 裂开！
 
 ### 声明处协变与逆变
 
-如果有 `Generic<Subtype>` 的实例，并且想将其称为 `Generic<Supertype>`，则可以安全地从中 _获取_ 泛型类型参数的实例——这些将确实是 `Subtype` 的实例。（因为它们来自 `Generic<Subtype>` 的实例），但是它们看起来是 `Supertype` 的实例（因为已经告诉编译器具有 `Generic<Supertype>`）。这很安全；它被称为 _协变_，而 Kotlin 可以通过在通用类型参数前面放置 `out` 来进行 _声明处协变_。如果这样做，则只能将该类型参数用作返回类型，而不能用作参数类型。这是最简单有用的协变接口：
+如果有 `Generic<Subtype>` 的实例，并且想将其称为 `Generic<Supertype>`，则可以安全地从中 _获取_ 泛型类型参数的实例——这些将确实是 `Subtype` 的实例。（因为它们来自 `Generic<Subtype>` 的实例），但是它们看起来是 `Supertype` 的实例（因为已经告诉编译器具有 `Generic<Supertype>`）。这很安全；它被称为 _协变_，而 Kotlin 可以通过在泛型参数前面放置 `out` 来进行 _声明处协变_。如果这样做，则只能将该类型参数用作返回类型，而不能用作参数类型。这是最简单有用的协变接口：
 
 ```kotlin
 interface Producer<out T> {
@@ -72,7 +72,7 @@ interface Producer<out T> {
 
 将 `Producer<Apple>` 视为 `Producer<Fruit>` 是安全的——它将产生的唯一东西是 `Apple` 实例，但这没关系，因为 `Apple` 是 `Fruit`。
 
-相反，如果有  `Generic<Supertype>` 的实例，并且想将其引用为 `Generic<Subtype>`（不能使用非泛型类），则可以安全地为其 _提供_ 泛型类型参数的实例——编译器将要求这些实例的类型为 `Subtype`，这对于实际实例是可接受的，因为它可以处理任何 `Supertype`。这被称为 _逆变_，而 Kotlin 可以通过在通用类型参数的前面加 `in` 来进行 _声明处逆变_。如果这样做，则只能将该类型参数用作参数类型，而不能用作返回类型。这是最简单有用的逆变接口：
+相反，如果有  `Generic<Supertype>` 的实例，并且想将其引用为 `Generic<Subtype>`（不能使用非泛型类），则可以安全地为其 _提供_ 泛型类型参数的实例——编译器将要求这些实例的类型为 `Subtype`，这对于实际实例是可接受的，因为它可以处理任何 `Supertype`。这被称为 _逆变_，而 Kotlin 可以通过在泛型参数的前面加 `in` 来进行 _声明处逆变_。如果这样做，则只能将该类型参数用作参数类型，而不能用作返回类型。这是最简单有用的逆变接口：
 
 ```kotlin
 interface Consumer<in T> {
@@ -82,7 +82,7 @@ interface Consumer<in T> {
 
 将 `Consumer <Fruit>` 视为 `Consumer <Apple>` 是安全的——然后，只能在其中添加 `Apple` 实例，但这没关系，因为它能够接收任何 `Fruit`。
 
-通过这两个接口，可以制作出更多用途的果盘。盘子本身需要产生与使用其通用类型，所以它既不能是协变的也不能是逆变的，但是它可以实现协变与逆变接口：
+通过这两个接口，可以制作出更多用途的果盘。盘子本身需要产生与使用其泛型，所以它既不能是协变的也不能是逆变的，但是它可以实现协变与逆变接口：
 
 ```kotlin
 class Bowl<T> : Producer<T>, Consumer<T> {
@@ -169,7 +169,7 @@ val c: Consumer<Apple> = Bowl<Fruit>()
 
 ### 类型投影（使用处协变与逆变）
 
-If you're using a generic class whose type parameters haven't been declared in a variant way (either because its authors didn't think of it, or because the type parameters can't have either variance kind because they are used both as parameter types and return types), you can still use it in a variant way thanks to _type projection_. The term "projection" refers to the fact that when you do this, you might restrict yourself to using only some of its members - so you're in a sense only seeing a partial, or "projected" version of the class. Let's look again at our `Bowl` class, but without the variant interfaces this time:
+如果使用的泛型类的类型参数没有以不同的方式声明（要么是因为作者没有想到，要么是因为类型参数不能具有任何一种方差类型，因为它们既用作参数类型又用作返回类型），由于 _类型投影_，仍然可以以其他方式使用它。术语“投影”是指这样的事实：执行此操作时，可能会限制自己仅使用其某些成员——因此，从某种意义上讲，只能看到类的部分或“投影”版本。再次关注 `Bowl` 类，但是这次没有变量接口：
 
 ```kotlin
 class Bowl<T> {
@@ -179,7 +179,7 @@ class Bowl<T> {
 }
 ```
 
-Because `T` is used as a parameter type, it can't be covariant, and because it's used as a return type, it can't be contravariant. But if we only want to use the `get()` function, we can project it covariantly with `out`:
+因为 `T` 用作参数类型，所以它不能是协变的，并且因为它用作返回类型，所以它不能是逆变的。但是，如果只想使用 `get()` 函数，则可以使用 `out` 进行协变地投影：
 
 ```kotlin
 fun <T> moveCovariantly(from: Bowl<out T>, to: Bowl<T>) {
@@ -187,9 +187,9 @@ fun <T> moveCovariantly(from: Bowl<out T>, to: Bowl<T>) {
 }
 ```
 
-Here, we're saying that the type parameter of `from` must be a subtype of the type parameter of `to`. This function will accept e.g. a `Bowl<Apple>` as `from` and `Bowl<Fruit>` as `to`. The price we're paying for using the `out` projection is that we can't call `add()` on `from()`, since we don't know its true type parameter and we would therefore risk adding incompatible fruits to it.
+在这里的 `from` 的类型参数必须是 `to` 的类型参数的子类型。此函数将接受例如 `Bowl<Apple>` 作为 `from`，而 `Bowl<Fruit>` 作为 `to`。而使用 `out` 投影而付出的代价是，无法在 `from()` 上调用 `add()`，因为不知道其真实类型参数，因此可能会给它添加不兼容的水果。
 
-We could do a similar thing with contravariant projection by using `in`:
+可以通过使用 `in` 来对逆变投影做类似的事情：
 
 ```kotlin
 fun <T> moveContravariantly(from: Bowl<T>, to: Bowl<in T>) {
@@ -197,9 +197,9 @@ fun <T> moveContravariantly(from: Bowl<T>, to: Bowl<in T>) {
 }
 ```
 
-Now, the type parameter of `to` must be a supertype of that of `from`. This time, we're losing the ability to call `get()` on `to`.
+现在，`to` 的类型参数必须是 `from` 的类型参数的超类型。这次，将失去在 `to` 上调用 `get()` 的能力。
 
-The same type parameter can be used in both covariant and contravariant projections (because it's the generic classes that are being projected, not the type parameter):
+相同的类型参数可以用于协变与逆变投影（因为被投影的是泛型类，而不是类型参数）
 
 ```kotlin
 fun <T> moveContravariantly(from: Bowl<out T>, to: Bowl<in T>) {
@@ -207,28 +207,28 @@ fun <T> moveContravariantly(from: Bowl<out T>, to: Bowl<in T>) {
 }
 ```
 
-While doing so was not useful in this particular example, one could get interesting effects by adding an unprojected parameter type `via: Bowl<T>`, in which case the generic type parameter of `via` would be forced to be "in-between" those of `from` and `to`.
+虽然这样做在这个特殊的例子中没有用处，但可以通过添加未投影的参数类型 `via: Bowl<T>` 来获得有趣的效果，在这种情况下，`via` 的泛型参数将被强制为“在 `from` 与 `to` 之间”。
 
-If you don't have any idea (or don't care) what the generic type might be, you can use a _star-projection_:
+如果不知道（或不在乎）泛型类型是什么，可以使用 _星投影_：
 
 ```kotlin
 fun printSize(items: List<*>) = println(items.size)
 ```
 
-When using a generic type where you have star-projected one or more of its type parameters, you can:
+当使用一个泛型类型时，就已经星投影了它的一个或多个类型参数，可以：
 
-* Use any members that don't mention the star-projected type parameter(s) at all
-* Use any members that return the star-projected type parameter(s), but the return type will appear to be `Any?` (unless the type parameter is constrained, in which case you'll get the type mentioned in the constraint)
-* Not use any members that take a star-projected type as a parameter
+* 使用任何未提及的成员的所有星投影类型参数
+* 使用任何返回星投影类型参数的成员，但是返回类型将显示为 `Any?`。（除非类型参数受到约束，在这种情况下，将获得约束中提到的类型）
+* 不要使用任何采用星投影类型作为参数的成员
 
 
 ## 具体化的类型参数
 
-Sadly, Kotlin has inherited Java's limitation on generics: they are strictly a compile-time concept - the generic type information is _erased_ at runtime. Therefore, you can not say `T()` to construct a new instance of a generic type; you can not at runtime check if an object is an instance of a generic type parameter; and if you try to cast between generic types, the compiler can't guarantee the correctness of it.
+可悲的是，Kotlin 继承了 Java 对泛型的限制：严格来说，它们是一个编译时概念——泛型类型信息在运行时被 _擦除_。因此，不能使用 `T()` 来构造泛型的新实例；无法在运行时检测对象是否为泛型类型参数的实例；如果尝试在泛型类型之间进行转换，编译器将无法保证其正确性。
 
-Luckily, Kotlin has got _reified type parameters_, which alleviates some of these problems. By writing `reified` in front of a generic type parameter, it does become available at runtime, and you'll get to write `T::class` to get the [class metadata](member-references-and-reflection.html#由类引用获取成员引用). You can only do this in inline functions (because an inline function will be compiled into its callsite, where the type information _is_ available at runtime), but it still goes a long way. For example, you can make an inline wrapper function for a big function that has got a less elegant signature.
+幸运的是，Kotlin 得到了 _具体化的类型参数_，从而缓解了其中的一些问题。通过在泛型参数前面编写 `reified`，它在运行时确实可用，并且需要编写 `T::class` 来获取[类元数据](member-references-and-reflection.html#由类引用获取成员引用)。只能在内联函数中这样做（因为内联函数将被编译到它的调用站点中，_其_ 中类型信息在运行时可用），但它仍然需要很长时间。例如，可以为签名不太优雅的大型函数创建内联包装器函数。
 
-In the example below, we assume that there is a `DbModel` base class, and that every subclass has got a parameterless primary constructor. In the inline function, `T` is reified, so we can get the class metadata. We pass this to the function that does the real work of talking to the database.
+在下面的示例中，假设有一个 `DbModel` 基类，并且每个子类都有一个无参数的主构造函数。在内联函数中， `T` 被具体化了，因此可以获得类元数据。将其传递给执行与数据库通信的实际工作的函数。
 
 ```kotlin
 inline fun <reified T : DbModel> loadFromDb(id: String): T =
@@ -244,7 +244,7 @@ fun <T : DbModel> loadFromDb(cls: KClass<T>, id: String): T {
 }
 ```
 
-Now, you can say `loadFromDb<Exercise>("x01234567")` to load an object from the `Exercise` database table.
+现在，可以使用 `loadFromDb<Exercise>("x01234567")` 从 `Exercise` 数据库表中加载对象。
 
 
 
