@@ -31,8 +31,7 @@ fun foo(v: Vehicle) = v.extension()
 val x = foo(Car())
 ```
 
-Kotlin 中有很多内置的扩展函数/属性——例如：`map()`、`filter()` 与使用扩展功能构建了用于以实用方式处理集合的其余框架。
-There are a lot of built-in extension functions/properties in Kotlin - for example, `map()`, `filter()`, and the rest of the framework for processing collections in a functional manner is built using extension functions.
+Kotlin 中有很多内置的扩展函数/属性——例如：`map()`、`filter()` 以及使用扩展函数构建了用于以实用方式处理集合的其余框架。
 
 
 
