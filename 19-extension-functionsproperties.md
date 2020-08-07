@@ -1,8 +1,8 @@
-Since you can't modify built-in or third-party classes, you can't directly add functions or properties to them. If you can achieve what you want by only using the public members of a class, you can of course just write a function that takes an instance of the class as a parameter - but sometimes, you'd really like to be able to say `x.foo(y)` instead of `foo(x, y)`,  especially if you want to make a chain of such calls or property lookups: `x.foo(y).bar().baz` instead of `getBaz(bar(foo(x, y)))`. 
+由于无法修改内置或第三方类，因此无法直接向其添加函数或属性。如果仅通过使用类的公共成员就可以实现所需的目标，那么可以编写一个将类的实例作为参数的函数——但是有时候，真的很想说 `x.foo(y)` 而不是 `foo(x, y)`，特别是如果要进行一系列这样的调用或属性查找时：`x.foo(y).bar().baz` 而不是 `getBaz(bar(foo(x, y)))`。
 
-There is a nice piece of syntactic sugar that lets you do this: _extension functions_ and _extension properties_. They look like regular member functions/properties, but they are defined outside of any class - yet they reference the class name and can use `this`. However, they can only use visible members of the class (typically just the public ones). Behind the scenes, they get compiled down to regular functions that take the target instance as a parameter.
+有一个不错的语法糖可以做到这一点：_扩展函数_ 与 _扩展属性_。它们看起来像常规成员函数/属性，但是它们在任何类之外定义——然而它们引用了类名并且可以使用 `this`。总之，他们只能使用该类的可见成员（通常只是公共成员）。在幕后，它们被编译为以目标实例为参数的常规函数。
 
-For example, if you work a lot with bytes, you might want to easily get an unsigned byte in the range 0 through 255 instead of the default -128 through 127 (the result will have to be in the form of a `Short`/`Int`/`Long`, though). `Byte` is a built-in class that you can't modify, but you can define this extension function:
+例如，如果处理大量字节，则可能希望轻松获取 0 到 255 之间的无符号字节，而不是默认的 -128 到 127（结果必须采用 `Short`/`Int`/`Long`）。`Byte` 是无法修改的内置类，但是可以定义此扩展函数：
 
 ```kotlin
 fun Byte.toUnsigned(): Int {
@@ -10,28 +10,28 @@ fun Byte.toUnsigned(): Int {
 }
 ```
 
-Now, you can do:
+现在，可以执行以下操作：
 
 ```kotlin
 val x: Byte = -1
 println(x.toUnsigned()) // Prints 255
 ```
 
-If you'd rather do `x.unsigned`, you can define an extension property:
+如果愿意使用 `x.unsigned`，则可以定义一个扩展属性：
 
 ```kotlin
 val Byte.unsigned: Int
     get() = if (this < 0) this + 256 else this.toInt()
 ```
 
-Keep in mind that this is just syntactic sugar - you're not actually modifying the class or its instances. Therefore, you have to import an extension function/property wherever you want to use it (since it isn't carried along with the instances of the class). For the same reason, you can not override extension members - you can reimplement them for subtypes, but the resolution happens at compile-time based on the static type of the expression you're invoking it on. So if you declare an extension function for `Vehicle`, and one with the same name and signature for its subclass `Car`, and you do the following, it's the extension function on `Vehicle` that will be called, even though `v` is really a `Car`:
+请记住，这只是语法糖——实际上并没有在修改类或其实例。因此，必须在要使用扩展函数/属性的任何地方导入它（因为它不随类的实例一起提供）。出于同样的原因，不能覆盖扩展成员——可以为子类型重新实现扩展成员，但是解决方案是在编译时根据调用它的表达式的静态类型进行的。因此，如果为 `Vehicle` 声明了一个扩展函数，并且为其子类 `Car` 声明了相同的名称和签名，并且执行了以下操作，则即使 `v` 实际上是 `Car`，也将调用 `Vehicle` 的扩展函数：
 
 ```kotlin
 fun foo(v: Vehicle) = v.extension()
 val x = foo(Car())
 ```
 
-There are a lot of built-in extension functions/properties in Kotlin - for example, `map()`, `filter()`, and the rest of the framework for processing collections in a functional manner is built using extension functions.
+Kotlin 中有很多内置的扩展函数/属性——例如：`map()`、`filter()` 以及使用扩展函数构建了用于以实用方式处理集合的其余框架。
 
 
 
