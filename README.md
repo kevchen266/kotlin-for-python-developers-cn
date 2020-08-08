@@ -2161,7 +2161,7 @@ Kotlin 中有很多内置的扩展函数/属性——例如：`map()`、`filter(
 
 ### 属性引用
 
-Consider this class: 
+思考此类：
 
 ```kotlin
 class Person(val name: String, var age: Int) {
