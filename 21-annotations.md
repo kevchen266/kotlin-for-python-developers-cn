@@ -1,4 +1,4 @@
-While Kotlin annotations look like Python decorators, they are far less flexible: they can generally only be used for metadata. They are pure data-containing classes, and do not contain any executable code. Some built-in annotations have an effect on the compilation process (such as `@JvmStatic`), but custom annotations are only useful for providing metadata that can be inspected at runtime by the reflection system. We won't delve deeply into annotations here, but here is an example. The annotations on the annotation declaration itself specify what constructs the annotation may be applied to and whether it is available for runtime inspection.
+尽管 Kotlin 注解看起来像 Python 装饰器，但它们的灵活性要差得多：它们通常只能用于元数据。它们是纯数据类，不包含任何可执行代码。一些内置注解会影响编译过程（例如：`@JvmStatic`），但是自定义注解仅可用于提供可由反射系统在运行时探查的元数据。不会在这里深入研究注解，但这里有一个示例。注解声明本身上的注解指定了注解可以应用于哪些构造以及是否可用于运行时探查。
 
 ```kotlin
 enum class TestSizes { SMALL, MEDIUM, LARGE }

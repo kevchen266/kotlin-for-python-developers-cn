@@ -36,7 +36,7 @@ printProperty(person, Person::name)
 incrementProperty(person, Person::age)
 ```
 
-还可以通过在属性名称前面加上 `::`（例如：`::foo`）来获得对顶级属性的引用，其类型将为 `KProperty0<V>` 或 `KMutableProperty0<V>`。
+还可以通过在属性名称前面加上 `::`（例如：`::foo`）来获得对顶层属性的引用，其类型将为 `KProperty0<V>` 或 `KMutableProperty0<V>`。
 
 
 ## 函数引用
@@ -78,7 +78,7 @@ callAndPrintTwoParam(Person::greet, person, "Lisa")
 
 如果只想调用函数而不关心元数据，请使用函数类型，例如：`(A, B) -> V` 用于普通函数引用或绑定成员函数引用，或 `A.(B, C) -> V` 用于 `A` 上的未绑定成员函数引用。请注意，`KFunction<V>` 及其子接口仅可用于已声明的函数（通过在代码中显式引用它或通过反射来获得，如稍后所示）——只有函数类型可用于函数字面量（lambda 表达式或匿名函数）。
 
-可以在函数名称前加上 `::`（例如：`::foo`），以获得对顶级函数的引用。
+可以在函数名称前加上 `::`（例如：`::foo`），以获得对顶层函数的引用。
 
 
 ## 由类引用获取成员引用
