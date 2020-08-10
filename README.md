@@ -1335,7 +1335,7 @@ val result = maybeNull
 
 第一个 `this` 是指 `maybeNull`，第二个是 `firstFunction()` 的结果，`result` 将是 `secondFunction()` 的结果（如果 `maybeNull` 或任何中间结果为空，那么返回空）。
 
-`run()` 的语法变体是 `let()`，它以普通函数类型而不是带有接收器的函数类型作为参数，因此可能为空的表达式将称为 `it` 而不是 `this`。 。
+`run()` 的语法变体是 `let()`，它以普通函数类型而不是带有接收者的函数类型作为参数，因此可能为空的表达式将称为 `it` 而不是 `this`。 。
 
 如果有一个需要多次使用的表达式，但是不必为它提供一个变量名并进行空检测，`run()` 与 `let()` 都非常有用：
 
@@ -1859,7 +1859,7 @@ start(object : Vehicle {
 
 如果超类型具有构造函数，那么必须在超类型名称之后用括号将其调用。可以根据需要指定多个超类型（但通常，最多只有一个超类）。
 
-由于匿名类没有名称，因此不能将其用作返回类型——如果确实返回了匿名对象，则该函数的返回类型必须为 `Any`。
+由于匿名类没有名称，因此不能将其用作返回类型——如果确实返回了匿名对象，那么该函数的返回类型必须为 `Any`。
 
 尽管使用了 `object` 关键字，但无论何时对对象表达式求值，都会创建一个匿名类的新实例。
 
@@ -1906,7 +1906,7 @@ class TreeNode<T : Vehicle>
 
 现在，可能无法创建类型不是 `Vehicle` 的子类/实现的 `TreeNode`。在类内部，只要获得类型为 `T` 的值，就可以访问其上所有 `Vehicle` 的公共成员。
 
-如果要施加其他约束，则必须使用单独的 `where` 子句，在这种情况下，类型参数必须是给定类的子类（如果指定了一个类，并且最多可以指定一个），_并且_ 实现所有给定的接口。然后，只要获得类型 `T` 的值，就可以访问所有给定类型的所有公共成员：
+如果要施加其他约束，那么必须使用单独的 `where` 子句，在这种情况下，类型参数必须是给定类的子类（如果指定了一个类，并且最多可以指定一个），_并且_ 实现所有给定的接口。然后，只要获得类型 `T` 的值，就可以访问所有给定类型的所有公共成员：
 
 ```kotlin
 class TreeNode<T> where T : Vehicle, T : HasWheels
@@ -1933,7 +1933,7 @@ val apple = bowl.get() // 裂开！
 
 #### 声明处协变与逆变
 
-如果有 `Generic<Subtype>` 的实例，并且想将其称为 `Generic<Supertype>`，则可以安全地从中 _获取_ 泛型类型参数的实例——这些将确实是 `Subtype` 的实例。（因为它们来自 `Generic<Subtype>` 的实例），但是它们看起来是 `Supertype` 的实例（因为已经告诉编译器具有 `Generic<Supertype>`）。这很安全；它被称为 _协变_，而 Kotlin 可以通过在泛型参数前面放置 `out` 来进行 _声明处协变_。如果这样做，则只能将该类型参数用作返回类型，而不能用作参数类型。这是最简单有用的协变接口：
+如果有 `Generic<Subtype>` 的实例，并且想将其称为 `Generic<Supertype>`，那么可以安全地从中 _获取_ 泛型类型参数的实例——这些将确实是 `Subtype` 的实例。（因为它们来自 `Generic<Subtype>` 的实例），但是它们看起来是 `Supertype` 的实例（因为已经告诉编译器具有 `Generic<Supertype>`）。这很安全；它被称为 _协变_，而 Kotlin 可以通过在泛型参数前面放置 `out` 来进行 _声明处协变_。如果这样做，那么只能将该类型参数用作返回类型，而不能用作参数类型。这是最简单有用的协变接口：
 
 ```kotlin
 interface Producer<out T> {
@@ -1943,7 +1943,7 @@ interface Producer<out T> {
 
 将 `Producer<Apple>` 视为 `Producer<Fruit>` 是安全的——它将产生的唯一东西是 `Apple` 实例，但这没关系，因为 `Apple` 是 `Fruit`。
 
-相反，如果有  `Generic<Supertype>` 的实例，并且想将其引用为 `Generic<Subtype>`（不能使用非泛型类），则可以安全地为其 _提供_ 泛型类型参数的实例——编译器将要求这些实例的类型为 `Subtype`，这对于实际实例是可接受的，因为它可以处理任何 `Supertype`。这被称为 _逆变_，而 Kotlin 可以通过在泛型参数的前面加 `in` 来进行 _声明处逆变_。如果这样做，则只能将该类型参数用作参数类型，而不能用作返回类型。这是最简单有用的逆变接口：
+相反，如果有  `Generic<Supertype>` 的实例，并且想将其引用为 `Generic<Subtype>`（不能使用非泛型类），那么可以安全地为其 _提供_ 泛型类型参数的实例——编译器将要求这些实例的类型为 `Subtype`，这对于实际实例是可接受的，因为它可以处理任何 `Supertype`。这被称为 _逆变_，而 Kotlin 可以通过在泛型参数的前面加 `in` 来进行 _声明处逆变_。如果这样做，那么只能将该类型参数用作参数类型，而不能用作返回类型。这是最简单有用的逆变接口：
 
 ```kotlin
 interface Consumer<in T> {
@@ -1973,7 +1973,7 @@ val c: Consumer<Apple> = Bowl<Fruit>()
 
 #### 型变方向
 
-如果变量类型的成员的参数或返回类型本身就是变量，则将变得有些复杂。参数中的函数类型和返回类型使其更具挑战性。如果想在特定位置使用变体类型参数 `T` 是否安全，请问自己：
+如果变量类型的成员的参数或返回类型本身就是变量，那将会变得有些复杂。参数中的函数类型和返回类型使其更具挑战性。如果想在特定位置使用变体类型参数 `T` 是否安全，请问自己：
 
 * 如果 `T` 是协变的：类的用户认为处于这个位置的 `T` 是 `Supertype`，而实际上是 `Subtype` 这样可以吗？
 * 如果 `T` 是逆变的：类的用户认为处于这个位置的 `T` 是 `Subtype`，而实际上是 `Supertype` 这样可以吗？
@@ -2050,7 +2050,7 @@ class Bowl<T> {
 }
 ```
 
-因为 `T` 用作参数类型，所以它不能是协变的，并且因为它用作返回类型，所以它不能是逆变的。但是，如果只想使用 `get()` 函数，则可以使用 `out` 进行协变地投影：
+因为 `T` 用作参数类型，所以它不能是协变的，并且因为它用作返回类型，所以它不能是逆变的。但是，如果只想使用 `get()` 函数，那么可以使用 `out` 进行协变地投影：
 
 ```kotlin
 fun <T> moveCovariantly(from: Bowl<out T>, to: Bowl<T>) {
@@ -2124,7 +2124,7 @@ fun <T : DbModel> loadFromDb(cls: KClass<T>, id: String): T {
 
 有一个不错的语法糖可以做到这一点：_扩展函数_ 与 _扩展属性_。它们看起来像常规成员函数/属性，但是它们在任何类之外定义——然而它们引用了类名并且可以使用 `this`。总之，他们只能使用该类的可见成员（通常只是公共成员）。在幕后，它们被编译为以目标实例为参数的常规函数。
 
-例如，如果处理大量字节，则可能希望轻松获取 0 到 255 之间的无符号字节，而不是默认的 -128 到 127（结果必须采用 `Short`/`Int`/`Long`）。`Byte` 是无法修改的内置类，但是可以定义此扩展函数：
+例如，如果处理大量字节，那么可能希望轻松获取 0 到 255 之间的无符号字节，而不是默认的 -128 到 127（结果必须采用 `Short`/`Int`/`Long`）。`Byte` 是无法修改的内置类，但是可以定义此扩展函数：
 
 ```kotlin
 fun Byte.toUnsigned(): Int {
@@ -2139,14 +2139,14 @@ val x: Byte = -1
 println(x.toUnsigned()) // Prints 255
 ```
 
-如果愿意使用 `x.unsigned`，则可以定义一个扩展属性：
+如果愿意使用 `x.unsigned`，那么可以定义一个扩展属性：
 
 ```kotlin
 val Byte.unsigned: Int
     get() = if (this < 0) this + 256 else this.toInt()
 ```
 
-请记住，这只是语法糖——实际上并没有在修改类或其实例。因此，必须在要使用扩展函数/属性的任何地方导入它（因为它不随类的实例一起提供）。出于同样的原因，不能覆盖扩展成员——可以为子类型重新实现扩展成员，但是解决方案是在编译时根据调用它的表达式的静态类型进行的。因此，如果为 `Vehicle` 声明了一个扩展函数，并且为其子类 `Car` 声明了相同的名称和签名，并且执行了以下操作，则即使 `v` 实际上是 `Car`，也将调用 `Vehicle` 的扩展函数：
+请记住，这只是语法糖——实际上并没有在修改类或其实例。因此，必须在要使用扩展函数/属性的任何地方导入它（因为它不随类的实例一起提供）。出于同样的原因，不能覆盖扩展成员——可以为子类型重新实现扩展成员，但是解决方案是在编译时根据调用它的表达式的静态类型进行的。因此，如果为 `Vehicle` 声明了一个扩展函数，并且为其子类 `Car` 声明了相同的名称和签名，并且执行了以下操作，那么即使 `v` 实际上是 `Car`，也将调用 `Vehicle` 的扩展函数：
 
 ```kotlin
 fun foo(v: Vehicle) = v.extension()
@@ -2161,7 +2161,7 @@ Kotlin 中有很多内置的扩展函数/属性——例如：`map()`、`filter(
 
 ### 属性引用
 
-Consider this class: 
+思考此类：
 
 ```kotlin
 class Person(val name: String, var age: Int) {
@@ -2170,15 +2170,15 @@ class Person(val name: String, var age: Int) {
 }
 ```
 
-You can get reference to its `name` property like this:
+可以像这样获取其 `name` 属性的引用：
 
 ```kotlin
 val prop = Person::name
 ```
 
-The result is an object which represents a reference to the property (the "Platonic ideal" property, not a property on a particular instance). There's a type hierarchy for property objects: the base interface is `KProperty`, which lets you get metadata about the property, such as its name and type. If you want to use the property object to read or modify the property's value in an object, you need to use a subinterface that specifies what kind of property it is. Immutable properties typically are `KProperty1<R, V>`, and mutable properties typically are `KMutableProperty1<R, V>`. Both of these are generic interfaces, with `R` being the receiver type (the type on which the property is declared, in this case `Person`) and `V` being the type of the property's value.
+结果是一个对象，该对象表示对该属性的引用（“柏拉图理想”属性，而不是特定实例上的属性）。属性对象有一个类型层次结构：基本接口是 `KProperty`，它能够获取有关属性的元数据，例如名称与类型。如果要使用属性对象读取或修改对象中属性的值那么需要使用一个子接口来指定它是什么类型的属性。不可变属性通常是 `KProperty1<R, V>`，可变属性通常是 `KMutableProperty1<R, V>`。这两个都是通用接口，其中 `R` 是接收者类型（在该类型中声明属性，在这种情况下是 `Person`），而 `V` 是属性值的类型。
 
-Given an `R` instance, `KProperty1<R, V>` will let you read the value that the property has in that instance by calling `get()`, and `KMutableProperty1<R, V>` will also let you change the property value in the instance by calling `set()`. Using this, we can start writing functions that manipulate properties without knowing in advance which property (or which class) they are going to deal with:
+给定一个 `R` 实例，`KProperty1<R, V>` 将允许通过调用 `get()` 来读取该实例中该属性具有的值，而  `KMutableProperty1<R, V>` 还可以通过调用 `set()` 来更改实例中的属性值。使用该实例，可以开始编写用于操作属性的函数，而无需事先知道它们将要处理哪个属性（或哪个类）：
 
 ```kotlin
 fun <T> printProperty(instance: T, prop: KProperty1<T, *>) {
@@ -2197,14 +2197,14 @@ printProperty(person, Person::name)
 incrementProperty(person, Person::age)
 ```
 
-You can also get a reference to a top-level property by just prefixing the property name with `::` (e.g. `::foo`), and its type will be `KProperty0<V>` or `KMutableProperty0<V>`.
+还可以通过在属性名称前面加上 `::`（例如：`::foo`）来获得对顶级属性的引用，其类型将为 `KProperty0<V>` 或 `KMutableProperty0<V>`。
 
 
 ### 函数引用
 
-Functions act similarly to properties, but can be referenced as two different kinds of types.
+函数的作用类似于属性，但可以作为两种不同类型引用。
 
-If you want to look at the metadata of a function (e.g. its name), use `KFunction<V>` or one of its subinterfaces, where `V` is the function's return type. Here's a basic example:
+如果要查看函数的元数据（例如：函数名称），请使用 `KFunction<V>` 或其子接口之一，其中 `V` 是函数的返回类型。 这是一个基本示例：
 
 ```kotlin
 val person = Person("Lisa", 32)
@@ -2213,11 +2213,11 @@ println(g.name)
 println(g.call(person, "Anne"))
 ```
 
-Invoking `call()` on a function object will call the function. If it is a member function, the first parameter must be the _receiver_ (the object on which the function is to be invoked, in this case `person`), and the remaining parameters must be the ordinary function parameters (in this case `"Anne"`).
+在函数对象上调用 `call()` 将调用该函数。如果它是成员函数那么第一个参数必须是 _接收者_（要在其上调用函数的对象，在本例中为 `person`），其余参数必须为普通函数参数（在本例中为 `"Anne"`）。
 
-Since the parameter types are not encoded as generic type parameters in `KFunction<V>`, you won't get compile-time type validation of the parameters you pass. In order to encode the parameter types, use one of the subinterfaces `KFunction1<A, V>`, `KFunction2<A, B, V>`, `KFunction3<A, B, C, V>`, and so on, depending on how many parameters the function has got. Keep in mind that if you are referencing a member function, the first generic type parameter is the receiver type. For example, `KFunction3<A, B, C, V>` may reference either an ordinary function that takes `A`, `B`, and `C` as parameters and returns `V`, or it may reference a member function on `A` that takes `B` and `C` as parameters and returns `V`. When you use any of these types, you can call the function through its reference as if the reference were a function, e.g. `function(a, b)`, and this call will be type-safe.
+由于在 `KFunction<V>` 中未将参数类型编码为泛型参数，因此无法对传递的参数进行编译时类型验证。为了对参数类型进行编码，请使用以下子接口之一：`KFunction1<A, V>`、`KFunction2<A, B, V>`、`KFunction3<A, B, C, V>`、依此类推，这取决于函数有多少个参数。请记住，如果要引用成员函数那么第一个泛型类型参数是接收者类型。例如：`KFunction3<A, B, C, V>` 可以引用一个普通函数，该函数以 `A`、`B`、`C` 为参数并返回 `V`，也可以引用 `A` 上的一个成员函数，该函数以 `B`、`C` 为参数并返回 `V`。当使用这些类型中的任何一种时，都可以通过其引用来调用该函数，就好像该引用是一个函数一样。例如：`function(a, b)`，并且此调用将是类型安全的。
 
-You can also reference a member property directly on an object, in which case you get a member function reference that is already bound to its receiver, so that you don't need the receiver type in the signature. Here's an example of both approaches:
+还可以直接在对象上引用成员属性，在这种情况下，将获得已绑定到其接收者的成员函数引用，因此在签名中不需要接收者类型。这是这两种方法的示例：
 
 ```kotlin
 fun <A, V> callAndPrintOneParam(function: KFunction1<A, V>, a: A): V {
@@ -2237,31 +2237,31 @@ callAndPrintOneParam(p::greet, "Alice")
 callAndPrintTwoParam(Person::greet, person, "Lisa")
 ```
 
-If you only want to call the function and don't care about the metadata, use a function type, e.g. `(A, B) -> V` for an ordinary function reference or a bound member function reference, or `A.(B, C) -> V` for an unbound member function reference on `A`. Note that `KFunction<V>` and its subinterfaces are only available for declared functions (obtained either by explicitly referencing it in the code, or through reflection, as shown later) - only function types are available for function literals (lambda expressions or anonymous functions).
+如果只想调用函数而不关心元数据，请使用函数类型，例如：`(A, B) -> V` 用于普通函数引用或绑定成员函数引用，或 `A.(B, C) -> V` 用于 `A` 上的未绑定成员函数引用。请注意，`KFunction<V>` 及其子接口仅可用于已声明的函数（通过在代码中显式引用它或通过反射来获得，如稍后所示）——只有函数类型可用于函数字面量（lambda 表达式或匿名函数）。
 
-You can get a reference to an top-level function by prefixing the function name with `::` (e.g. `::foo`).
+可以在函数名称前加上 `::`（例如：`::foo`），以获得对顶级函数的引用。
 
 
 ### 由类引用获取成员引用
 
-While it is possible in Kotlin to dynamically create new classes at runtime or to add members to a class, it's tricky and slow, and generally discouraged. However, it is easy to dynamically inspect an object to see e.g. what properties and functions it contains and which annotations exist on them. This is called _reflection_, and it's not very performant, so avoid it unless you really need it.
+尽管在 Kotlin 中可以在运行时动态创建新类或将成员添加到类中，但这既棘手又缓慢，并且通常不鼓励这样做。然而，动态地探查一个对象是很容易的，例如：看它包含什么属性和函数，以及它们上面有什么注解。这被称为 _反射_，它不是很高效，因此除非真正需要它，否则请避免使用它。
 
-Kotlin has got its own reflection library (`kotlin-reflect.jar` must be included in your build). When targeting the JVM, you can also use the Java reflection facilities. Note that the Kotlin reflection isn't quite feature-complete yet - in particular, you can't use it to inspect built-in classes like `String`.
+Kotlin 有自己的反射库（构建中必须包含 `kotlin-reflect.jar`）。以 JVM 为目标时，还可以使用 Java 反射工具。请注意，Kotlin 反射特性还不是很完善——特别是，不能使用它来探查诸如 `String` 之类的内置类。
 
-Warning: using reflection is usually the wrong way to solve problems in Kotlin! In particular, if you have several classes that all have some common properties/functions and you want to write a function that can take an instance of any of those classes and use those properties, the correct approach is to define an interface with the common properties/functions and make all the relevant classes implement it; the function can then take that interface as a parameter. If you don't control those classes, you can use the [Adapter pattern](https://en.wikipedia.org/wiki/Adapter_pattern) and write wrapper classes that implement the interface - this is very easy thanks to Kotlin's [delegation feature](#委托). You can also get a lot of leverage out of using generics in clever ways.
+警告：使用反射通常是解决 Kotlin 问题的错误方法！特别是，如果有几个都具有某些公共属性/函数的类，并且想要编写一个可以接受任何这些类的实例并使用这些属性的函数那么正确的方法是用通用的属性/函数定义一个接口，并使所有相关的类都实现它；然后，该函数可以将该接口作为参数。如果不控制这些类那么可以使用[适配器模式](https://zh.wikipedia.org/wiki/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F)并编写实现该接口的包装器类——由于 Kotlin 的[委托特性](#委托)，这非常容易。通过巧妙地使用泛型，还可以获得很多优势。
 
-Appending `::class` to a class name will give you a `KClass<C>` metadata object for that class. The generic type parameter `C` is the class itself, so you can use `KClass<*>` if you're writing a function that can work with metadata for any class, or you can make a generic function with a type parameter `T` and parameter type `KClass<T>`. From this, you can obtain references to the members of the class. The most interesting properties on `KClass` are probably `primaryConstructor`, `constructors`, `memberProperties`, `declaredMemberProperties`, `memberFunctions`, and `declaredMemberFunctions`. The difference between e.g. `memberProperties` and `declaredMemberProperties` is that the former includes inherited properties, while the latter only includes the properties that have been declared in the class' own body.
+在类名后附加 `::class` 将提供该类的 `KClass<C>` 元数据对象。通用类型参数 `C` 是类本身，因此，如果要编写可用于任何类的元数据的函数那么可以使用 `KClass<*>`，或者可以使用类型参数 `T` 与参数类型 `KClass<T>` 来创建泛型函数。由此，可以获得对类成员的引用。`KClass` 上最有趣的属性可能是 `primaryConstructor`、`constructors`、`memberProperties`、`declaredMemberProperties`、`memberFunctions` 与 `declaredMemberFunctions`。例如：`memberProperties` 与 `declaredMemberProperties` 之间的区别在于前者包括继承的属性，而后者只包括已经在类自己的主体中声明的属性。
 
-In this example, using `Person` and `callAndPrintTwoParam()` from the previous section, we locate a member function reference by name and call it:
+在此示例中，使用上一节中的 `Person` 与 `callAndPrintTwoParam()`，按名称查找成员函数引用并对其进行调用：
 
 ```kotlin
 val f = Person::class.memberFunctions.single { it.name == "greet" } as KFunction2<Person, String, String>
 callAndPrintTwoParam(f, person, "Lisa")
 ```
 
-The signature of `greet()` is `KFunction2<Person, String, String>` because it's a function on `Person` that takes a `String` and returns a `String`.
+`greet()` 的签名为 `KFunction2<Person, String, String>`，因为它是 `Person` 上的一个函数，它接受 `String` 并返回 `String`。
 
-Constructor references are effectively factory functions for creating new instances of a class, which might come in handy:
+构造函数引用实际上是工厂函数，用于创建类的新实例，这可能会派上用场：
 
 ```kotlin
 val ctor = Person::class.primaryConstructor!! as (String, Int) -> Person
@@ -2271,7 +2271,7 @@ val newPerson = ctor("Karen", 45)
 
 ### Java 风格反射
 
-If you're targeting the JVM platform, you can also use Java's reflection system directly. In this example, we grab a function reference from an object's class by specifying the function's name as a string (if the function takes parameters, you also need to specify their types), and then we call it. Note that we didn't mention `String` anywhere - this technique works without knowing what the object's class is, but it will raise an exception if the object's class doesn't have the requested function. However, Java-style function references do not have type information, so you won't get verification of the parameter types, and you must cast the return value:
+如果以 JVM 平台为目标，那么还可以直接使用 Java 的反射系统。在此示例中，通过将函数名称指定为字符串来从对象的类中获取函数引用（如果函数带有参数，那么还需要指定其类型），然后调用它。注意，在任何地方都没有提到 `String` ——这种技术在不知道对象的类是什么的情况下起作用，但是如果对象的类没有所请求的函数，将会引发异常。但是，Java 风格的函数引用没有类型信息，因此将无法验证参数类型，并且必须强制转换返回值：
 
 ```kotlin
 val s = "Hello world"
@@ -2279,9 +2279,9 @@ val length = s.javaClass.getMethod("length")
 val x = length.invoke(s) as Int
 ```
 
-If you don't have an instance of the class, you can get the class metadata with `String::class.java` (but you can't invoke any of its members until you have an instance).
+如果没有该类的实例，那么可以使用 `String::class.java` 获取该类的元数据（但是只有在拥有实例后才能调用其任何成员）。
 
-If you need to look up the class dynamically as well, you can use `Class.forName()` and supply the fully-qualified name of the class.
+如果还需要动态查找该类，那么可以使用 `Class.forName()` 并提供该类的全限定名称。
 
 
 ## 注解
