@@ -30,7 +30,7 @@ println(bytes)
 File("data.txt").writeText("Hello world!")
 ```
 
-如果希望逐步编写字符串，则需要通过在文件对象上调用 `writer()` 来创建一个 `OutputStreamWriter`。可以通过在文件对象上调用 `outputStream()` 并使用产生的 `OutputStream` 来写入字节，从而将二进制数据写入文件。
+如果希望逐步写入字符串，则需要通过在文件对象上调用 `writer()` 来创建一个 `OutputStreamWriter`。可以通过在文件对象上调用 `outputStream()` 并使用产生的 `OutputStream` 来写入字节，从而将二进制数据写入文件。
 
 如果需要一种更高级的读取或写入文件数据的方式，那么可以访问完整的 Java I/O 类套件——特别是 `Scanner`，它可以解析文件或其他流中的数字与其他数据类型，以及 `BufferedReader`（可以高效地读取大量数据），可以通过在文件或流上调用 `bufferedReader()` 来获得该数据。请参见任何 Java 教程以了解如何使用它们。
 
