@@ -60,7 +60,7 @@ println(-mostNegative)
 -----|------|------
 `Double` | 64 | 16~17 位有效数字（与 Python 中的 `float` 相同）
 `Float` | 32 | 6~7 位有效数字
-`Char` | 16 | UTF-16 代码单元（请参阅[字符串](strings.html)——在大多数情况下，这是一个 Unicode 字符，但也可能只是 Unicode 字符的一半）
+`Char` | 16 | UTF-16 代码单元（请参见[字符串](strings.html)——在大多数情况下，这是一个 Unicode 字符，但也可能只是 Unicode 字符的一半）
 `Boolean` | 8 | `true` 或 `false`
 
 浮点数的作用与 Python 中的相似，但根据所需的位数，分为两种类型。如果需要更高的精度，或者需要处理货币金额（或必须具有精确结果的其他情况），请使用非原始类型 `BigDecimal`。

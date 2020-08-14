@@ -326,7 +326,7 @@ println(-mostNegative)
 -----|------|------
 `Double` | 64 | 16~17 位有效数字（与 Python 中的 `float` 相同）
 `Float` | 32 | 6~7 位有效数字
-`Char` | 16 | UTF-16 代码单元（请参阅[字符串](#字符串)——在大多数情况下，这是一个 Unicode 字符，但也可能只是 Unicode 字符的一半）
+`Char` | 16 | UTF-16 代码单元（请参见[字符串](#字符串)——在大多数情况下，这是一个 Unicode 字符，但也可能只是 Unicode 字符的一半）
 `Boolean` | 8 | `true` 或 `false`
 
 浮点数的作用与 Python 中的相似，但根据所需的位数，分为两种类型。如果需要更高的精度，或者需要处理货币金额（或必须具有精确结果的其他情况），请使用非原始类型 `BigDecimal`。
@@ -2307,21 +2307,21 @@ println(getTestSize(Tests::class))
 
 ## 文件 I/O
 
-Kotlin has inherited Java's fidgety (but very flexible) way of doing I/O, but with some simplifying extra features. We won't get into all of it here, so for starters, this is how to iterate through all the lines of a file (you'll need `import java.io.File`):
+Kotlin 继承了 Java 烦躁（但非常灵活）的 I/O 方式，但是简化了一些附加特性。不会在这里介绍所有内容，因此对于初学者来说，这就是如何遍历文件的所有行（需要 `import java.io.File`）：
 
 ```kotlin
 File("data.txt").forEachLine { println(it) }
 ```
 
-The default [encoding](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/) is UTF-8, but you can specify it if you need something else:
+默认[字符编码](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)为 UTF-8，但是如果需要的话可以指定其他字符编码：
 
 ```kotlin
 File("data.txt").forEachLine(Charsets.UTF_16) { println(it) }
 ```
 
-Note that the trailing newline of each line is stripped. You can also call `readLines()` on a file object to get a list of all the lines, or `useLines()` to supply a function that will be called on every line. If you simply want the entire file contents as one string or byte array, call `readText()` or `readBytes()`, respectively.
+请注意，每一行的末尾换行符被去除。还可以在文件对象上调用 `readLines()` 以获取所有行的列表，或 `useLines()` 提供将在每一行上调用的函数。如果只希望将整个文件内容作为一个字符串或字节数组，请分别调用 `readText()` 或 `readBytes()`。
 
-Note that while `File()` does create a "file object", it doesn't actually open the file - the file object is just a reference to the file path; opening the file is a separate action. The preceding functions open and close the file automatically, whereas other functions separately open and close the file. For example, if you're parsing binary data and you don't want to read the entire file at once, you must create an _input stream_ (for binary data) or an _input stream reader_ (for strings) - the example below will read 16 bytes:
+注意，虽然 `File()` 确实创建了一个“文件对象”，但实际上并没有打开文件——文件对象只是对文件路径的引用；打开文件是一个单独的操作。前面的函数会自动打开和关闭文件，而其他函数会分别打开和关闭文件。例如，如果要解析二进制数据，并且不想一次读取整个文件，那么必须创建一个 _输入流_（用于二进制数据）或一个 _输入流读取器_（用于字符串）——下面的示例将读取 16 个字节：
 
 ```kotlin
 val stream = File("data.txt").inputStream()
@@ -2331,17 +2331,17 @@ stream.close()
 println(bytes)
 ```
 
-It's important to close a stream when you're done with it; otherwise, your program will leak a file handle. See the next section for how do do this nicely.
+完成后关闭流很重要；否则，程序将泄漏文件句柄。请参见下一部分，以了解如何做到这一点。
 
-If you've got one string that you want to write to a file, overwriting the existing contents if the file already exists, do this (again, UTF-8 is the default encoding):
+如果有一个要写入文件的字符串，并且在文件已经存在的情况下覆盖现有内容，请执行此操作（同样，UTF-8 是默认编码）：
 
 ```kotlin
 File("data.txt").writeText("Hello world!")
 ```
 
-If you want to write strings gradually, you need to create an `OutputStreamWriter` by calling `writer()` on the file object. You can write binary data to a file by calling `outputStream()` on a file object and use the resulting `OutputStream` to write bytes.
+如果希望逐步写入字符串，则需要通过在文件对象上调用 `writer()` 来创建一个 `OutputStreamWriter`。可以通过在文件对象上调用 `outputStream()` 并使用产生的 `OutputStream` 来写入字节，从而将二进制数据写入文件。
 
-If you need a fancier way of reading or writing file data, you have access to  the full Java suite of I/O classes - in particular, `Scanner`, which can parse numbers and other data types from files or other streams, and `BufferedReader` (which is good for efficient reading of large amounts of data), which you can obtain by calling `bufferedReader()` on a file or stream. See any Java tutorial for how to use these.
+如果需要一种更高级的读取或写入文件数据的方式，那么可以访问完整的 Java I/O 类套件——特别是 `Scanner`，它可以解析文件或其他流中的数字与其他数据类型，以及 `BufferedReader`（可以高效地读取大量数据），可以通过在文件或流上调用 `bufferedReader()` 来获得该数据。请参见任何 Java 教程以了解如何使用它们。
 
 
 ## 作用域内资源用法
