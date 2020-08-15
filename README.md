@@ -2346,7 +2346,7 @@ File("data.txt").writeText("Hello world!")
 
 ## 作用域内资源用法
 
-Kotlin does not have Python's _resource managers_ or Java's _try-with-resources_, but thanks to extension functions, there's `use`:
+Kotlin 没有 Python 的 _资源管理器(resource managers)_ 或 Java 的 _try-with-resources_，但是多亏了扩展函数，有了 `use`：
 
 ```kotlin
 File("/home/aasmund/test.txt").inputStream().use {
@@ -2355,11 +2355,11 @@ File("/home/aasmund/test.txt").inputStream().use {
 }
 ```
 
-`use` can be invoked on anything that implements the `Closeable` interface, and when the `use` block ends (whether normally or due to an exception), `close()` will be called on the object upon which you invoked `use`. If an exception is raised within the block or by `close()`, it will bubble out of `use`. If both the block and `close()` raise, it's the exception from the block that will bubble out.
+可以在实现 `Closeable` 接口的任何对象上调用 `use`，并且当 `use` 块结束时（无论是正常还是引发异常），都会在调用 `use` 的对象上调用 `close()`。如果在该代码块内或通过 `close()` 引发了异常，那么该异常将冒泡并退出 `use` 。如果代码块与 `close()` 都提升了，那么来自代码块的异常就会冒泡。
 
-Thus, you can create something resource manager-like by creating a class that implements `Closeable`, does its setup work in `init`, and does its cleanup work in `close()`.
+因此，可以创建类似于资源管理器的东西，方法是创建一个实现 `Closeable` 的类，在 `init` 中进行设置工作，在 `close()` 中进行清理工作。
 
-In case you're wondering about how `use`, which is a function, can just be followed by a block like that, see the section on [DSL support](#接收者).
+如果想知道如何“`use`”，它是一个函数，后面可以跟着一个这样的代码块，请参见 [DSL 支持](#接收者)一节。
 
 
 ## 编写文档
