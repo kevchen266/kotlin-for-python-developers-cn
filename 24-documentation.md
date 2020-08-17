@@ -1,4 +1,4 @@
-Kotlin's documentation syntax is called _KDoc_. A KDoc block is placed above the construct it describes, and begins with `/**` and ends with `*/` (possibly on one line; if not, each intermediate lines should start with an aligned asterisk). The first block of text is the summary; then, you can use _block tags_ to provide information about specific parts of the construct. Some block tags are `@param` for function parameters and generic type parameters, and `@return` for the return value. You can link to identifiers inside brackets. All the text outside of links and block tag names is in Markdown format.
+Kotlin 的文档语法称为 _KDoc_。 一个 KDoc 块放置在它描述的结构上方，并以 `/**` 开始，以 `*/` 结束（可能在一行上；如果没有，则每个中间行应以对齐的星号开头）。文本的第一块是摘要。然后，可以使用 _块标签_ 提供有关构造的特定部分的信息。一些块标签是用于函数参数和泛型类型参数的 `@param`，以及用于返回值的 `@return`。可以链接到方括号内的标识符。链接与块标签名称之外的所有文本均为 Markdown 格式。
 
 ```kotlin
 /**
@@ -11,11 +11,11 @@ Kotlin's documentation syntax is called _KDoc_. A KDoc block is placed above the
 fun square(number: Double) = number * number
 ```
 
-Package-level documentation can be provided in a separate Markdown file.
+包级文档可以在单独的 Markdown 文件中提供。
 
-Unlike docstrings, KDoc blocks are not available to the program at runtime.
+与文档字符串不同，KDoc 在运行时对程序不可用。
 
-You can generate separate documentation files in HTML format from KDoc by using a tool called [Dokka](https://github.com/Kotlin/dokka/blob/master/README.md).
+可以使用名为 [Dokka](https://github.com/Kotlin/dokka/blob/master/README.md) 的工具从 KDoc 生成 HTML 格式的单独文档文件。
 
 
 
