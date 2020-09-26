@@ -1370,7 +1370,7 @@ maybeNull?.apply {
 }?.memberFunctionB()
 ```
 
-在 `apply` 块中，`this 是指 `maybeNull`。在 `memberPropertyA`，`memberPropertyB` 与 `memberFunctionA` 之前有一个隐含的 `this`（除非这些在 `maybeNull` 上不存在，在这种情况下将在包含的作用域中查找它们）。此后，也可以在 `maybeNull` 上调用 `memberFunctionB()`。
+在 `apply` 块中，`this` 是指 `maybeNull`。在 `memberPropertyA`，`memberPropertyB` 与 `memberFunctionA` 之前有一个隐含的 `this`（除非这些在 `maybeNull` 上不存在，在这种情况下将在包含的作用域中查找它们）。此后，也可以在 `maybeNull` 上调用 `memberFunctionB()`。
 
 如果发现 `this` 语法令人困惑，那么可以改用 `also`，它以普通的 lambda 作为参数：
 
