@@ -1,7 +1,7 @@
 # 面向 Python 开发者的 Kotlin 教程
 
 *英文原文作者是 [Aasmund Eldhuset](https://eldhuset.net/)，[可汗学院（Khan Academy）](https://www.khanacademy.org/)软件工程师。原文发布于 2018-11-29。*
-*本文档原文并非可汗学院官方产品的一部分，而是他们为造福编程社区而“按原样”（“as is”）提供的[内部资源](http://engineering.khanacademy.org/posts/kotlin-for-python-developers.htm)。如果发现任何**原文**错误，请在[原文版本库](https://github.com/Khan/kotlin-for-python-developers)提交 [issue](https://github.com/Khan/kotlin-for-python-developers/issues) 或 [pull request](https://github.com/Khan/kotlin-for-python-developers/pulls)。*
+*本文档原文并非可汗学院官方产品的一部分，而是他们为造福编程社区而“按原样”（“as is”）提供的[内部资源](https://blog.khanacademy.org/kotlin-for-python-developers/)。如果发现任何**原文**错误，请在[原文版本库](https://github.com/Khan/kotlin-for-python-developers)提交 [issue](https://github.com/Khan/kotlin-for-python-developers/issues) 或 [pull request](https://github.com/Khan/kotlin-for-python-developers/pulls)。*
 *而如果发现任何**译文**错误，请在[中文版本库](https://github.com/hltj/kotlin-for-python-developers-cn)提交 [issue](https://github.com/hltj/kotlin-for-python-developers-cn/issues) 或 [pull request](https://github.com/hltj/kotlin-for-python-developers-cn/pulls)。*
 
 ---
@@ -10,7 +10,7 @@ Kotlin 是一种编译型的静态类型语言，这可能会给习惯于解释�
 
 Kotlin 可以为多个不同平台编译。在本文档中，假定目标平台是 Java 虚拟机，它提供了一些附加功能——尤其是会将代码编译为 Java 字节码，进而能够与 Java 库的庞大生态系统互操作。
 
-即使你不了解 Python，这篇文档应该也是对 Kotlin 的有用介绍，尤其是如果你已习惯于其他动态类型语言。但是如果你有 Java 背景，最好直接去看优秀的[官方网文档](https://www.kotlincn.net/docs/reference/)（本文档也从中汲取了很多灵感）。一定程度上讲，你可以按照 Java 代码的方式编写，并在所尝试的内容不起作用时查找资料——一些 IDE 甚至可以自动将 Java 代码转换为 Kotlin 代码。
+即使你不了解 Python，这篇文档应该也是对 Kotlin 的有用介绍，尤其是如果你已习惯于其他动态类型语言。但是如果你有 Java 背景，最好直接去看优秀的[官方网文档](https://www.kotlincn.net/docs/home.html)（本文档也从中汲取了很多灵感）。一定程度上讲，你可以按照 Java 代码的方式编写，并在所尝试的内容不起作用时查找资料——一些 IDE 甚至可以自动将 Java 代码转换为 Kotlin 代码。
 
 
 ## 目录
@@ -172,9 +172,9 @@ return    // 空 return 语句
 
 ## 编译与运行
 
-作者强烈建议使用支持 Kotlin 的 IDE，因为静态类型让 IDE 能够进行可靠的导航与代码补全。我推荐 [IntelliJ IDEA](https://www.jetbrains.com/idea/)，它与 Kotlin 都是同一家公司出品的。其社区版免费；参见[引入指引](https://www.kotlincn.net/docs/tutorials/getting-started.html)（其中预置了 Kotlin，可以在 IDE 中运行程序）。
+作者强烈建议使用支持 Kotlin 的 IDE，因为静态类型让 IDE 能够进行可靠的导航与代码补全。我推荐 [IntelliJ IDEA](https://www.jetbrains.com/idea/)，它与 Kotlin 都是同一家公司出品的。其社区版免费；参见[引入指引](https://www.kotlincn.net/docs/getting-started.html)（其中预置了 Kotlin，可以在 IDE 中运行程序）。
 
-如果你坚持使用普通编辑器与命令行，请参见[这些指引](https://www.kotlincn.net/docs/tutorials/command-line.html)。 简而言之，在运行之前需要*编译* Kotlin 代码。假设你的 Kotlin 文件名为 `program.kt`：
+如果你坚持使用普通编辑器与命令行，请参见[这些指引](https://www.kotlincn.net/docs/command-line.html)。 简而言之，在运行之前需要*编译* Kotlin 代码。假设你的 Kotlin 文件名为 `program.kt`：
 
 ```bash
 kotlinc program.kt -include-runtime -d program.jar
@@ -291,7 +291,7 @@ val aSmallLong = 3L
 val aShort: Short = 32767
 val anotherShort = 1024.toShort()
 val aByte: Byte = 65
-val anotherByte = -32.toByte()
+val anotherByte = (-32).toByte()
 ```
 
 请注意，将整数除以整数会产生整数（类似于 Python 2，但与 Python 3不同）。如果需要浮点结果，那么至少一个操作数需要为浮点数（并且请记住，就像在大多数语言中一样，浮点运算通常是不精确的）：
@@ -357,7 +357,7 @@ val yearNow = 2018
 val message = "$name is ${yearNow - yearOfBirth} years old"
 ```
 
-如果要使用文本 `$`，那么需要​​对其进行转义：`\$`。转义通常以与 Python 中相同的方式工作，并具有一组类似的标准转义序列。
+如果要使用文本 `$`，那么需要对其进行转义：`\$`。转义通常以与 Python 中相同的方式工作，并具有一组类似的标准转义序列。
 
 
 
@@ -409,7 +409,7 @@ val result = if (condition) trueBody else falseBody
 
 ### `when`
 
-并不会在这里深入介绍 [`when` 表达式](https://www.kotlincn.net/docs/reference/control-flow.html#when-表达式)，因为在 Python 中没有非常接近的等效表达式，但请来看看——<span title="漂亮警告！( ‵▽′)ψ">它好漂亮的</span>，因为它可以用非常紧凑的方式将一个表达式与多种表达式进行比较（但这不是完整的函数式编程风格的模式匹配器）。例如：
+The [`when` expression](https://kotlinlang.org/docs/control-flow.html#when-expression) has similarities with pattern matching introduced in Python 3.10. 它可以用非常紧凑的方式将一个表达式与多种表达式进行比较（但这不是完整的函数式编程风格的模式匹配器）。例如：
 
 ```kotlin
 val x = 42
@@ -451,7 +451,15 @@ val emptyMap = mapOf<String, Int>()
 
 尖括号内的类型称为 _泛型参数_，将在后面介绍。简而言之，这是使一个类与另一个类绑定的有用技术（例如，将容器类与其元素类绑定）且适用于许多不同的类。
 
-如果确实需要混合类型的集合，那么可以使用元素类型 `Any`——但是需要再次进行类型转换以使元素回到其正确的类型，因此，如果想要从函数返回多个值，请改用按元素类型的 `Pair` 或 `Triple`。如果需要四个或更多元素，请考虑为返回类型制作一个[数据类](#数据类)（理想情况下，也应该对两个或三个元素进行此处理，尤其是公有函数，因为它会为元素提供恰当的名称）——这很容易，通常一行搞定。
+Coming from Python, you might be used to creating lists that contain elements of different types. This is discouraged in Kotlin, except when dealing with [polymorphic types](#polymorphism). In many cases, such as when returning multiple values from a function, the differently-typed values represent different kinds of information; it would then be better to create a [data class](#data-classes) with named properties of the appropriate types, or to use the per-element-typed `Pair` or `Triple` instead. However, if you really need to, you can put anything inside `listOf()` and the other collection creation functions. Kotlin will then infer the "lowest common denominator" supertype of the types of the given values, and you'll get a list of that element type. If the values have nothing in common, the element type will be `Any`, or `Any?` if one or more of the values are `null`:
+
+```kotlin
+val mixed = listOf("a", 2, 3.14)               // List<Any>
+val mixedWithNull = listOf("a", 2, 3.14, null) // List<Any?>
+```
+
+If you need a collection with a more general type than the values you are initializing it with, you can specify the type like this: `listOf<Number>(1, 2, 3)`.
+
 
 
 ## 循环
@@ -470,7 +478,15 @@ for (name in names) {
 
 请注意，`for` 循环始终隐式声明一个新的只读变量（在本示例中为 `name`）——如果外部作用域已经包含一个具有相同名称的变量，那么该变量将被不相关的循环变量遮盖。出于同样的原因，循环变量的最终值在循环后不可访问。
 
-还可以使用 `..` 运算符创建区间——但要注意，与 Python 的 `range()` 不同，它 _包含_ 其端点：
+In every iteration, the type of the loop variable is the same as the element type of the iterable, even if you are iterating over a mixed-type list. With `for (x in listOf("a", 2, 3.14))`, the type of `x` will always be `Any`, and you'll need to cast it in order to perform any operations that depend on knowing the "real" type. This is one of the reasons that mixed-type lists are usually only useful with [polymorphic types](#polymorphism), where the common supertype defines operations that are applicable to all the subtypes. In the example below, `Number` is a supertype of both `Int` and `Double`; it defines `toDouble()`, which converts the number to a `Double`, which can be multiplied. It would _not_ work to simply write `x * 2`.
+
+```kotlin
+for (x in listOf<Number>(2, 3.14)) {
+    println(x.toDouble() * 2)
+}
+```
+
+可以使用 `..` 操作符创建区间——但要注意，与 Python 的 `range()` 不同，它 _包含_ 其端点：
 
 ```kotlin
 for (x in 0..10) println(x) // 输出 0 到 10（含10）
@@ -988,7 +1004,7 @@ return try {
 
 基本异常类是 `Throwable`（但是扩展其子类 `Exception` 更为常见），并且有大量内置的异常类。如果找不到满足需求的异常类，那么可以通过从现有异常类继承来创建自己的异常类。
 
-请注意，除了与 Java 代码进行交互时，在 Kotlin 中不建议使用异常。与其在自己的代码中引发异常，不如考虑使用特殊的返回类型，例如 [Arrow 库](https://arrow-kt.io/)中的 [Option](https://arrow-kt.io/docs/datatypes/option/) 或 [Either](https://arrow-kt.io/docs/datatypes/either/)。
+请注意，除了与 Java 代码进行交互时，在 Kotlin 中不建议使用异常。与其在自己的代码中引发异常，不如考虑使用特殊的返回类型，例如 [Arrow 库](https://arrow-kt.io/)中的 [Either](https://arrow-kt.io/docs/apidocs/arrow-core-data/arrow.core/-either/)。
 
 
 ### Nothing
@@ -1190,7 +1206,7 @@ short_greetings = [
 
 这些转换也可以应用于 `Sequence<T>`，它与 Python 的生成器类似，并且允许进行惰性求值。如果有一个庞大的列表，并且想要延迟处理它，那么可以在其上调用 `asSequence()`。
 
-[`kotlin.collections` 包](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/index.html)中提供了大量函数式编程风格的操作。
+[`kotlin.collections` 包](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/)中提供了大量函数式编程风格的操作。
 
 
 ### 接收者
@@ -1280,7 +1296,7 @@ def init_math(math):
 t = tree("root", init_root)
 ```
 
-官方文档还有一个非常酷的示例，其中包含[用于构造 HTML 文档的 DSL](https://www.kotlincn.net/docs/reference/type-safe-builders.html)。
+官方文档还有一个非常酷的示例，其中包含[用于构造 HTML 文档的 DSL](https://www.kotlincn.net/docs/type-safe-builders.html)。
 
 
 ### 内联函数
